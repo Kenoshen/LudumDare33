@@ -6,6 +6,7 @@ import com.winger.utils.GlobalClipboard;
 
 public class Application
 {
+    // another test comment
     public static void main(String[] arg)
     {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
