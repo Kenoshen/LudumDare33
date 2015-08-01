@@ -7,9 +7,6 @@ mainClassName = "ludum.dare.Application"
 
 repositories {
     mavenCentral()
-    flatDir {
-        dirs "../Winger/build/libs"
-    }
 }
 ext.gdxVersion = '1.6.4'
 dependencies {
@@ -19,11 +16,8 @@ dependencies {
     compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
     compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.6.0'
-    compile 'com.fasterxml.jackson.core:jackson-core:2.6.0'
-    compile 'com.fasterxml.jackson.core:jackson-annotations:2.6.0'
 
-    compile name: "Winger-0.1.0"
+    compile project("..:Winger")
 }
 
 jar {

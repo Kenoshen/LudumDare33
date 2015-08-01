@@ -73,7 +73,5 @@ public class Director {
                 stage.draw(spriteBatch);
             }
         }
-
-        log.info("(" + ((int)mouse.x()) + ", " + ((int)mouse.y()) + ")");
     }
 }
