@@ -4,17 +4,17 @@ Ludum Dare 33 entry
 ## Setup
 ### Depends on:
 #### Gradle
-    1. download [gradle.zip](https://services.gradle.org/distributions/gradle-2.5-bin.zip)
-    2. extract zip and put in C:/Programs/gradle or /Applications/gradle
-    3. add GRADLE_HOME/bin to your path (...;C:/Programs/gradle/bin)
-    4. test by opening a shell and type 'gradle --version'
+1. download [gradle.zip](https://services.gradle.org/distributions/gradle-2.5-bin.zip)
+2. extract zip and put in C:/Programs/gradle or /Applications/gradle
+3. add GRADLE_HOME/bin to your path (...;C:/Programs/gradle/bin)
+4. test by opening a shell and type 'gradle --version'
 #### GitHub and Intellij
-    1. open Intellij
-    2. go to Settings->VersionControl->GitHub
-    3. host: https://github.com
-    4. authType: Password
-    5. put in your username and password for GitHub
-    6. click the 'Test' button
+1. open Intellij
+2. go to Settings->VersionControl->GitHub
+3. host: https://github.com
+4. authType: Password
+5. put in your username and password for GitHub
+6. click the 'Test' button
 
 ### Project setup
 1. Create directory LD33 (I put mine in ~/Documents)
