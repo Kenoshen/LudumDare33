@@ -17,6 +17,8 @@ Ludum Dare 33 entry
 6. click the 'Test' button
 
 ### Project setup
+    NOTE: after going through this process you might have to enable VersionControl on the projects if it doesn't happen automatically.  It is kind of a pain, but you have to go to Settings->VersionControl and then there is an option in that menu for each project to set the version control to Git.  Not sure why, but this only seems to happen SOME of the time.
+    LINK: (https://www.jetbrains.com/idea/help/associating-a-project-root-with-a-version-control-system.html)
 1. Create directory LD33 (I put mine in ~/Documents)
 2. Select 'Check out from Version Control'->'GitHub'
 ![alt tag](https://github.com/Kenoshen/LudumDare33/blob/master/help/project/01.png)
