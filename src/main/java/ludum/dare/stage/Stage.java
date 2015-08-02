@@ -14,11 +14,13 @@ import com.winger.log.HTMLLogger;
 import com.winger.log.LogGroup;
 import com.winger.ui.Page;
 import ludum.dare.Director;
+import ludum.dare.trait.Drawable;
+import ludum.dare.trait.Updatable;
 
 /**
  * Created by mwingfield on 7/30/15.
  */
-public class Stage implements CMouseEventHandler, CKeyboardEventHandler {
+public class Stage implements CMouseEventHandler, CKeyboardEventHandler, Updatable, Drawable {
     protected final HTMLLogger log;
     public Page ui;
     public Director director;
