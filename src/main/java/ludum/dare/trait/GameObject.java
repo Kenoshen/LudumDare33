@@ -20,6 +20,21 @@ public abstract class GameObject {
         return null;
     }
 
+    public List<Trait> getTraits(Class<? extends Trait>... traitTypes){
+        List<Trait> ts = new ArrayList<>();
+        for (int i = 0; i < traitTypes.length; i++){
+            ts.add(null);
+        }
+        for (Trait trait : traits){
+            for (int i = 0; i < traitTypes.length; i++) {
+                if (trait.getClass().equals(traitTypes[i])) {
+                    ts.set(i, trait);
+                }
+            }
+        }
+        return ts;
+    }
+
     public void markForDeletion(){
         shouldBeDeleted = true;
     }

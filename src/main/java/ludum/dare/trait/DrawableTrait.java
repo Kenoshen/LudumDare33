@@ -1,5 +1,6 @@
 package ludum.dare.trait;
 
+import com.badlogic.gdx.math.Vector2;
 import com.winger.draw.texture.CSprite;
 import com.winger.draw.texture.CSpriteBatch;
 import com.winger.struct.Tups;
@@ -36,8 +37,12 @@ public class DrawableTrait extends Trait{
 
         sprite.setX(pos.x);
         sprite.setY(pos.y);
-        sprite.setWidth(size.width);
-        sprite.setHeight(size.height);
+        // TODO: figure out why the sprites are displaying at half the size they should be
+        sprite.setWidth(size.width * 2); // this is a hack (the * 2), because of the above comment
+        sprite.setHeight(size.height * 2);
+        sprite.setOrigin(new Vector2(size.width, size.height)); // this is a hack, should be width / 2f, etc
+
+        sprite.setRotation(pos.rotation);
 
         sprite.draw(spriteBatch);
     }

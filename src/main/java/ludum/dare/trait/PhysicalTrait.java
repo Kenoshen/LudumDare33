@@ -1,6 +1,7 @@
 package ludum.dare.trait;
 
 import com.badlogic.gdx.math.Vector2;
+import com.winger.Winger;
 import com.winger.physics.CBody;
 import com.winger.physics.CWorld;
 
@@ -8,7 +9,7 @@ import com.winger.physics.CWorld;
  * Created by mwingfield on 8/2/15.
  */
 public class PhysicalTrait extends Trait {
-    private static Class[] REQUIRES = new Class[]{ PositionTrait.class, SizeTrait.class };
+    private static Class[] REQUIRES = new Class[]{ };
 
     public CBody<?> body;
     private PositionTrait pos;
@@ -32,9 +33,12 @@ public class PhysicalTrait extends Trait {
     }
 
     public void step(){
-        Vector2 p = body.getPosition();
-        pos.x = p.x;
-        pos.y = p.y;
+        if (pos != null) {
+            Vector2 p = body.getPosition();
+            pos.x = p.x;
+            pos.y = p.y;
+            pos.rotation = (float)Math.toDegrees(body.getAngle());
+        }
     }
 
     public void delete(){

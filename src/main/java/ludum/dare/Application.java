@@ -30,6 +30,7 @@ public class Application
         System.setProperty("org.lwjgl.opengl.Display.allowSoftwareOpenGL", "true");
         Game game = new Game(debug);
         com.badlogic.gdx.Application app = new LwjglApplication(game, config);
+        game.app = app;
         GlobalClipboard.instance().setClipboard(app.getClipboard());
     }
 }

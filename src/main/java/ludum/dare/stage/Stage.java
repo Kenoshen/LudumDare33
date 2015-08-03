@@ -42,7 +42,7 @@ public abstract class Stage implements CMouseEventHandler, CKeyboardEventHandler
         return ui.isVisible;
     }
 
-    public abstract void update(float delta);
+    public abstract void update();
 
     public abstract void draw(CSpriteBatch spriteBatch);
 

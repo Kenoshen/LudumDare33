@@ -16,7 +16,7 @@ public class MainMenuStage extends Stage{
     }
 
     @Override
-    public void update(float delta) {
+    public void update() {
 
     }
 

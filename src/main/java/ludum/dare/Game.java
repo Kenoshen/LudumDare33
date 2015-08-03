@@ -10,6 +10,7 @@ import com.winger.Winger;
 import com.winger.draw.texture.CSpriteBatch;
 import com.winger.input.raw.CKeyboard;
 import com.winger.input.raw.CMouse;
+import com.winger.input.raw.state.KeyboardKey;
 import com.winger.log.HTMLLogger;
 import com.winger.log.LogGroup;
 import com.winger.log.LogLevel;
@@ -19,7 +20,9 @@ import com.winger.stats.FPSCalculator;
 public class Game extends ApplicationAdapter
 {
     private static final HTMLLogger log = HTMLLogger.getLogger(Game.class, LogGroup.System);
+    com.badlogic.gdx.Application app;
     CSpriteBatch batch;
+    CSpriteBatch uiBatch;
     CWorld world;
     OrthographicCamera camera;
     CMouse mouse;
@@ -45,21 +48,24 @@ public class Game extends ApplicationAdapter
         log.debug("Game create()");
         //
         batch = new CSpriteBatch();
+        uiBatch = new CSpriteBatch();
 
         Winger.texture.loadTexturesInDirectory("src/main/resources/imgs");
         //Winger.texture.loadTextureAtlas("src/main/resources/atlas", "atlas");
         Winger.ui.addPagesInDirectory("src/main/resources/pages");
         //
-        Winger.ui.setUISpriteBatch(batch);
+        Winger.ui.setUISpriteBatch(uiBatch);
         //
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.zoom = 0.1f;
+        batch.setCamera(camera);
+        //
         world = new CWorld(camera);
         world.init(new Vector2(0, -30), true);
         world.debug(debug);
         //
         mouse = CMouse.instance;
-        keyboard = new CKeyboard();
+        keyboard = CKeyboard.instance;
         //
         director = new Director(mouse, keyboard);
         director.initialize();
@@ -79,9 +85,6 @@ public class Game extends ApplicationAdapter
         fps.update();
         mouse.update();
         keyboard.update();
-        if (director.worldEnabled) {
-            world.update(director.worldStepTime);
-        }
         Winger.ui.update();
         director.update();
 
@@ -89,11 +92,22 @@ public class Game extends ApplicationAdapter
         Gdx.gl.glClearColor(0.39f, 0.58f, 0.92f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        // in game drawing
+        camera.update();
         batch.begin();
         director.draw(batch);
-        Winger.ui.draw();
-        fps.displayFps(batch, 20, Gdx.graphics.getHeight() - 20);
         batch.end();
+
+        // ui drawing
+        uiBatch.begin();
+        Winger.ui.draw();
+        fps.displayFps(uiBatch, 50, Gdx.graphics.getHeight() - 50);
+        uiBatch.end();
+
+
+        if (keyboard.isKeyJustPressed(KeyboardKey.ESCAPE)){
+            app.exit();
+        }
     }
 
 

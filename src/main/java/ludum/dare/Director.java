@@ -9,6 +9,8 @@ import com.winger.input.raw.CMouse;
 import com.winger.input.raw.state.ButtonState;
 import com.winger.log.HTMLLogger;
 import com.winger.log.LogGroup;
+import ludum.dare.scene.TestScene;
+import ludum.dare.stage.GameStage;
 import ludum.dare.stage.MainMenuStage;
 import ludum.dare.stage.Stage;
 
@@ -20,14 +22,14 @@ import java.util.List;
  */
 public class Director {
     private static final HTMLLogger log = HTMLLogger.getLogger(Director.class, LogGroup.GameLogic, LogGroup.System);
-    public static float worldStepTime = 1 / 60f;
-    public boolean worldEnabled = false;
+
 
     public CMouse mouse;
     public CKeyboard keyboard;
 
     private List<Stage> stages = new ArrayList<Stage>();
     private MainMenuStage mainMenuStage;
+    private GameStage gameStage;
 
     public Director(CMouse mouse, CKeyboard keyboard){
         log.debug("Construct Director");
@@ -40,9 +42,10 @@ public class Director {
         log.debug("Initialize Director");
         //
         mainMenuStage = new MainMenuStage(Winger.ui.getPage("mainmenu"), this);
+        gameStage = new GameStage(Winger.ui.getPage("game"), this);
         //
-        // TODO: create stage transition instead of using the UI
-        Winger.ui.transitionToPage(mainMenuStage.ui);
+        gameStage.loadScene(new TestScene());
+        Winger.ui.transitionToPage(gameStage.ui);
     }
 
     public void addStage(Stage stage){
@@ -63,7 +66,7 @@ public class Director {
     public void update(){
         stages.forEach(stage -> {
             if (stage.isEnabled()) {
-                stage.update(worldStepTime);
+                stage.update();
             }
         });
     }

@@ -1,0 +1,15 @@
+{
+  "elements": [
+  ],
+  "groups": {
+  },
+  "variables": {
+  },
+  "global": {
+    "font": "default"
+  },
+  "transition": {
+    "name": "fade",
+    "time": 1000
+  }
+}

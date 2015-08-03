@@ -8,6 +8,7 @@ public class PositionTrait extends Trait {
     public float x = 0;
     public float y = 0;
     public float z = 0;
+    public float rotation = 0;
 
     public PositionTrait(GameObject obj) {
         super(obj);
