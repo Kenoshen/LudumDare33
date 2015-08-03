@@ -8,13 +8,29 @@ import java.util.List;
  */
 public abstract class GameObject {
     public List<Trait> traits = new ArrayList<>();
+    private boolean shouldBeDeleted = false;
 
     // TODO: figure out how to do the dynamic return value
-    public void getTrait(Class<? extends Trait> traitType){
+    public <T extends Trait> T getTrait(Class<T> traitType){
         for (Trait trait : traits){
-            if (trait.getClass().equals(traitType){
+            if (trait.getClass().equals(traitType)){
                 return traitType.cast(trait);
             }
         }
+        return null;
+    }
+
+    public void markForDeletion(){
+        shouldBeDeleted = true;
+    }
+
+    public boolean shouldBeDeleted(){
+        return shouldBeDeleted;
+    }
+
+    public void initializeTraits(){
+        traits.forEach(t ->{
+            t.initialize();
+        });
     }
 }

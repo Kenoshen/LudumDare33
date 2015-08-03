@@ -14,13 +14,15 @@ import com.winger.log.HTMLLogger;
 import com.winger.log.LogGroup;
 import com.winger.ui.Page;
 import ludum.dare.Director;
-import ludum.dare.trait.Drawable;
-import ludum.dare.trait.Updatable;
+import ludum.dare.trait.GameObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by mwingfield on 7/30/15.
  */
-public class Stage implements CMouseEventHandler, CKeyboardEventHandler, Updatable, Drawable {
+public abstract class Stage implements CMouseEventHandler, CKeyboardEventHandler {
     protected final HTMLLogger log;
     public Page ui;
     public Director director;
@@ -40,13 +42,11 @@ public class Stage implements CMouseEventHandler, CKeyboardEventHandler, Updatab
         return ui.isVisible;
     }
 
-    public void update(float delta){
+    public abstract void update(float delta);
 
-    }
+    public abstract void draw(CSpriteBatch spriteBatch);
 
-    public void draw(CSpriteBatch spriteBatch){
 
-    }
 
     @Override
     public final void handleKeyEvent(CKeyboard cKeyboard, KeyboardKey keyboardKey, ButtonState buttonState) {

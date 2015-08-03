@@ -5,12 +5,20 @@ package ludum.dare.trait;
  */
 public abstract class Trait {
     public GameObject self;
-    public Class[] requires = null;
     public Trait(GameObject obj){
-
+        self = obj;
     }
 
     public void initialize(){
-        // TODO: check the requires array for traits on the obj
+        Class[] req = requires();
+        if (req != null){
+            for (Class c : req){
+                if (self.getTrait(c) == null){
+                    throw new RuntimeException("This trait requires another trait(" + this.getClass().getSimpleName() + ") that doesn't exist (" + c.getSimpleName() + ")");
+                }
+            }
+        }
     }
+
+    public abstract Class[] requires();
 }

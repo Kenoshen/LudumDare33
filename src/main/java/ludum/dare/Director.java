@@ -41,6 +41,7 @@ public class Director {
         //
         mainMenuStage = new MainMenuStage(Winger.ui.getPage("mainmenu"), this);
         //
+        // TODO: create stage transition instead of using the UI
         Winger.ui.transitionToPage(mainMenuStage.ui);
     }
 
@@ -60,18 +61,18 @@ public class Director {
     }
 
     public void update(){
-        for(Stage stage : stages){
-            if (stage.isEnabled()){
+        stages.forEach(stage -> {
+            if (stage.isEnabled()) {
                 stage.update(worldStepTime);
             }
-        }
+        });
     }
 
     public void draw(CSpriteBatch spriteBatch){
-        for(Stage stage : stages){
-            if (stage.isVisible()){
+        stages.forEach(stage -> {
+            if (stage.isVisible()) {
                 stage.draw(spriteBatch);
             }
-        }
+        });
     }
 }

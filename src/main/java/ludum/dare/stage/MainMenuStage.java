@@ -1,5 +1,6 @@
 package ludum.dare.stage;
 
+import com.winger.draw.texture.CSpriteBatch;
 import com.winger.ui.Page;
 import ludum.dare.Director;
 
@@ -12,5 +13,15 @@ public class MainMenuStage extends Stage{
         super(ui, director);
 
         log.debug("MainMenuStage constructed");
+    }
+
+    @Override
+    public void update(float delta) {
+
+    }
+
+    @Override
+    public void draw(CSpriteBatch spriteBatch) {
+
     }
 }
