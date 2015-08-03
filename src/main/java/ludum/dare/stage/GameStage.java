@@ -27,6 +27,8 @@ public class GameStage extends Stage {
     }
 
     public void loadScene(Scene scene){
+        // TODO: should clean up old game objects (remove from world, etc)
+        //
         log.debug("Load scene");
         gameObjects = scene.loadScene();
     }
