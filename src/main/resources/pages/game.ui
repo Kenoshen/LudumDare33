@@ -1,5 +1,18 @@
 {
   "elements": [
+    {
+      "id": "back",
+      "text": "Back",
+      "textAlignment": "center",
+      "x": 50,
+      "y": "90%",
+      "width": 50,
+      "height": 50,
+      "texture": "white",
+      "color": "black",
+      "textColor": "white",
+      "transitionOnSelect": "levelselect"
+    }
   ],
   "groups": {
   },

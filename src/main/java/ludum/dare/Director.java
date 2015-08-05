@@ -10,7 +10,9 @@ import com.winger.input.raw.state.ButtonState;
 import com.winger.log.HTMLLogger;
 import com.winger.log.LogGroup;
 import ludum.dare.scene.TestScene;
+import ludum.dare.scene.TestScene2;
 import ludum.dare.stage.GameStage;
+import ludum.dare.stage.LevelSelectStage;
 import ludum.dare.stage.MainMenuStage;
 import ludum.dare.stage.Stage;
 
@@ -29,6 +31,7 @@ public class Director {
 
     private List<Stage> stages = new ArrayList<Stage>();
     private MainMenuStage mainMenuStage;
+    private LevelSelectStage levelSelectStage;
     private GameStage gameStage;
 
     public Director(CMouse mouse, CKeyboard keyboard){
@@ -43,9 +46,9 @@ public class Director {
         //
         mainMenuStage = new MainMenuStage(Winger.ui.getPage("mainmenu"), this);
         gameStage = new GameStage(Winger.ui.getPage("game"), this);
+        levelSelectStage = new LevelSelectStage(Winger.ui.getPage("levelselect"), this, "resources/scenes", gameStage);
         //
-        gameStage.loadScene(new TestScene());
-        Winger.ui.transitionToPage(gameStage.ui);
+        Winger.ui.transitionToPage(mainMenuStage.ui);
     }
 
     public void addStage(Stage stage){

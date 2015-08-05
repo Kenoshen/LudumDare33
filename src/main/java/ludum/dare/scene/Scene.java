@@ -14,17 +14,25 @@ public class Scene {
     private FileHandle fileHandle;
 
     public Scene(String fileLocation){
+        this(Gdx.files.internal(fileLocation));
+    }
+
+    public Scene(FileHandle fileHandle){
         // check the file location for a real file
-        fileHandle = Gdx.files.internal(fileLocation);
+        this.fileHandle = fileHandle;
         if (! fileHandle.exists()){
-            throw new RuntimeException("File at " + fileLocation + " does not exist");
+            throw new RuntimeException("File at " + fileHandle.path() + " does not exist");
         } else if (!"scene".equals(fileHandle.extension())) {
-            throw new RuntimeException("File at " + fileLocation + " must have extension: .scene");
+            throw new RuntimeException("File at " + fileHandle.path() + " must have extension: .scene");
         }
     }
 
     protected Scene(){
         // this is for test scenes or manually created scenes
+    }
+
+    public String name(){
+        return fileHandle.name();
     }
 
     public List<GameObject> loadScene(){

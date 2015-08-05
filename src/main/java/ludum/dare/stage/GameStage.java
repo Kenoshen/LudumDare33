@@ -36,6 +36,7 @@ public class GameStage extends Stage {
         removeMarkedGameObjects();
         //
         log.debug("Load scene");
+        // TODO: figure out why the hell some of the game objects can jump when you switch to different levels
         gameObjects = scene.loadScene();
     }
 

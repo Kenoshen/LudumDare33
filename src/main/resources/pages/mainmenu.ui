@@ -14,8 +14,9 @@
       "height": "100%",
       "children": [
         {
-          "id": "test",
-          "text": "Test",
+          "id": "levelselect",
+          "text": "Level Select",
+          "transitionOnSelect": "levelselect",
           "groups": [
             "btn"
           ]
