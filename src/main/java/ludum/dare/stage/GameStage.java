@@ -27,7 +27,13 @@ public class GameStage extends Stage {
     }
 
     public void loadScene(Scene scene){
-        // TODO: should clean up old game objects (remove from world, etc)
+        // should clean up old game objects (remove from world, etc)
+        objsToDelete = new ArrayList<>();
+        gameObjects.forEach(obj -> {
+            obj.markForDeletion();
+            objsToDelete.add(obj);
+        });
+        removeMarkedGameObjects();
         //
         log.debug("Load scene");
         gameObjects = scene.loadScene();
@@ -39,13 +45,13 @@ public class GameStage extends Stage {
         gameObjects.forEach(obj -> {
             List<Trait> traits = obj.getTraits(ControlTrait.class, PhysicalTrait.class, DebugTrait.class);
             if (traits.get(0) != null) {
-                ((ControlTrait)traits.get(0)).update();
+                ((ControlTrait) traits.get(0)).update();
             }
             if (traits.get(1) != null) {
-                ((PhysicalTrait)traits.get(1)).step();
+                ((PhysicalTrait) traits.get(1)).step();
             }
             if (traits.get(2) != null) {
-                ((DebugTrait)traits.get(2)).debug();
+                ((DebugTrait) traits.get(2)).debug();
             }
 
             // handle deletion of objects gracefully
@@ -54,17 +60,7 @@ public class GameStage extends Stage {
             }
         });
 
-        // handle deletion of objects gracefully
-        if (objsToDelete.size() > 0){
-            objsToDelete.forEach(obj -> {
-                gameObjects.remove(obj);
-                PhysicalTrait pt = obj.getTrait(PhysicalTrait.class);
-                if (pt != null){
-                    pt.delete();
-                }
-            });
-            objsToDelete = new ArrayList<>();
-        }
+        removeMarkedGameObjects();
     }
 
     @Override
@@ -79,10 +75,25 @@ public class GameStage extends Stage {
             CWorld.world.draw();
         }
     }
+
     public void addGameObject(GameObject obj){
         log.debug("Add game object");
         if (obj != null) {
             gameObjects.add(obj);
+        }
+    }
+
+    private void removeMarkedGameObjects(){
+        // handle deletion of objects gracefully
+        if (objsToDelete.size() > 0){
+            objsToDelete.forEach(obj -> {
+                gameObjects.remove(obj);
+                PhysicalTrait pt = obj.getTrait(PhysicalTrait.class);
+                if (pt != null){
+                    pt.delete();
+                }
+            });
+            objsToDelete = new ArrayList<>();
         }
     }
 }

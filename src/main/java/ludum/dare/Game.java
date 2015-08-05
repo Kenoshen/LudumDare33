@@ -45,7 +45,7 @@ public class Game extends ApplicationAdapter
     public void create()
     {
         super.create();
-        log.debug("Game create()");
+        log.debug("Game create(" + Config.instance.version() + ")");
         //
         batch = new CSpriteBatch();
         uiBatch = new CSpriteBatch();

@@ -9,6 +9,9 @@ import com.winger.input.raw.CKeyboard;
 import com.winger.input.raw.CMouse;
 import com.winger.input.raw.state.*;
 import com.winger.physics.body.PlayerBody;
+import ludum.dare.Config;
+
+import java.nio.file.AtomicMoveNotSupportedException;
 
 /**
  * Created by mwingfield on 8/2/15.
@@ -23,19 +26,13 @@ public class ControlTrait extends Trait implements CMouseEventHandler, CKeyboard
     private PhysicalTrait physical;
     private PlayerBody player;
 
-    public float PLAYER_JUMP_FORCE = 25.0f;
-    public float PLAYER_WALK_SPEED = 15.0f;
-    public float PLAYER_RUN_SPEED = 20.0f;
 
     public ControlTrait(GameObject obj, CMouse mouse, CKeyboard keyboard) {
-        super(obj);
-        this.mouse = mouse;
-        this.keyboard = keyboard;
+        this(obj, mouse, keyboard, null);
     }
 
     public ControlTrait(GameObject obj, CGamePad gamepad) {
-        super(obj);
-        this.gamepad = gamepad;
+        this(obj, null, null, gamepad);
     }
 
     public ControlTrait(GameObject obj, CMouse mouse, CKeyboard keyboard, CGamePad gamepad) {
@@ -77,15 +74,15 @@ public class ControlTrait extends Trait implements CMouseEventHandler, CKeyboard
         if (keyboard != null){
             if (keyboard.isKeyBeingPressed(KeyboardKey.LEFT) || keyboard.isKeyBeingPressed(KeyboardKey.A)){
                 if (keyboard.isKeyBeingPressed(KeyboardKey.LEFT_SHIFT) || keyboard.isKeyBeingPressed(KeyboardKey.RIGHT_SHIFT)){
-                    player.run(-PLAYER_RUN_SPEED);
+                    player.run(-Config.instance.playerRunSpeed());
                 } else {
-                    player.walk(-PLAYER_WALK_SPEED);
+                    player.walk(-Config.instance.playerWalkSpeed());
                 }
             } else if (keyboard.isKeyBeingPressed(KeyboardKey.RIGHT) || keyboard.isKeyBeingPressed(KeyboardKey.D)){
                 if (keyboard.isKeyBeingPressed(KeyboardKey.LEFT_SHIFT) || keyboard.isKeyBeingPressed(KeyboardKey.RIGHT_SHIFT)){
-                    player.run(PLAYER_RUN_SPEED);
+                    player.run(Config.instance.playerRunSpeed());
                 } else {
-                    player.walk(PLAYER_WALK_SPEED);
+                    player.walk(Config.instance.playerWalkSpeed());
                 }
             }
         }
@@ -112,7 +109,7 @@ public class ControlTrait extends Trait implements CMouseEventHandler, CKeyboard
         switch(state){
             case DOWN:
                 if (key == KeyboardKey.UP || key == KeyboardKey.W || key == KeyboardKey.SPACE){
-                    player.jump(PLAYER_JUMP_FORCE);
+                    player.jump(Config.instance.playerJumpForce());
                 }
                 break;
             case UP:
