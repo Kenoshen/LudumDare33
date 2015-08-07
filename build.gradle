@@ -4,10 +4,12 @@ apply plugin: 'eclipse'
 apply plugin: 'application'
 
 mainClassName = "ludum.dare.Application"
+version = '0.1.0'
 
-repositories {
-    mavenCentral()
-}
+ext.server = 'http://www.bytebreakstudios.com:8081/artifactory'
+
+repositories.maven { url "$server/all" }
+
 ext.gdxVersion = '1.6.4'
 dependencies {
     compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
@@ -18,10 +20,16 @@ dependencies {
     compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
     compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
 
-    compile project("..:Winger")
+    compile "com.winger:Winger:0.1.0-SNAPSHOT"
+}
+
+task fatJar(type: Jar) {
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
 }
 
 jar {
-    version =  '0.1.0'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 
