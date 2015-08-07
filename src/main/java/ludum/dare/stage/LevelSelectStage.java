@@ -3,8 +3,6 @@ package ludum.dare.stage;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
-import com.sun.prism.impl.Disposer;
-import com.sun.xml.internal.ws.api.streaming.XMLStreamReaderFactory;
 import com.winger.Winger;
 import com.winger.draw.texture.CSpriteBatch;
 import com.winger.ui.Element;

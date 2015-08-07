@@ -1,7 +1,5 @@
 package ludum.dare;
 
-import sun.rmi.runtime.Log;
-
 /**
  * Created by mwingfield on 8/4/15.
  */
