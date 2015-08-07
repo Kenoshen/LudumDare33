@@ -3,3 +3,4 @@
 build
 LudumDare33.iml
 src/main/resources/packed
+.DS_Store
