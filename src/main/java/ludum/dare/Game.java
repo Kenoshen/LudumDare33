@@ -98,7 +98,7 @@ public class Game extends ApplicationAdapter
         director.draw(batch);
         batch.end();
 
-        // ui drawing
+        // imgs.ui drawing
         uiBatch.begin();
         Winger.ui.draw();
         fps.displayFps(uiBatch, 50, Gdx.graphics.getHeight() - 50);

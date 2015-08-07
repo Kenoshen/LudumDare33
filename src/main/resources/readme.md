@@ -1,1 +1,1 @@
-This is where the all the assets (art, sound, ui, etc) go
+This is where the all the assets (art, sound, images, etc) go
