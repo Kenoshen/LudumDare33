@@ -43,8 +43,8 @@ public abstract class GameObject {
     }
 
     public void initializeTraits(){
-        traits.forEach(t ->{
+        for (Trait t : traits){
             t.initialize();
-        });
+        }
     }
 }

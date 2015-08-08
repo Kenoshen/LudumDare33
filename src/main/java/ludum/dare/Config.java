@@ -7,7 +7,7 @@ public class Config extends com.winger.utils.Config {
     public static final Config instance = new Config();
 
     private Config(){
-        super(true);
+        super("./src/main/resources/conf/project.config", true);
     }
 
     public String version(){

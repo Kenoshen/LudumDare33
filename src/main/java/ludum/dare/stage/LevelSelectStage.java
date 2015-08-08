@@ -5,9 +5,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.winger.Winger;
 import com.winger.draw.texture.CSpriteBatch;
-import com.winger.ui.Element;
-import com.winger.ui.ElementFactory;
-import com.winger.ui.ElementRecord;
 import com.winger.ui.Page;
 import com.winger.ui.element.impl.DefaultElement;
 import com.winger.ui.element.impl.GridElement;
@@ -59,10 +56,11 @@ public class LevelSelectStage extends Stage{
             element.height(100);
             element.font(Winger.font.getDefaultFont());
             element.transitionOnSelect("game");
-            element.onSelectEnd(scene.name() + "SelectEnd", e -> {
-                Scene s = (Scene) e.userData();
-                gameStage.loadScene(s);
-            });
+            // TODO: find another way besides lambdas to do this
+//            element.onSelectEnd(scene.name() + "SelectEnd", e -> {
+//                Scene s = (Scene) e.userData();
+//                gameStage.loadScene(s);
+//            });
             ui.addElement(element);
             parent.children().add(element);
             log.debug("Add level select option for: " + scene.name() + "\n" + element);

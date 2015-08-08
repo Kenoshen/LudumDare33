@@ -9,8 +9,6 @@ import com.winger.input.raw.CMouse;
 import com.winger.input.raw.state.ButtonState;
 import com.winger.log.HTMLLogger;
 import com.winger.log.LogGroup;
-import ludum.dare.scene.TestScene;
-import ludum.dare.scene.TestScene2;
 import ludum.dare.stage.GameStage;
 import ludum.dare.stage.LevelSelectStage;
 import ludum.dare.stage.MainMenuStage;
@@ -67,18 +65,18 @@ public class Director {
     }
 
     public void update(){
-        stages.forEach(stage -> {
+        for(Stage stage : stages){
             if (stage.isEnabled()) {
                 stage.update();
             }
-        });
+        }
     }
 
     public void draw(CSpriteBatch spriteBatch){
-        stages.forEach(stage -> {
+        for(Stage stage : stages){
             if (stage.isVisible()) {
                 stage.draw(spriteBatch);
             }
-        });
+        }
     }
 }

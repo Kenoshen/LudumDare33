@@ -1,9 +1,7 @@
 package ludum.dare.stage;
 
-import com.winger.draw.texture.CSprite;
 import com.winger.draw.texture.CSpriteBatch;
 import com.winger.physics.CWorld;
-import com.winger.struct.Tups;
 import com.winger.ui.Page;
 import ludum.dare.Director;
 import ludum.dare.scene.Scene;
@@ -29,10 +27,10 @@ public class GameStage extends Stage {
     public void loadScene(Scene scene){
         // should clean up old game objects (remove from world, etc)
         objsToDelete = new ArrayList<>();
-        gameObjects.forEach(obj -> {
+        for (GameObject obj : gameObjects){
             obj.markForDeletion();
             objsToDelete.add(obj);
-        });
+        }
         removeMarkedGameObjects();
         //
         log.debug("Load scene");
@@ -43,7 +41,7 @@ public class GameStage extends Stage {
     @Override
     public void update() {
         CWorld.world.update(WORLD_STEP_TIME);
-        gameObjects.forEach(obj -> {
+        for (GameObject obj : gameObjects){
             List<Trait> traits = obj.getTraits(ControlTrait.class, PhysicalTrait.class, DebugTrait.class);
             if (traits.get(0) != null) {
                 ((ControlTrait) traits.get(0)).update();
@@ -59,19 +57,19 @@ public class GameStage extends Stage {
             if (obj.shouldBeDeleted()) {
                 objsToDelete.add(obj);
             }
-        });
+        }
 
         removeMarkedGameObjects();
     }
 
     @Override
     public void draw(CSpriteBatch spriteBatch) {
-        gameObjects.forEach(obj ->{
+        for (GameObject obj : gameObjects){
             DrawableTrait drawable = obj.getTrait(DrawableTrait.class);
             if (drawable != null){
                 drawable.draw(spriteBatch);
             }
-        });
+        }
         if (CWorld.world.debug()){
             CWorld.world.draw();
         }
@@ -87,13 +85,13 @@ public class GameStage extends Stage {
     private void removeMarkedGameObjects(){
         // handle deletion of objects gracefully
         if (objsToDelete.size() > 0){
-            objsToDelete.forEach(obj -> {
+            for (GameObject obj : objsToDelete){
                 gameObjects.remove(obj);
                 PhysicalTrait pt = obj.getTrait(PhysicalTrait.class);
                 if (pt != null){
                     pt.delete();
                 }
-            });
+            }
             objsToDelete = new ArrayList<>();
         }
     }
