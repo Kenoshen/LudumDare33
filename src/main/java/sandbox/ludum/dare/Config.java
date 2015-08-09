@@ -37,4 +37,8 @@ public class Config extends com.winger.utils.Config {
     public float playerRunSpeed(){
         return get("player.runSpeed", Double.class).floatValue();
     }
+
+    public float worldStepTime(){
+        return get("world.step.time", Double.class).floatValue();
+    }
 }

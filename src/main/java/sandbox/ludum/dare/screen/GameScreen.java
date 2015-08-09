@@ -3,20 +3,97 @@ package sandbox.ludum.dare.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.winger.draw.texture.CSpriteBatch;
+import com.winger.input.raw.CKeyboard;
+import com.winger.input.raw.CMouse;
+import com.winger.log.HTMLLogger;
+import com.winger.log.LogGroup;
+import com.winger.physics.CWorld;
+import sandbox.ludum.dare.trait.DrawableTrait;
+import sandbox.ludum.dare.trait.ControlTrait;
+import sandbox.ludum.dare.trait.DebugTrait;
+import sandbox.ludum.dare.trait.Trait;
+import sandbox.ludum.dare.trait.PhysicalTrait;
+import sandbox.ludum.dare.trait.GameObject;
+import sandbox.ludum.dare.Config;
 import sandbox.ludum.dare.Game;
+import sandbox.ludum.dare.level.Level;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by mwingfield on 8/6/15.
  */
 public class GameScreen implements Screen {
+    private static final HTMLLogger log = HTMLLogger.getLogger(GameScreen.class, LogGroup.System);
 
     private Game game;
     private Stage stage = new Stage();
 
-    public GameScreen(Game game){
-        this.game = game;
+    private OrthographicCamera camera;
+    private CWorld world;
 
+    private CMouse mouse;
+    private CKeyboard keyboard;
+
+    private CSpriteBatch batch;
+
+    public List<GameObject> gameObjects = new ArrayList<>();
+    private List<GameObject> objsToDelete = new ArrayList<>();
+
+    public GameScreen(final Game game, Level level){
+        this.game = game;
+        //
+        camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.zoom = 0.1f;
+        //
+        world = new CWorld(camera);
+        world.init(new Vector2(0, -30), true);
+        world.debug(Config.instance.isDebug());
+        //
+        mouse = CMouse.instance;
+        keyboard = CKeyboard.instance;
+        //
+        batch = new CSpriteBatch();
+        //
+        loadLevel(level);
+
+        // ///////////////////////////////////
+        // this is for the back button
+        TextButton btn = new TextButton("Back", new Skin(Gdx.files.internal("src/main/resources/skins/menu-skin.json"),
+                new TextureAtlas(Gdx.files.internal("src/main/resources/packed/ui.atlas"))), "simple");
+        btn.setPosition(50, 50);
+        btn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new LevelSelectScreen(game));
+            }
+        });
+        stage.addActor(btn);
+        Gdx.input.setInputProcessor(stage);
+        // ///////////////////////////////////
+    }
+
+    private void loadLevel(Level level){
+        // should clean up old game objects (remove from world, etc)
+        objsToDelete = new ArrayList<>();
+        for (GameObject obj : gameObjects){
+            obj.markForDeletion();
+            objsToDelete.add(obj);
+        }
+        removeMarkedGameObjects();
+        //
+        log.debug("Load scene");
+        gameObjects = level.loadLevel();
     }
 
     @Override
@@ -30,6 +107,38 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.act();
+
+        CWorld.world.update(Config.instance.worldStepTime());
+        for (GameObject obj : gameObjects){
+            List<Trait> traits = obj.getTraits(ControlTrait.class, PhysicalTrait.class, DebugTrait.class);
+            if (traits.get(0) != null) {
+                ((ControlTrait) traits.get(0)).update();
+            }
+            if (traits.get(1) != null) {
+                ((PhysicalTrait) traits.get(1)).step();
+            }
+            if (traits.get(2) != null) {
+                ((DebugTrait) traits.get(2)).debug();
+            }
+
+            // handle deletion of objects gracefully
+            if (obj.shouldBeDeleted()) {
+                objsToDelete.add(obj);
+            }
+        }
+
+        removeMarkedGameObjects();
+
+        for (GameObject obj : gameObjects){
+            DrawableTrait drawable = obj.getTrait(DrawableTrait.class);
+            if (drawable != null){
+                drawable.draw(batch);
+            }
+        }
+        if (CWorld.world.debug()){
+            CWorld.world.draw();
+        }
+
         stage.draw();
     }
 
@@ -50,11 +159,32 @@ public class GameScreen implements Screen {
 
     @Override
     public void hide() {
-
+        dispose();
     }
 
     @Override
     public void dispose() {
         stage.dispose();
+        objsToDelete = new ArrayList<>();
+        for (GameObject obj : gameObjects){
+            obj.markForDeletion();
+            objsToDelete.add(obj);
+        }
+        removeMarkedGameObjects();
+        world._world.dispose();
+    }
+
+    private void removeMarkedGameObjects(){
+        // handle deletion of objects gracefully
+        if (objsToDelete.size() > 0){
+            for (GameObject obj : objsToDelete){
+                gameObjects.remove(obj);
+                PhysicalTrait pt = obj.getTrait(PhysicalTrait.class);
+                if (pt != null){
+                    pt.delete();
+                }
+            }
+            objsToDelete = new ArrayList<>();
+        }
     }
 }

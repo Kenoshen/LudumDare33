@@ -2,7 +2,7 @@ package sandbox.ludum.dare.level;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import ludum.dare.trait.GameObject;
+import sandbox.ludum.dare.trait.GameObject;
 
 import java.util.List;
 

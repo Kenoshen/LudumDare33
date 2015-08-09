@@ -29,13 +29,19 @@ public class MainMenuScreen implements Screen {
     private TextButton optionsBtn;
     private TextButton quitBtn;
 
-    public MainMenuScreen(Game game){
+    public MainMenuScreen(final Game game){
         this.game = game;
 
         skin = new Skin(Gdx.files.internal("src/main/resources/skins/menu-skin.json"),
                 new TextureAtlas(Gdx.files.internal("src/main/resources/packed/ui.atlas")));
 
         playBtn = new TextButton("Play", skin, "flare");
+        playBtn.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new LevelSelectScreen(game));
+            }
+        });
         highscoreBtn = new TextButton("Highscores", skin, "flare");
         optionsBtn = new TextButton("Options", skin, "simple");
         quitBtn = new TextButton("Exit", skin, "simple");
@@ -91,7 +97,7 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void hide() {
-
+        dispose();
     }
 
     @Override

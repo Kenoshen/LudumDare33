@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -16,6 +15,7 @@ import com.winger.struct.Tups;
 import sandbox.ludum.dare.Game;
 import sandbox.ludum.dare.level.Level;
 import sandbox.ludum.dare.level.TestLevel;
+import sandbox.ludum.dare.level.TestLevel2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,33 +30,44 @@ public class LevelSelectScreen implements Screen {
 
     private Skin skin;
     private Table levelButtons;
-    private List<Tups.Tup2<Level, ImageTextButton>> lvls = new ArrayList<>();
+    private List<Tups.Tup2<Level, TextButton>> lvls = new ArrayList<>();
 
-    public LevelSelectScreen(Game game){
+    public LevelSelectScreen(final Game game){
         this.game = game;
 
         skin = new Skin(Gdx.files.internal("src/main/resources/skins/menu-skin.json"),
                 new TextureAtlas(Gdx.files.internal("src/main/resources/packed/ui.atlas")));
 
         levelButtons = new Table();
+        levelButtons.setFillParent(true);
         stage.addActor(levelButtons);
 
         List<Level> levels = new ArrayList<>();
         levels.add(new TestLevel());
+        levels.add(new TestLevel2());
         for (FileHandle fileHandle : Gdx.files.internal("src/main/resources/levels").list()){
             levels.add(new Level(fileHandle));
         }
-        for (Level level : levels){
-            ImageTextButton btn = new ImageTextButton(level.name(), skin, "simple");
+        for (final Level level : levels){
+            TextButton btn = new TextButton(level.name(), skin, "simple");
+            btn.setUserObject(level);
             btn.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    // TODO: go to the game screen with the level object
+                    game.setScreen(new GameScreen(game, level));
                 }
             });
             levelButtons.add(btn); // TODO: do any button positioning
             lvls.add(new Tups.Tup2<>(level, btn));
         }
+
+        TextButton backButton = new TextButton("Back", skin, "simple");
+        backButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new MainMenuScreen(game));
+            }
+        });
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -92,7 +103,7 @@ public class LevelSelectScreen implements Screen {
 
     @Override
     public void hide() {
-
+        dispose();
     }
 
     @Override

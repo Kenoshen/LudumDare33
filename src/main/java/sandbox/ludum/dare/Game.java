@@ -6,7 +6,7 @@ import com.winger.input.raw.state.KeyboardKey;
 import com.winger.log.HTMLLogger;
 import com.winger.log.LogGroup;
 import ludum.dare.Config;
-import sandbox.ludum.dare.screen.MainMenuScreen;
+import sandbox.ludum.dare.screen.SplashScreen;
 
 public class Game extends com.badlogic.gdx.Game
 {
@@ -35,8 +35,8 @@ public class Game extends com.badlogic.gdx.Game
         Winger.texture.loadTextureAtlas("./src/main/resources/packed", "ui");
         Winger.texture.loadTextureAtlas("./src/main/resources/packed", "ui-background");
 
-        //setScreen(new SplashScreen(this));
-        setScreen(new MainMenuScreen(this));
+        setScreen(new SplashScreen(this));
+        //setScreen(new MainMenuScreen(this));
     }
 
 
