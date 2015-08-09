@@ -68,6 +68,8 @@ public class LevelSelectScreen implements Screen {
                 game.setScreen(new MainMenuScreen(game));
             }
         });
+        backButton.setPosition(0, 0);
+        stage.addActor(backButton);
 
         Gdx.input.setInputProcessor(stage);
     }

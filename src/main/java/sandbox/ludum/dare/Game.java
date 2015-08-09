@@ -2,6 +2,7 @@ package sandbox.ludum.dare;
 
 import com.winger.Winger;
 import com.winger.input.raw.CKeyboard;
+import com.winger.input.raw.CMouse;
 import com.winger.input.raw.state.KeyboardKey;
 import com.winger.log.HTMLLogger;
 import com.winger.log.LogGroup;
@@ -16,6 +17,7 @@ public class Game extends com.badlogic.gdx.Game
     boolean debug;
 
     CKeyboard keyboard;
+    CMouse mouse;
 
     public Game(boolean debug){
         super();
@@ -30,10 +32,12 @@ public class Game extends com.badlogic.gdx.Game
     {
         log.debug("Game create(" + Config.instance.version() + ")");
         keyboard = CKeyboard.instance;
+        mouse = CMouse.instance;
         //
         Winger.texture.loadTextureAtlas("./src/main/resources/packed", "game");
-        Winger.texture.loadTextureAtlas("./src/main/resources/packed", "ui");
-        Winger.texture.loadTextureAtlas("./src/main/resources/packed", "ui-background");
+        // ui stuff is handled by the libgdx stage objects
+//        Winger.texture.loadTextureAtlas("./src/main/resources/packed", "ui");
+//        Winger.texture.loadTextureAtlas("./src/main/resources/packed", "ui-background");
 
         setScreen(new SplashScreen(this));
         //setScreen(new MainMenuScreen(this));
@@ -45,6 +49,7 @@ public class Game extends com.badlogic.gdx.Game
     {
         super.render();
         keyboard.update();
+        mouse.update();
 
         if (keyboard.isKeyJustPressed(KeyboardKey.ESCAPE)){
             app.exit();

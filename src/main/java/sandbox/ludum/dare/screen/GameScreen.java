@@ -64,6 +64,7 @@ public class GameScreen implements Screen {
         keyboard = CKeyboard.instance;
         //
         batch = new CSpriteBatch();
+        batch.setCamera(camera);
         //
         loadLevel(level);
 
@@ -129,6 +130,7 @@ public class GameScreen implements Screen {
 
         removeMarkedGameObjects();
 
+        batch.begin();
         for (GameObject obj : gameObjects){
             DrawableTrait drawable = obj.getTrait(DrawableTrait.class);
             if (drawable != null){
@@ -138,6 +140,7 @@ public class GameScreen implements Screen {
         if (CWorld.world.debug()){
             CWorld.world.draw();
         }
+        batch.end();
 
         stage.draw();
     }
