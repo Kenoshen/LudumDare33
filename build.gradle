@@ -12,6 +12,8 @@ repositories.maven { url "$server/all" }
 
 ext.gdxVersion = '1.6.4'
 dependencies {
+    compile "com.winger:Winger:0.1.0-SNAPSHOT"
+
     compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
@@ -19,8 +21,6 @@ dependencies {
     compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
     compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
-
-    compile "com.winger:Winger:0.1.0-SNAPSHOT"
 }
 
 task fatJar(type: Jar) {
