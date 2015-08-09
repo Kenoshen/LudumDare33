@@ -9,7 +9,7 @@ import com.winger.input.raw.CKeyboard;
 import com.winger.input.raw.CMouse;
 import com.winger.input.raw.state.*;
 import com.winger.physics.body.PlayerBody;
-import ludum.dare.Config;
+import sandbox.ludum.dare.Config;
 
 /**
  * Created by mwingfield on 8/2/15.

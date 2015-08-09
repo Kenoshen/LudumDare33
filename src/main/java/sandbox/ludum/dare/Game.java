@@ -6,7 +6,6 @@ import com.winger.input.raw.CMouse;
 import com.winger.input.raw.state.KeyboardKey;
 import com.winger.log.HTMLLogger;
 import com.winger.log.LogGroup;
-import ludum.dare.Config;
 import sandbox.ludum.dare.screen.SplashScreen;
 
 public class Game extends com.badlogic.gdx.Game
