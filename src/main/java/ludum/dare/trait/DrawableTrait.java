@@ -1,4 +1,4 @@
-package sandbox.ludum.dare.trait;
+package ludum.dare.trait;
 
 import com.badlogic.gdx.math.Vector2;
 import com.winger.draw.texture.CSprite;

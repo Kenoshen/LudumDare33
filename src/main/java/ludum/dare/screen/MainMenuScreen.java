@@ -1,4 +1,4 @@
-package sandbox.ludum.dare.screen;
+package ludum.dare.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import sandbox.ludum.dare.Game;
+import ludum.dare.Game;
 
 
 /**

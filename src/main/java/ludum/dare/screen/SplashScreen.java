@@ -1,4 +1,4 @@
-package sandbox.ludum.dare.screen;
+package ludum.dare.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.winger.log.HTMLLogger;
 import com.winger.log.LogGroup;
-import sandbox.ludum.dare.Game;
+import ludum.dare.Game;
 
 /**
  * Created by mwingfield on 8/6/15.

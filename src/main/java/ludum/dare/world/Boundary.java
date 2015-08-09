@@ -1,11 +1,11 @@
-package sandbox.ludum.dare.world;
+package ludum.dare.world;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.winger.physics.body.ChainBody;
-import sandbox.ludum.dare.trait.GameObject;
-import sandbox.ludum.dare.trait.PhysicalTrait;
-import sandbox.ludum.dare.trait.PositionTrait;
+import ludum.dare.trait.PhysicalTrait;
+import ludum.dare.trait.GameObject;
+import ludum.dare.trait.PositionTrait;
 
 /**
  * Created by mwingfield on 8/3/15.

@@ -1,4 +1,4 @@
-package sandbox.ludum.dare.world;
+package ludum.dare.world;
 
 import com.badlogic.gdx.math.Vector2;
 import com.winger.draw.texture.CSprite;
@@ -7,7 +7,7 @@ import com.winger.input.raw.CKeyboard;
 import com.winger.input.raw.CMouse;
 import com.winger.physics.CBody;
 import com.winger.physics.body.PlayerBody;
-import sandbox.ludum.dare.trait.*;
+import ludum.dare.trait.*;
 
 /**
  * Created by mwingfield on 8/3/15.

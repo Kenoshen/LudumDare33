@@ -1,4 +1,4 @@
-package sandbox.ludum.dare.trait;
+package ludum.dare.trait;
 
 /**
  * Created by mwingfield on 8/2/15.

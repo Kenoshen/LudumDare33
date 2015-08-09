@@ -1,4 +1,4 @@
-package sandbox.ludum.dare;
+package ludum.dare;
 
 /**
  * Created by mwingfield on 8/4/15.

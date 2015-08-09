@@ -1,4 +1,4 @@
-package sandbox.ludum.dare.trait;
+package ludum.dare.trait;
 
 import com.winger.log.HTMLLogger;
 

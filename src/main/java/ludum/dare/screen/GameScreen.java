@@ -1,4 +1,4 @@
-package sandbox.ludum.dare.screen;
+package ludum.dare.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -17,15 +17,15 @@ import com.winger.input.raw.CMouse;
 import com.winger.log.HTMLLogger;
 import com.winger.log.LogGroup;
 import com.winger.physics.CWorld;
-import sandbox.ludum.dare.trait.DrawableTrait;
-import sandbox.ludum.dare.trait.ControlTrait;
-import sandbox.ludum.dare.trait.DebugTrait;
-import sandbox.ludum.dare.trait.Trait;
-import sandbox.ludum.dare.trait.PhysicalTrait;
-import sandbox.ludum.dare.trait.GameObject;
-import sandbox.ludum.dare.Config;
-import sandbox.ludum.dare.Game;
-import sandbox.ludum.dare.level.Level;
+import ludum.dare.Config;
+import ludum.dare.Game;
+import ludum.dare.level.Level;
+import ludum.dare.trait.DrawableTrait;
+import ludum.dare.trait.ControlTrait;
+import ludum.dare.trait.DebugTrait;
+import ludum.dare.trait.Trait;
+import ludum.dare.trait.PhysicalTrait;
+import ludum.dare.trait.GameObject;
 
 import java.util.ArrayList;
 import java.util.List;

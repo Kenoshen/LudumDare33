@@ -1,4 +1,4 @@
-package sandbox.ludum.dare.screen;
+package ludum.dare.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -12,10 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.winger.struct.Tups;
-import sandbox.ludum.dare.Game;
-import sandbox.ludum.dare.level.Level;
-import sandbox.ludum.dare.level.TestLevel;
-import sandbox.ludum.dare.level.TestLevel2;
+import ludum.dare.Game;
+import ludum.dare.level.Level;
+import ludum.dare.level.TestLevel;
+import ludum.dare.level.TestLevel2;
 
 import java.util.ArrayList;
 import java.util.List;
