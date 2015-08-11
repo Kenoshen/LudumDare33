@@ -26,6 +26,10 @@ public class Config extends com.winger.utils.Config {
         return get("game.debug", Boolean.class);
     }
 
+    public boolean isStandalone(){
+        return get("game.standalone", Boolean.class);
+    }
+
     public float playerJumpForce(){
         return get("player.jumpForce", Double.class).floatValue();
     }

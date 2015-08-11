@@ -1,12 +1,14 @@
 package ludum.dare;
 
-import com.winger.Winger;
 import com.winger.input.raw.CKeyboard;
 import com.winger.input.raw.CMouse;
 import com.winger.input.raw.state.KeyboardKey;
 import com.winger.log.HTMLLogger;
 import com.winger.log.LogGroup;
-import ludum.dare.screen.SplashScreen;
+import ludum.dare.level.TestLevel2;
+import ludum.dare.screen.GameScreen;
+import ludum.dare.utils.AtlasManager;
+import ludum.dare.utils.SkinManager;
 
 public class Game extends com.badlogic.gdx.Game
 {
@@ -33,13 +35,14 @@ public class Game extends com.badlogic.gdx.Game
         keyboard = CKeyboard.instance;
         mouse = CMouse.instance;
         //
-        Winger.texture.loadTextureAtlas("./src/main/resources/packed", "game");
-        // ui stuff is handled by the libgdx stage objects
-//        Winger.texture.loadTextureAtlas("./src/main/resources/packed", "ui");
-//        Winger.texture.loadTextureAtlas("./src/main/resources/packed", "ui-background");
-
-        setScreen(new SplashScreen(this));
+        AtlasManager.instance.loadAtlas("./src/main/resources/packed/game.atlas");
+        AtlasManager.instance.loadAtlas("./src/main/resources/packed/ui.atlas");
+        AtlasManager.instance.loadAtlas("./src/main/resources/packed/ui-background.atlas");
+        SkinManager.instance.loadSkin("src/main/resources/skins/menu-skin.json", "ui");
+        //
+        //setScreen(new SplashScreen(this));
         //setScreen(new MainMenuScreen(this));
+        setScreen(new GameScreen(this, new TestLevel2()));
     }
 
 

@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -16,6 +15,7 @@ import ludum.dare.Game;
 import ludum.dare.level.Level;
 import ludum.dare.level.TestLevel;
 import ludum.dare.level.TestLevel2;
+import ludum.dare.utils.SkinManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,15 +28,13 @@ public class LevelSelectScreen implements Screen {
     private Game game;
     private Stage stage = new Stage();
 
-    private Skin skin;
     private Table levelButtons;
     private List<Tups.Tup2<Level, TextButton>> lvls = new ArrayList<>();
 
     public LevelSelectScreen(final Game game){
         this.game = game;
 
-        skin = new Skin(Gdx.files.internal("src/main/resources/skins/menu-skin.json"),
-                new TextureAtlas(Gdx.files.internal("src/main/resources/packed/ui.atlas")));
+        Skin skin = SkinManager.instance.getSkin("menu-skin");
 
         levelButtons = new Table();
         levelButtons.setFillParent(true);

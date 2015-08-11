@@ -13,9 +13,11 @@ public class Application
     private static final HTMLLogger log = HTMLLogger.getLogger(Application.class, LogGroup.System);
     public static void main(String[] arg)
     {
-        TexturePacker.process("./src/main/resources/imgs/ui/menu", "./src/main/resources/packed", "ui");
-        TexturePacker.process("./src/main/resources/imgs/ui/background", "./src/main/resources/packed", "ui-background");
-        TexturePacker.process("./src/main/resources/imgs/game", "./src/main/resources/packed", "game");
+        if (! Config.instance.isStandalone()) {
+            TexturePacker.process("./src/main/resources/imgs/ui/menu", "./src/main/resources/packed", "ui");
+            TexturePacker.process("./src/main/resources/imgs/ui/background", "./src/main/resources/packed", "ui-background");
+            TexturePacker.process("./src/main/resources/imgs/game", "./src/main/resources/packed", "game");
+        }
         //
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         //

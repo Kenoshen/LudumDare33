@@ -2,6 +2,7 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
 apply plugin: 'application'
+apply plugin: 'com.github.johnrengelman.shadow'
 
 mainClassName = "ludum.dare.Application"
 version = '0.1.0'
@@ -23,13 +24,22 @@ dependencies {
     compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
 }
 
-task fatJar(type: Jar) {
-    baseName = project.name + '-all'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
-}
+//task fatJar(type: Jar) {
+//    baseName = project.name + '-all'
+//    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+//    with jar
+//}
 
 jar {
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
+
+buildscript {
+    repositories { jcenter() }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.2'
+    }
+}
+
+
 

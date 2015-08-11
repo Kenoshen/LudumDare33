@@ -3,13 +3,13 @@ package ludum.dare.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.winger.log.HTMLLogger;
 import com.winger.log.LogGroup;
 import ludum.dare.Game;
+import ludum.dare.utils.AtlasManager;
 
 /**
  * Created by mwingfield on 8/6/15.
@@ -25,10 +25,9 @@ public class SplashScreen implements Screen {
     public SplashScreen(Game game){
         this.game = game;
         stage = new Stage();
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("src/main/resources/packed/ui-background.atlas"));
-        ldWallpaper = new Image(atlas.findRegion("ludumdarewallpaper"));
+        ldWallpaper = new Image(AtlasManager.instance.findRegion("ludumdarewallpaper"));
         ldWallpaper.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        bdWallpaper = new Image(atlas.findRegion("bitdecaywallpaper"));
+        bdWallpaper = new Image(AtlasManager.instance.findRegion("bitdecaywallpaper"));
         bdWallpaper.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage.addActor(ldWallpaper);
         stage.addActor(bdWallpaper);

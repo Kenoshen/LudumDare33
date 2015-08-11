@@ -4,14 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.winger.draw.texture.CSpriteBatch;
 import com.winger.input.raw.CKeyboard;
 import com.winger.input.raw.CMouse;
 import com.winger.log.HTMLLogger;
@@ -20,12 +18,8 @@ import com.winger.physics.CWorld;
 import ludum.dare.Config;
 import ludum.dare.Game;
 import ludum.dare.level.Level;
-import ludum.dare.trait.DrawableTrait;
-import ludum.dare.trait.ControlTrait;
-import ludum.dare.trait.DebugTrait;
-import ludum.dare.trait.Trait;
-import ludum.dare.trait.PhysicalTrait;
-import ludum.dare.trait.GameObject;
+import ludum.dare.trait.*;
+import ludum.dare.utils.SkinManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +39,7 @@ public class GameScreen implements Screen {
     private CMouse mouse;
     private CKeyboard keyboard;
 
-    private CSpriteBatch batch;
+    private SpriteBatch batch;
 
     public List<GameObject> gameObjects = new ArrayList<>();
     private List<GameObject> objsToDelete = new ArrayList<>();
@@ -63,15 +57,9 @@ public class GameScreen implements Screen {
         mouse = CMouse.instance;
         keyboard = CKeyboard.instance;
         //
-        batch = new CSpriteBatch();
-        batch.setCamera(camera);
+        batch = new SpriteBatch();
         //
-        loadLevel(level);
-
-        // ///////////////////////////////////
-        // this is for the back button
-        TextButton btn = new TextButton("Back", new Skin(Gdx.files.internal("src/main/resources/skins/menu-skin.json"),
-                new TextureAtlas(Gdx.files.internal("src/main/resources/packed/ui.atlas"))), "simple");
+        TextButton btn = new TextButton("Back", SkinManager.instance.getSkin("menu-skin"), "simple");
         btn.setPosition(50, 50);
         btn.addListener(new ClickListener() {
             @Override
@@ -81,7 +69,8 @@ public class GameScreen implements Screen {
         });
         stage.addActor(btn);
         Gdx.input.setInputProcessor(stage);
-        // ///////////////////////////////////
+        //
+        loadLevel(level);
     }
 
     private void loadLevel(Level level){
@@ -111,7 +100,7 @@ public class GameScreen implements Screen {
 
         CWorld.world.update(Config.instance.worldStepTime());
         for (GameObject obj : gameObjects){
-            List<Trait> traits = obj.getTraits(ControlTrait.class, PhysicalTrait.class, DebugTrait.class);
+            List<Trait> traits = obj.getTraits(ControlTrait.class, PhysicalTrait.class, DebugTrait.class, UpdatableTrait.class);
             if (traits.get(0) != null) {
                 ((ControlTrait) traits.get(0)).update();
             }
@@ -120,6 +109,9 @@ public class GameScreen implements Screen {
             }
             if (traits.get(2) != null) {
                 ((DebugTrait) traits.get(2)).debug();
+            }
+            if (traits.get(3) != null) {
+                ((UpdatableTrait) traits.get(3)).update(delta);
             }
 
             // handle deletion of objects gracefully
@@ -130,11 +122,16 @@ public class GameScreen implements Screen {
 
         removeMarkedGameObjects();
 
+        camera.update();
+        batch.setProjectionMatrix(camera.projection);
         batch.begin();
         for (GameObject obj : gameObjects){
-            DrawableTrait drawable = obj.getTrait(DrawableTrait.class);
-            if (drawable != null){
-                drawable.draw(batch);
+            List<Trait> traits = obj.getTraits(AnimatorTrait.class, DrawableTrait.class);
+            if (traits.get(0) != null){
+                ((AnimatorTrait) traits.get(0)).update(delta);
+            }
+            if (traits.get(1) != null){
+                ((DrawableTrait) traits.get(1)).draw(batch);
             }
         }
         if (CWorld.world.debug()){

@@ -3,7 +3,6 @@ package ludum.dare.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -12,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import ludum.dare.Game;
+import ludum.dare.utils.SkinManager;
 
 
 /**
@@ -22,7 +22,6 @@ public class MainMenuScreen implements Screen {
     private Game game;
     private Stage stage = new Stage();
 
-    private Skin skin;
     private Table menu;
     private TextButton playBtn;
     private TextButton highscoreBtn;
@@ -32,8 +31,7 @@ public class MainMenuScreen implements Screen {
     public MainMenuScreen(final Game game){
         this.game = game;
 
-        skin = new Skin(Gdx.files.internal("src/main/resources/skins/menu-skin.json"),
-                new TextureAtlas(Gdx.files.internal("src/main/resources/packed/ui.atlas")));
+        Skin skin = SkinManager.instance.getSkin("menu-skin");
 
         playBtn = new TextButton("Play", skin, "flare");
         playBtn.addListener(new ClickListener(){
