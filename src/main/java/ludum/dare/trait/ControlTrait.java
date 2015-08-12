@@ -9,7 +9,7 @@ import com.winger.input.raw.CKeyboard;
 import com.winger.input.raw.CMouse;
 import com.winger.input.raw.state.*;
 import com.winger.physics.body.PlayerBody;
-import ludum.dare.Config;
+import ludum.dare.Conf;
 
 /**
  * Created by mwingfield on 8/2/15.
@@ -72,15 +72,15 @@ public class ControlTrait extends Trait implements CMouseEventHandler, CKeyboard
         if (keyboard != null){
             if (keyboard.isKeyBeingPressed(KeyboardKey.LEFT) || keyboard.isKeyBeingPressed(KeyboardKey.A)){
                 if (keyboard.isKeyBeingPressed(KeyboardKey.LEFT_SHIFT) || keyboard.isKeyBeingPressed(KeyboardKey.RIGHT_SHIFT)){
-                    player.run(-Config.instance.playerRunSpeed());
+                    player.run(-Conf.instance.playerRunSpeed());
                 } else {
-                    player.walk(-Config.instance.playerWalkSpeed());
+                    player.walk(-Conf.instance.playerWalkSpeed());
                 }
             } else if (keyboard.isKeyBeingPressed(KeyboardKey.RIGHT) || keyboard.isKeyBeingPressed(KeyboardKey.D)){
                 if (keyboard.isKeyBeingPressed(KeyboardKey.LEFT_SHIFT) || keyboard.isKeyBeingPressed(KeyboardKey.RIGHT_SHIFT)){
-                    player.run(Config.instance.playerRunSpeed());
+                    player.run(Conf.instance.playerRunSpeed());
                 } else {
-                    player.walk(Config.instance.playerWalkSpeed());
+                    player.walk(Conf.instance.playerWalkSpeed());
                 }
             }
         }
@@ -107,7 +107,7 @@ public class ControlTrait extends Trait implements CMouseEventHandler, CKeyboard
         switch(state){
             case DOWN:
                 if (key == KeyboardKey.UP || key == KeyboardKey.W || key == KeyboardKey.SPACE){
-                    player.jump(Config.instance.playerJumpForce());
+                    player.jump(Conf.instance.playerJumpForce());
                 }
                 break;
             case UP:

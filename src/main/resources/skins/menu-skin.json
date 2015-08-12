@@ -6,7 +6,7 @@
   },
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
     "chalkFont": {
-      "file": "./src/main/resources/fonts/chalk.fnt"
+      "file": "fonts/chalk.fnt"
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable": {

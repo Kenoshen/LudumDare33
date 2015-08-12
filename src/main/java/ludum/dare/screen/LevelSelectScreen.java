@@ -43,7 +43,7 @@ public class LevelSelectScreen implements Screen {
         List<Level> levels = new ArrayList<>();
         levels.add(new TestLevel());
         levels.add(new TestLevel2());
-        for (FileHandle fileHandle : Gdx.files.internal("src/main/resources/levels").list()){
+        for (FileHandle fileHandle : Gdx.files.internal("levels").list()){
             levels.add(new Level(fileHandle));
         }
         for (final Level level : levels){

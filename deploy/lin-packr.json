@@ -1,0 +1,14 @@
+{
+  "platform": "linux64",
+  "jdk": "openjdk-1.7.0-u80-unofficial-macosx-x86_64-image.zip",
+  "executable": "LudumDare33",
+  "appjar": "../build/libs/LudumDare33-all-0.1.0.jar",
+  "mainclass": "ludum/dare/Application",
+  "vmargs": [
+    "-Xmx1G"
+  ],
+  "resources": [
+    "../src/main/resources"
+  ],
+  "outdir": "LudumDare33.Linux"
+}

@@ -1,10 +1,13 @@
 package ludum.dare;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.winger.input.raw.CKeyboard;
 import com.winger.input.raw.CMouse;
 import com.winger.input.raw.state.KeyboardKey;
 import com.winger.log.HTMLLogger;
 import com.winger.log.LogGroup;
+import com.winger.log.LogLevel;
 import ludum.dare.level.TestLevel2;
 import ludum.dare.screen.GameScreen;
 import ludum.dare.utils.AtlasManager;
@@ -20,25 +23,37 @@ public class Game extends com.badlogic.gdx.Game
     CKeyboard keyboard;
     CMouse mouse;
 
-    public Game(boolean debug){
+    public Game(){
         super();
-        this.debug = debug;
-        log.debug("Game constructed (debug: " + debug + ")");
     }
-
-    public Game(){this(false);}
 
     @Override
     public void create()
     {
-        log.debug("Game create(" + Config.instance.version() + ")");
+        debug = Conf.instance.isDebug();
+        log.debug("Game created (debug: " + debug + ")");
+        //
+        if (debug) {
+            HTMLLogger.setGlobalLogLevel(LogLevel.Debug);
+        } else {
+            HTMLLogger.setGlobalLogLevel(LogLevel.Info);
+        }
+        //
+        // should only run if you are running from the IDE, not the JAR
+        if (Gdx.files.internal("src/main/resources/").exists()) {
+            TexturePacker.process("src/main/resources/imgs/ui/menu", "src/main/resources/packed", "ui");
+            TexturePacker.process("src/main/resources/imgs/ui/background", "src/main/resources/packed", "ui-background");
+            TexturePacker.process("src/main/resources/imgs/game", "src/main/resources/packed", "game");
+        }
+        //
+        log.debug("Game create(" + Conf.instance.version() + ")");
         keyboard = CKeyboard.instance;
         mouse = CMouse.instance;
         //
-        AtlasManager.instance.loadAtlas("./src/main/resources/packed/game.atlas");
-        AtlasManager.instance.loadAtlas("./src/main/resources/packed/ui.atlas");
-        AtlasManager.instance.loadAtlas("./src/main/resources/packed/ui-background.atlas");
-        SkinManager.instance.loadSkin("src/main/resources/skins/menu-skin.json", "ui");
+        AtlasManager.instance.loadAtlas("packed/game.atlas");
+        AtlasManager.instance.loadAtlas("packed/ui.atlas");
+        AtlasManager.instance.loadAtlas("packed/ui-background.atlas");
+        SkinManager.instance.loadSkin("skins/menu-skin.json", "ui");
         //
         //setScreen(new SplashScreen(this));
         //setScreen(new MainMenuScreen(this));

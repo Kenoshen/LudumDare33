@@ -30,6 +30,7 @@ public class TestLevel extends Level{
         List<GameObject> objs = new ArrayList<>();
 
         objs.add(new Boundary(new Vector2(-20, 1), new Vector2(20, 1)));
+        // TODO: try out the animation trait with the player object
         objs.add(new Player(0, 5, 0, 2, 4, new Sprite(AtlasManager.instance.findRegion("cross")), new HashMap<String, Animation>(), CMouse.instance, CKeyboard.instance, null));
 
         TextureRegion tex = AtlasManager.instance.findRegion("white");

@@ -1,11 +1,12 @@
+ext.gameName = "Game"
+version = '0.1.0'
+
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
 apply plugin: 'application'
-apply plugin: 'com.github.johnrengelman.shadow'
 
 mainClassName = "ludum.dare.Application"
-version = '0.1.0'
 
 ext.server = 'http://www.bytebreakstudios.com:8081/artifactory'
 
@@ -13,7 +14,7 @@ repositories.maven { url "$server/all" }
 
 ext.gdxVersion = '1.6.4'
 dependencies {
-    compile "com.winger:Winger:0.1.0-SNAPSHOT"
+    compile group: "com.winger", name: "Winger", version: "0.1.2-SNAPSHOT", changing: true
 
     compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
@@ -24,22 +25,102 @@ dependencies {
     compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
 }
 
-//task fatJar(type: Jar) {
-//    baseName = project.name + '-all'
-//    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-//    with jar
-//}
-
-jar {
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
 buildscript {
-    repositories { jcenter() }
+    repositories {
+        jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
     dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.2'
+        classpath "gradle.plugin.edu.sc.seis:macAppBundle:2.1.1"
     }
 }
+
+jar {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+}
+
+task fatJar(type: Jar, dependsOn: 'compileJava') {
+    baseName = project.name + "-all"
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+    from {
+        sourceSets.main.output.classesDir
+    }
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    with jar
+}
+fatJar.dependsOn build
+
+task copyToLib(type: Copy) {
+    into "$buildDir/libs"
+    from configurations.compile
+}
+build.dependsOn(copyToLib)
+
+// ////////////////////////////////////
+//  DEPLOY TASKS
+// ////////////////////////////////////
+task macDeploy << {
+    def name = "$gameName" + "-" + version + ".app";
+
+    def dir = { String path ->
+        def d = new File(project.buildDir, path);
+        if (!d.exists()){
+            d.mkdirs();
+        }
+        return d
+    }
+    def cp = { String src, String dest ->
+        copy {
+            from project.projectDir.absolutePath + src
+            into project.buildDir.absolutePath + dest
+        }
+    }
+    def del = { String path ->
+        def d = new File(project.buildDir, path);
+        if (d.exists()){
+            d.delete()
+            println("deleted " + d)
+        }
+    }
+    del(name)
+
+    def contents = dir(name + "/Contents");
+    def javaDir = dir(name + "/Contents/Java");
+    def macOs = dir(name + "/Contents/MacOS");
+    def resources = dir(name + "/Contents/Resources");
+
+    cp("/deploy/Info.plist", "/" + name + "/Contents/")
+    cp("/deploy/Pkginfo", "/" + name + "/Contents/")
+
+    cp("/build/libs/" + project.name + "-all-" + version + ".jar", "/" + name + "/Contents/Java")
+
+    cp("/deploy/JavaAppLauncher", "/" + name + "/Contents/MacOS")
+    cp("/deploy/cross.icns", "/" + name + "/Contents/Resources")
+
+    new File(project.buildDir, name).setExecutable(true, false);
+}
+macDeploy.dependsOn fatJar
+
+
+task deploy {
+    // don't really need to do anything here, just depends on the other deploys
+}
+deploy.dependsOn macDeploy
+
 
 
 

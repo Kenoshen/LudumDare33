@@ -15,7 +15,7 @@ import com.winger.input.raw.CMouse;
 import com.winger.log.HTMLLogger;
 import com.winger.log.LogGroup;
 import com.winger.physics.CWorld;
-import ludum.dare.Config;
+import ludum.dare.Conf;
 import ludum.dare.Game;
 import ludum.dare.level.Level;
 import ludum.dare.trait.*;
@@ -52,7 +52,7 @@ public class GameScreen implements Screen {
         //
         world = new CWorld(camera);
         world.init(new Vector2(0, -30), true);
-        world.debug(Config.instance.isDebug());
+        world.debug(Conf.instance.isDebug());
         //
         mouse = CMouse.instance;
         keyboard = CKeyboard.instance;
@@ -98,7 +98,7 @@ public class GameScreen implements Screen {
 
         stage.act();
 
-        CWorld.world.update(Config.instance.worldStepTime());
+        CWorld.world.update(Conf.instance.worldStepTime());
         for (GameObject obj : gameObjects){
             List<Trait> traits = obj.getTraits(ControlTrait.class, PhysicalTrait.class, DebugTrait.class, UpdatableTrait.class);
             if (traits.get(0) != null) {

@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+echo ===============
+echo == MAC PACKR ==
+echo ===============
+java -jar packr.jar mac-packr.json
+echo ===============
+echo == WIN PACKR ==
+echo ===============
+java -jar packr.jar win-packr.json
+echo ===============
+echo == LIN PACKR ==
+echo ===============
+java -jar packr.jar lin-packr.json
