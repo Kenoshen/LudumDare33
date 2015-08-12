@@ -22,9 +22,9 @@ public class Player extends GameObject {
     public Player(float x, float y, float z, float width, float height, Sprite defaultSprite, Map<String, Animation> states, CMouse mouse, CKeyboard keyboard, CGamePad gamepad){
         traits.add(new PositionTrait(this, x, y, z));
         traits.add(new SizeTrait(this, width, height));
-        traits.add(new DrawableTrait(this, null));
+        traits.add(new DrawableTrait(this, defaultSprite));
         animator = new AnimatorTrait(this, states);
-        traits.add(animator);
+//        traits.add(animator);
         traits.add(new ControlTrait(this, mouse, keyboard, gamepad));
         CBody body = new PlayerBody(width, height).init(new Vector2(x, y));
         physical = new PhysicalTrait(this, body);

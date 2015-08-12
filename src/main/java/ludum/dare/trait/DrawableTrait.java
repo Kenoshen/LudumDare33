@@ -32,11 +32,11 @@ public class DrawableTrait extends Trait {
 
     public void draw(SpriteBatch spriteBatch){
         if (sprite != null) {
-            // TODO: figure out why stuff isn't drawing correctly, should be something related to the camera and spritebatch
-            sprite.setX(pos.x);
-            sprite.setY(pos.y);
-            sprite.setSize(size.width, size.height);
-            sprite.setOrigin(size.width / 2f, size.height / 2f);
+            // TODO: not sure why the size has to be double... that is really confusing me...
+            sprite.setSize(size.width * 2, size.height * 2);
+            sprite.setOrigin(sprite.getWidth() / 2f, sprite.getHeight() / 2f);
+            sprite.setX(pos.x - sprite.getWidth() / 2f); // also, this stuff seems kind of hacky?
+            sprite.setY(pos.y - sprite.getHeight() / 2f);
 
             sprite.setRotation(pos.rotation);
 

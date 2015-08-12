@@ -34,6 +34,14 @@ public abstract class GameObject {
         return ts;
     }
 
+    public GameObject addAndInitializeTrait(Trait trait){
+        if (trait != null) {
+            trait.initialize();
+            traits.add(trait);
+        }
+        return this;
+    }
+
     public void markForDeletion(){
         shouldBeDeleted = true;
     }

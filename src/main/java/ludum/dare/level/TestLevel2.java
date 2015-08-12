@@ -1,5 +1,6 @@
 package ludum.dare.level;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -7,9 +8,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.winger.input.raw.CKeyboard;
 import com.winger.input.raw.CMouse;
 import com.winger.utils.RandomUtils;
+import ludum.dare.trait.CameraFollowTrait;
 import ludum.dare.trait.GameObject;
 import ludum.dare.utils.AtlasManager;
 import ludum.dare.world.Boundary;
+import ludum.dare.world.CircleProp;
 import ludum.dare.world.Player;
 import ludum.dare.world.SquareProp;
 
@@ -29,16 +32,33 @@ public class TestLevel2 extends Level{
     @Override
     public List<GameObject> loadLevel(){
         List<GameObject> objs = new ArrayList<>();
+        float boundarySize = 30;
 
-        objs.add(new Boundary(new Vector2(-20, -20), new Vector2(20, -20), new Vector2(20, 20), new Vector2(-20, 20), new Vector2(-20, -20)));
-        objs.add(new Player(0, 5, 0, 2, 4, new Sprite(AtlasManager.instance.findRegion("cross")), new HashMap<String, Animation>(), CMouse.instance, CKeyboard.instance, null));
+        GameObject o = new Boundary(new Vector2(-boundarySize * 2, -boundarySize), new Vector2(boundarySize * 2, -boundarySize), new Vector2(boundarySize * 2, boundarySize), new Vector2(-boundarySize * 2, boundarySize), new Vector2(-boundarySize * 2, -boundarySize));
+        objs.add(o);
 
-        TextureRegion tex = AtlasManager.instance.findRegion("cross");
+        o = new Player(0, 5, 0, 2, 4, new Sprite(AtlasManager.instance.findRegion("cross")), new HashMap<String, Animation>(), CMouse.instance, CKeyboard.instance, null);
+        o.addAndInitializeTrait(new CameraFollowTrait(o));
+        objs.add(o);
+
+        TextureRegion tex = AtlasManager.instance.findRegion("white");
         for (int i = 0; i < 10; i++){
             Sprite s = new Sprite(tex);
             s.setColor(RandomUtils.randomColor());
             objs.add(new SquareProp(RandomUtils.rand(), RandomUtils.rand(), 0, 1, 1, s));
         }
+
+        Sprite s = new Sprite(tex);
+        s.setColor(Color.YELLOW.cpy());
+        o = new CircleProp(RandomUtils.rand(), RandomUtils.rand(), 0, 1, s);
+        o.addAndInitializeTrait(new CameraFollowTrait(o));
+        objs.add(o);
+
+        s = new Sprite(tex);
+        s.setColor(Color.YELLOW.cpy());
+        o = new CircleProp(RandomUtils.rand(), RandomUtils.rand(), 0, 1, s);
+        o.addAndInitializeTrait(new CameraFollowTrait(o));
+        objs.add(o);
 
         return objs;
     }

@@ -3,13 +3,13 @@ package ludum.dare.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.winger.camera.FollowOrthoCamera;
 import com.winger.input.raw.CKeyboard;
 import com.winger.input.raw.CMouse;
 import com.winger.log.HTMLLogger;
@@ -33,7 +33,7 @@ public class GameScreen implements Screen {
     private Game game;
     private Stage stage = new Stage();
 
-    private OrthographicCamera camera;
+    private FollowOrthoCamera camera;
     private CWorld world;
 
     private CMouse mouse;
@@ -47,8 +47,9 @@ public class GameScreen implements Screen {
     public GameScreen(final Game game, Level level){
         this.game = game;
         //
-        camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera.zoom = 0.1f;
+        camera = new FollowOrthoCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.zoom = camera.minZoom;
+        camera.minZoom = 1;
         //
         world = new CWorld(camera);
         world.init(new Vector2(0, -30), true);
@@ -123,21 +124,26 @@ public class GameScreen implements Screen {
         removeMarkedGameObjects();
 
         camera.update();
-        batch.setProjectionMatrix(camera.projection);
+        batch.setProjectionMatrix(camera.combined);
+        //batch.setTransformMatrix(camera.view);
         batch.begin();
         for (GameObject obj : gameObjects){
-            List<Trait> traits = obj.getTraits(AnimatorTrait.class, DrawableTrait.class);
+            List<Trait> traits = obj.getTraits(AnimatorTrait.class, DrawableTrait.class, CameraFollowTrait.class);
             if (traits.get(0) != null){
                 ((AnimatorTrait) traits.get(0)).update(delta);
             }
             if (traits.get(1) != null){
                 ((DrawableTrait) traits.get(1)).draw(batch);
             }
+            if (traits.get(2) != null){
+                ((CameraFollowTrait) traits.get(2)).updateCamera(camera);
+            }
         }
+        batch.end();
+
         if (CWorld.world.debug()){
             CWorld.world.draw();
         }
-        batch.end();
 
         stage.draw();
     }
