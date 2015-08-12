@@ -96,30 +96,89 @@ task macDeploy << {
             println("deleted " + d)
         }
     }
-    del(name)
+    del("deploy/mac/" + name)
 
-    def contents = dir(name + "/Contents");
-    def javaDir = dir(name + "/Contents/Java");
-    def macOs = dir(name + "/Contents/MacOS");
-    def resources = dir(name + "/Contents/Resources");
+    dir("deploy/mac/" + name + "/Contents/Java");
+    dir("deploy/mac/" + name + "/Contents/MacOS");
+    dir("deploy/mac/" + name + "/Contents/Resources");
 
-    cp("/deploy/Info.plist", "/" + name + "/Contents/")
-    cp("/deploy/Pkginfo", "/" + name + "/Contents/")
+    cp("/deploy/conf/Info.plist", "/deploy/mac/" + name + "/Contents/")
+    cp("/deploy/conf/Pkginfo", "/deploy/mac/" + name + "/Contents/")
 
-    cp("/build/libs/" + project.name + "-all-" + version + ".jar", "/" + name + "/Contents/Java")
+    cp("/build/libs/" + project.name + "-all-" + version + ".jar", "/deploy/mac/" + name + "/Contents/Java")
 
-    cp("/deploy/JavaAppLauncher", "/" + name + "/Contents/MacOS")
-    cp("/deploy/cross.icns", "/" + name + "/Contents/Resources")
+    cp("/deploy/executables/JavaAppLauncher", "/deploy/mac/" + name + "/Contents/MacOS")
+    cp("/deploy/icons/cross.icns", "/deploy/mac/" + name + "/Contents/Resources")
 
-    new File(project.buildDir, name).setExecutable(true, false);
+    new File(project.buildDir, "deploy/mac/" + name).setExecutable(true, false);
 }
-macDeploy.dependsOn fatJar
+//macDeploy.dependsOn fatJar
+
+task winAmdDeploy(type:Exec) {
+    executable "sh"
+    def str = "java -jar deploy/packr.jar "
+    str += "-platform windows "
+    str += "-jdk \"deploy/jres/openjdk-1.7.0-u80-unofficial-windows-amd64-image.zip\" "
+    str += "-executable $gameName "
+    str += "-appjar \"build/libs/" + project.name + "-all-" + version + ".jar\" "
+    str += "-mainclass \"ludum/dare/Application\" "
+    str += "-vmargs \"-Xmx1G\" "
+    str += "-resources src/main/resources "
+    str += "-outdir build/deploy/windows/amd/$gameName-" + version
+    args "-c", str
+}
+
+task winIntelDeploy(type:Exec) {
+    executable "sh"
+    def str = "java -jar deploy/packr.jar "
+    str += "-platform windows "
+    str += "-jdk \"deploy/jres/openjdk-1.7.0-u80-unofficial-windows-i586-image.zip\" "
+    str += "-executable $gameName "
+    str += "-appjar \"build/libs/" + project.name + "-all-" + version + ".jar\" "
+    str += "-mainclass \"ludum/dare/Application\" "
+    str += "-vmargs \"-Xmx1G\" "
+    str += "-resources src/main/resources "
+    str += "-outdir build/deploy/windows/i586/$gameName-" + version
+    args "-c", str
+}
+
+task linuxAmdDeploy(type:Exec) {
+    executable "sh"
+    def str = "java -jar deploy/packr.jar "
+    str += "-platform linux64 "
+    str += "-jdk \"deploy/jres/openjdk-1.7.0-u80-unofficial-windows-amd64-image.zip\" "
+    str += "-executable $gameName "
+    str += "-appjar \"build/libs/" + project.name + "-all-" + version + ".jar\" "
+    str += "-mainclass \"ludum/dare/Application\" "
+    str += "-vmargs \"-Xmx1G\" "
+    str += "-resources src/main/resources "
+    str += "-outdir build/deploy/linux/amd/$gameName-" + version
+    args "-c", str
+}
+
+task linuxIntelDeploy(type:Exec) {
+    executable "sh"
+    def str = "java -jar deploy/packr.jar "
+    str += "-platform linux64 "
+    str += "-jdk \"deploy/jres/openjdk-1.7.0-u80-unofficial-windows-i586-image.zip\" "
+    str += "-executable $gameName "
+    str += "-appjar \"build/libs/" + project.name + "-all-" + version + ".jar\" "
+    str += "-mainclass \"ludum/dare/Application\" "
+    str += "-vmargs \"-Xmx1G\" "
+    str += "-resources src/main/resources "
+    str += "-outdir build/deploy/linux/i586/$gameName-" + version
+    args "-c", str
+}
 
 
 task deploy {
     // don't really need to do anything here, just depends on the other deploys
 }
 deploy.dependsOn macDeploy
+deploy.dependsOn winAmdDeploy
+deploy.dependsOn winIntelDeploy
+deploy.dependsOn linuxAmdDeploy
+deploy.dependsOn linuxIntelDeploy
 
 
 
