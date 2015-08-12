@@ -68,7 +68,7 @@ task copyToLib(type: Copy) {
     into "$buildDir/libs"
     from configurations.compile
 }
-build.dependsOn(copyToLib)
+build.dependsOn copyToLib
 
 // ////////////////////////////////////
 //  DEPLOY TASKS
@@ -112,7 +112,6 @@ task macDeploy << {
 
     new File(project.buildDir, "deploy/mac/" + name).setExecutable(true, false);
 }
-//macDeploy.dependsOn fatJar
 
 task winAmdDeploy(type:Exec) {
     executable "sh"
