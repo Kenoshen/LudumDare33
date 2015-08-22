@@ -1,6 +1,7 @@
 package ludum.dare.trait;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import ludum.dare.utils.NamedAnimation;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,13 +12,13 @@ import java.util.Map;
 public class AnimatorTrait extends Trait {
     private static Class[] REQUIRES = new Class[]{ DrawableTrait.class };
 
-    private Map<String, Animation> states = new HashMap<>();
+    private Map<String, NamedAnimation> states = new HashMap<>();
     private String state = null;
     private DrawableTrait drawer;
     private float curTimer = 0;
     private boolean loop = false;
 
-    public AnimatorTrait(GameObject obj, Map<String, Animation> states){
+    public AnimatorTrait(GameObject obj, Map<String, NamedAnimation> states){
         super(obj);
         this.states.putAll(states);
     }
