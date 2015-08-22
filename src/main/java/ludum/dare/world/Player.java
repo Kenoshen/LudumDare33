@@ -1,8 +1,7 @@
 package ludum.dare.world;
 
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -33,33 +32,38 @@ public class Player extends GameObject {
     public Player(float x, float y, float z, float width, float height, CMouse mouse, CKeyboard keyboard, CGamePad gamepad){
         traits.add(new PositionTrait(this, x, y, z));
         traits.add(new SizeTrait(this, width, height));
-        final Sprite sprite = new Sprite();
-        traits.add(new DrawableTrait(this, sprite));
+        traits.add(new DrawableTrait(this));
 
 
         AnimationBundle bundle = new AnimationBundle();
 
-        final NamedAnimation animation = new NamedAnimation("stand", 0.2f, AtlasManager.instance.getAtlas("game").findRegions("bumStand"));
-        bundle.addNamedAnimation(animation);
-        bundle.addNamedAnimation(new NamedAnimation("walk", 0.2f, AtlasManager.instance.getAtlas("game").findRegions("bumWalk")));
+        bundle.addNamedAnimation(new NamedAnimation("stand", 0.1f, AtlasManager.instance.getAtlas("game").findRegions("bumStand"), new Vector2(0,0), new Vector2(6,6)));
+        bundle.addNamedAnimation(new NamedAnimation("walk", 0.1f, AtlasManager.instance.getAtlas("game").findRegions("bumWalk"), new Vector2(0,0), new Vector2(6,6)));
+        bundle.addNamedAnimation(new NamedAnimation("punch", 0.1f, AtlasManager.instance.getAtlas("game").findRegions("bumJab"), new Vector2(1.7f,0), new Vector2(8,6)));
 
         CollisionSequence sequence = new CollisionSequence();
-        sequence.name = "walk";
+        sequence.name = "punch";
 
         CollisionGroup group1 = new CollisionGroup();
-        group1.circles = new Circle[] {new Circle(1,1,1)};
+        group1.circles = new Circle[] {new Circle(7.2f,.5f,1.5f)};
 
-        CollisionGroup group2 = new CollisionGroup();
-        group2.circles = new Circle[] {new Circle(1,1.5f,1)};
-
-        CollisionGroup group3 = new CollisionGroup();
-        group3.circles = new Circle[] {new Circle(1,2,1)};
-
-        sequence.frames = new CollisionGroup[5];
-        sequence.frames[2] = group1;
-        sequence.frames[3] = group2;
-        sequence.frames[4] = group3;
+        sequence.frames = new CollisionGroup[3];
+        sequence.frames[0] = group1;
         bundle.addHitboxSequence(sequence);
+
+        CollisionSequence collisionSequence = new CollisionSequence();
+        collisionSequence.name = "stand";
+        collisionSequence.frames = new CollisionGroup[9];
+
+        // Generating the hurtbox
+        CollisionGroup collisionGroup = new CollisionGroup();
+        collisionGroup.boxes = new Rectangle[]{new Rectangle(0,0,5,5)};
+
+        for(int i = 0; i < collisionSequence.frames.length; i++){
+            collisionSequence.frames[i] = collisionGroup;
+        }
+
+        bundle.addHurtboxSequence(collisionSequence);
 
         animator = new AnimatorTrait(this, bundle.getAnimations());
         traits.add(animator);
@@ -67,7 +71,8 @@ public class Player extends GameObject {
         hitboxes = new TimedCollisionTrait(this, bundle);
         traits.add(hitboxes);
 
-        traits.add(new ControlTrait(this, mouse, keyboard, gamepad));
+        traits.add(new InputHandlerTrait(this, mouse, keyboard, gamepad));
+        traits.add(new ControlTrait(this));
         //
         // this part sets the collision filter for the boundary object
         // all boundary objects collide with Actor objects
@@ -79,30 +84,12 @@ public class Player extends GameObject {
         bD.type = BodyDef.BodyType.DynamicBody;
         bD.position.x = x;
         bD.position.y = y;
+        bD.fixedRotation = true;
         CBody body = new BoxBody(width, height).init(fD, bD);
         physical = new PhysicalTrait(this, body);
         traits.add(physical);
 
         traits.add(new DebugTrait(this));
-
-        final Player self = this;
-        traits.add(new UpdatableTrait(this, new Runnable(){
-            @Override
-            public void run() {
-                Vector2 vel = physical.body.getLinearVelocity();
-                if (vel.len() > PLAYER_ANIMATION_VEL_CHANGE){
-                    animator.changeStateIfUnique("walk", true);
-                } else {
-                    animator.changeStateIfUnique("stand", true);
-                }
-                DrawableTrait drawable = self.getTrait(DrawableTrait.class);
-                if (vel.x > 0){
-                    animator.flipped = false;
-                } else if(vel.x < 0) {
-                    animator.flipped = true;
-                }
-            }
-        }));
 
         initializeTraits();
 
