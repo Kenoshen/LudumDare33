@@ -22,7 +22,6 @@ import ludum.dare.level.Level;
 import ludum.dare.trait.*;
 import ludum.dare.utils.SkinManager;
 import ludum.dare.world.AIHiveMind;
-import ludum.dare.world.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,7 +104,6 @@ public class GameScreen implements Screen {
                 AIHiveMind.addEnemy(g);
             }
         }
-
     }
 
     @Override
@@ -128,7 +126,7 @@ public class GameScreen implements Screen {
                 ((DebugTrait) traits.get(2)).debug();
             }
             if (traits.get(3) != null) {
-                ((UpdatableTrait) traits.get(3)).update(delta);
+                ((UpdatableTrait) traits.get(3)).update();
             }
 
             // handle deletion of objects gracefully
@@ -143,11 +141,11 @@ public class GameScreen implements Screen {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         shaper.setProjectionMatrix(camera.combined);
-        //batch.setTransformMatrix(camera.view);
+
         batch.begin();
         shaper.begin(ShapeRenderer.ShapeType.Filled);
         for (GameObject obj : gameObjects){
-            List<Trait> traits = obj.getTraits(AnimatorTrait.class, DrawableTrait.class, TimedHitboxTrait.class, CameraFollowTrait.class);
+            List<Trait> traits = obj.getTraits(AnimatorTrait.class, DrawableTrait.class, TimedCollisionTrait.class, CameraFollowTrait.class);
             if (traits.get(0) != null){
                 ((AnimatorTrait) traits.get(0)).update(delta);
             }
@@ -155,7 +153,7 @@ public class GameScreen implements Screen {
                 ((DrawableTrait) traits.get(1)).draw(batch);
             }
             if (traits.get(2) != null){
-                ((TimedHitboxTrait) traits.get(2)).draw(shaper);
+                ((TimedCollisionTrait) traits.get(2)).draw(shaper);
             }
             if (traits.get(3) != null){
                 ((CameraFollowTrait) traits.get(3)).updateCamera(camera);

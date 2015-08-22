@@ -17,8 +17,7 @@ import ludum.dare.screen.SplashScreen;
 import ludum.dare.utils.AtlasManager;
 import ludum.dare.utils.SkinManager;
 
-public class Game extends com.badlogic.gdx.Game
-{
+public class Game extends com.badlogic.gdx.Game {
     private static final HTMLLogger log = HTMLLogger.getLogger(Game.class, LogGroup.System);
     com.badlogic.gdx.Application app;
 
@@ -27,13 +26,12 @@ public class Game extends com.badlogic.gdx.Game
     CKeyboard keyboard;
     CMouse mouse;
 
-    public Game(){
+    public Game() {
         super();
     }
 
     @Override
-    public void create()
-    {
+    public void create() {
         debug = Conf.instance.isDebug();
         log.debug("Game created (debug: " + debug + ")");
         //
@@ -42,15 +40,7 @@ public class Game extends com.badlogic.gdx.Game
         } else {
             HTMLLogger.setGlobalLogLevel(LogLevel.Info);
         }
-        //
-        // should only run if you are running from the IDE, not the JAR
-        if (Gdx.files.internal("src/main/resources/").exists()) {
-            TexturePacker.process("src/main/resources/imgs/ui/menu", "src/main/resources/packed", "ui");
-            TexturePacker.process("src/main/resources/imgs/ui/background", "src/main/resources/packed", "ui-background");
-            TexturePacker.process("src/main/resources/imgs/game", "src/main/resources/packed", "game");
-        }
-        //
-        log.debug("Game create(" + Conf.instance.version() + ")");
+        log.debug("Game created (" + Conf.instance.version() + ":" + (debug ? "debug" : "prod") + ")");
         keyboard = CKeyboard.instance;
         mouse = CMouse.instance;
         //
@@ -59,26 +49,26 @@ public class Game extends com.badlogic.gdx.Game
         AtlasManager.instance.loadAtlas("packed/ui-background.atlas");
         SkinManager.instance.loadSkin("skins/menu-skin.json", "ui");
         //
-        setScreen(new MainMenuScreen(this));
+        setScreen(new CutsceneScreen(this));
+        //setScreen(new MainMenuScreen(this));
+        //setScreen(new GameScreen(this, new TestLevel2()));
     }
 
 
     @Override
-    public void render()
-    {
+    public void render() {
         super.render();
         keyboard.update();
         mouse.update();
 
-        if (keyboard.isKeyJustPressed(KeyboardKey.ESCAPE)){
+        if (keyboard.isKeyJustPressed(KeyboardKey.ESCAPE)) {
             app.exit();
         }
     }
 
 
     @Override
-    public void dispose()
-    {
+    public void dispose() {
         log.debug("Game dispose()");
         super.dispose();
     }
