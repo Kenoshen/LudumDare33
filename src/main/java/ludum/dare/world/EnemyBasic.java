@@ -21,7 +21,7 @@ public class EnemyBasic extends GameObject{
 
     public EnemyBasic(float x, float y, float z, float width, float height, Sprite eSprite){
         traits.add(new PositionTrait(this, x, y, z));
-        traits.add(new SizeTrait(this, width, height));
+        //traits.add(new SizeTrait(this, width, height));
         traits.add(new DrawableTrait(this, eSprite));
         traits.add(new AITrait(this));
         traits.add(new EnemyBasicBehaviorTrait(this));
