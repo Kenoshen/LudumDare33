@@ -10,10 +10,7 @@ import com.winger.utils.RandomUtils;
 import ludum.dare.trait.CameraFollowTrait;
 import ludum.dare.trait.GameObject;
 import ludum.dare.utils.AtlasManager;
-import ludum.dare.world.Boundary;
-import ludum.dare.world.CircleProp;
-import ludum.dare.world.Player;
-import ludum.dare.world.SquareProp;
+import ludum.dare.world.*;
 
 import java.util.ArrayList;
 import java.util.List;
