@@ -40,7 +40,7 @@ public class TestLevel extends Level{
         // TODO: try out the animation trait with the player object
         //objs.add(new Player(0, 5, 0, 2, 4, new Sprite(AtlasManager.instance.findRegion("cross")), new HashMap<String, Animation>(), CMouse.instance, CKeyboard.instance, null));
         // Adding EnemyBasic to objs
-        objs.add(new EnemyBasic(9, 5, 0, 2, 4, new Sprite(AtlasManager.instance.findRegion("testEnemySprite")), new HashMap<String, Animation>()));
+        objs.add(new EnemyBasic(9, 5, 0, 2, 4, new Sprite(AtlasManager.instance.findRegion("testEnemySprite"))));
         AnimationBundle bundle = new AnimationBundle();
 
         TextureAtlas.AtlasRegion frame = AtlasManager.instance.findRegion("cross");

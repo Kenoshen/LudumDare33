@@ -16,10 +16,7 @@ import ludum.dare.trait.CameraFollowTrait;
 import ludum.dare.trait.GameObject;
 import ludum.dare.utils.AtlasManager;
 import ludum.dare.utils.NamedAnimation;
-import ludum.dare.world.Boundary;
-import ludum.dare.world.CircleProp;
-import ludum.dare.world.Player;
-import ludum.dare.world.SquareProp;
+import ludum.dare.world.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,6 +54,14 @@ public class TestLevel2 extends Level{
         bundle.addHitboxSequence(sequence);
 
         o = new Player(0, 5, 0, 2, 4, bundle, CMouse.instance, CKeyboard.instance, null);
+        o.addAndInitializeTrait(new CameraFollowTrait(o));
+        objs.add(o);
+
+        o = new EnemyBasic(10, 5, 0, 2, 4,  new Sprite(AtlasManager.instance.findRegion("testEnemySprite")));
+        o.addAndInitializeTrait(new CameraFollowTrait(o));
+        objs.add(o);
+
+        o = new EnemyThrower(10, 5, 0, 2, 4,  new Sprite(AtlasManager.instance.findRegion("testEnemySprite")));
         o.addAndInitializeTrait(new CameraFollowTrait(o));
         objs.add(o);
 

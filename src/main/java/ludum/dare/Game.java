@@ -12,6 +12,7 @@ import ludum.dare.level.TestLevel;
 import ludum.dare.level.TestLevel2;
 import ludum.dare.screen.CutsceneScreen;
 import ludum.dare.screen.GameScreen;
+import ludum.dare.screen.MainMenuScreen;
 import ludum.dare.screen.SplashScreen;
 import ludum.dare.utils.AtlasManager;
 import ludum.dare.utils.SkinManager;
@@ -58,8 +59,7 @@ public class Game extends com.badlogic.gdx.Game
         AtlasManager.instance.loadAtlas("packed/ui-background.atlas");
         SkinManager.instance.loadSkin("skins/menu-skin.json", "ui");
         //
-        //setScreen(new MainMenuScreen(this));
-        setScreen(new GameScreen(this, new TestLevel()));
+        setScreen(new MainMenuScreen(this));
     }
 
 

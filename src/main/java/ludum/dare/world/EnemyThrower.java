@@ -15,22 +15,21 @@ import java.util.Map;
 public class EnemyThrower extends GameObject{
     private PhysicalTrait physical;
 
-    public EnemyThrower(float x, float y, float z, float width, float height, Sprite eSprite, Map<String, Animation> states){
+    public EnemyThrower(float x, float y, float z, float width, float height, Sprite eSprite){
         traits.add(new PositionTrait(this, x, y, z));
         traits.add(new SizeTrait(this, width, height));
         traits.add(new DrawableTrait(this, eSprite));
         traits.add(new AITrait(this));
         traits.add(new EnemyThrowerBehaviorTrait(this));
         traits.add(new HealthTrait(this));
-        //        animator = new AnimatorTrait(this, states);
 
         CBody body = new BoxBody(width, height).init(new Vector2(x, y));
+//        body.body.setFixedRotation(true);
         physical = new PhysicalTrait(this, body);
         traits.add(physical);
 
         traits.add(new DebugTrait(this));
 
         initializeTraits();
-        body.setFriction(1);
     }
 }
