@@ -1,11 +1,10 @@
 package ludum.dare.trait;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import ludum.dare.utils.AnimationCallback;
 import ludum.dare.utils.NamedAnimation;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by mwingfield on 8/10/15.
@@ -19,6 +18,8 @@ public class AnimatorTrait extends Trait {
     private float curTimer = 0;
     private boolean loop = true;
     public boolean flipped = false;
+
+    private List<AnimationCallback> callbackList = new ArrayList<AnimationCallback>();
 
     public AnimatorTrait(GameObject obj, Map<String, NamedAnimation> states){
         super(obj);
@@ -85,6 +86,16 @@ public class AnimatorTrait extends Trait {
             drawer.sprite.flip(flipped, false);
             drawer.sprite.setSize(a.getSize().x, a.getSize().y);
             drawer.offset = a.getOffset();
+
+            if (!loop && a.isAnimationFinished(curTimer)) {
+                for(AnimationCallback callback : callbackList) {
+                    callback.animationEnded(a.getName());
+                }
+            }
         }
+    }
+
+    public void registerAnimationCallback(AnimationCallback callback) {
+        callbackList.add(callback);
     }
 }
