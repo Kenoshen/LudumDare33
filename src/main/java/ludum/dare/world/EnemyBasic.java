@@ -29,6 +29,7 @@ public class EnemyBasic extends GameObject{
 
         FixtureDef fd = new FixtureDef();
         BodyDef bd = new BodyDef();
+        bd.type = BodyDef.BodyType.DynamicBody;
         bd.position.x = x;
         bd.position.y = y;
         bd.fixedRotation = true;

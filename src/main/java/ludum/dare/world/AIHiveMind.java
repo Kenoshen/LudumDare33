@@ -49,28 +49,6 @@ public class AIHiveMind {
     }
     public static void minionLogic(GameObject e, GameObject p){
         if(e.getTrait(EnemyBasicBehaviorTrait.class) != null){
-            Vector2 vel = new Vector2(0, 0);
-            if(p.getTrait(PositionTrait.class).x < e.getTrait(PositionTrait.class).x){
-                vel.x -= 10.0;
-//                log.debug("player x: " + p.getTrait(PositionTrait.class).x + "\nenemy x: " + e.getTrait(PositionTrait.class).x);
-                log.debug("Enemy: Want to move left");
-            }
-            if(p.getTrait(PositionTrait.class).x >= e.getTrait(PositionTrait.class).x){
-                vel.x += 10.0;
-//                log.debug("player x: " + p.getTrait(PositionTrait.class).x + "\nenemy x: " + e.getTrait(PositionTrait.class).x);
-                log.debug("Enemy: Want to move right");
-            }
-            if(p.getTrait(PositionTrait.class).y < e.getTrait(PositionTrait.class).y){
-                vel.y -= 10.0;
-//                log.debug("player y: " + p.getTrait(PositionTrait.class).y + "\nenemy y: " + e.getTrait(PositionTrait.class).y);
-                log.debug("Enemy: Want to move down");
-            }
-            if(p.getTrait(PositionTrait.class).y >= e.getTrait(PositionTrait.class).y){
-                vel.y += 10.0;
-//                log.debug("player y: " + p.getTrait(PositionTrait.class).y + "\nenemy y: " + e.getTrait(PositionTrait.class).y);
-                log.debug("Enemy: Want to move up");
-            }
-            e.getTrait(PhysicalTrait.class).body.body.setLinearVelocity(vel);
             enemyBasicBehaviorLogic(e, p);
         }
         if(e.getTrait(EnemyThrowerBehaviorTrait.class) != null){
@@ -80,34 +58,62 @@ public class AIHiveMind {
 
     private static void enemyThrowerBehaviorLogic(GameObject e, GameObject p) {
         Vector2 vel = new Vector2(0,0);
-        if((p.getTrait(PositionTrait.class).x < e.getTrait(PositionTrait.class).x) && (e.getTrait(PositionTrait.class).x - p.getTrait(PositionTrait.class).x)>10){
+        if((p.getTrait(PositionTrait.class).x < e.getTrait(PositionTrait.class).x)
+                && (e.getTrait(PositionTrait.class).x - p.getTrait(PositionTrait.class).x)>20){
             vel.x -= 10.0;
         }
-        if((p.getTrait(PositionTrait.class).x >= e.getTrait(PositionTrait.class).x) && (p.getTrait(PositionTrait.class).x - e.getTrait(PositionTrait.class).x)>10){
+        if((p.getTrait(PositionTrait.class).x >= e.getTrait(PositionTrait.class).x)
+                && (p.getTrait(PositionTrait.class).x - e.getTrait(PositionTrait.class).x)>20){
             vel.x += 10.0;
         }
-        if((p.getTrait(PositionTrait.class).y < e.getTrait(PositionTrait.class).y) && (e.getTrait(PositionTrait.class).y - p.getTrait(PositionTrait.class).y)>10){
+        if((p.getTrait(PositionTrait.class).y < e.getTrait(PositionTrait.class).y)
+                && (e.getTrait(PositionTrait.class).y - p.getTrait(PositionTrait.class).y)>20){
             vel.y -= 10.0;
         }
-        if((p.getTrait(PositionTrait.class).y >= e.getTrait(PositionTrait.class).y) && (p.getTrait(PositionTrait.class).y - e.getTrait(PositionTrait.class).y)>10){
+        if((p.getTrait(PositionTrait.class).y >= e.getTrait(PositionTrait.class).y)
+                && (p.getTrait(PositionTrait.class).y - e.getTrait(PositionTrait.class).y)>20){
             vel.y += 10.0;
+        }
+        if((p.getTrait(PositionTrait.class).x < e.getTrait(PositionTrait.class).x)
+                && (e.getTrait(PositionTrait.class).x - p.getTrait(PositionTrait.class).x)<15){
+            vel.x += 7.0;
+        }
+        if((p.getTrait(PositionTrait.class).x >= e.getTrait(PositionTrait.class).x)
+                && (p.getTrait(PositionTrait.class).x - e.getTrait(PositionTrait.class).x)<15){
+            vel.x -= 7.0;
+        }
+        if((p.getTrait(PositionTrait.class).y < e.getTrait(PositionTrait.class).y)
+                && (e.getTrait(PositionTrait.class).y - p.getTrait(PositionTrait.class).y)<15){
+            vel.y += 7.0;
+        }
+        if((p.getTrait(PositionTrait.class).y >= e.getTrait(PositionTrait.class).y)
+                && (p.getTrait(PositionTrait.class).y - e.getTrait(PositionTrait.class).y)<15){
+            vel.y -= 7.0;
         }
         e.getTrait(PhysicalTrait.class).body.body.setLinearVelocity(vel);
     }
 
     public static void enemyBasicBehaviorLogic(GameObject e, GameObject p){
         Vector2 vel = new Vector2(0, 0);
-        if(p.getTrait(PositionTrait.class).x < e.getTrait(PositionTrait.class).x){
+        if((p.getTrait(PositionTrait.class).x < e.getTrait(PositionTrait.class).x)
+            && (e.getTrait(PositionTrait.class).x - p.getTrait(PositionTrait.class).x)>2){
             vel.x -= 10.0;
+            log.debug("Enemy: Want to move left");
         }
-        if(p.getTrait(PositionTrait.class).x >= e.getTrait(PositionTrait.class).x){
+        if((p.getTrait(PositionTrait.class).x >= e.getTrait(PositionTrait.class).x)
+            && (p.getTrait(PositionTrait.class).x - e.getTrait(PositionTrait.class).x)>2){
             vel.x += 10.0;
+            log.debug("Enemy: Want to move right");
         }
-        if(p.getTrait(PositionTrait.class).y < e.getTrait(PositionTrait.class).y){
+        if((p.getTrait(PositionTrait.class).y < e.getTrait(PositionTrait.class).y)
+            && (e.getTrait(PositionTrait.class).y - p.getTrait(PositionTrait.class).y)>2){
             vel.y -= 10.0;
+            log.debug("Enemy: Want to move down");
         }
-        if(p.getTrait(PositionTrait.class).y >= e.getTrait(PositionTrait.class).y){
+        if((p.getTrait(PositionTrait.class).y >= e.getTrait(PositionTrait.class).y)
+            && (p.getTrait(PositionTrait.class).y - e.getTrait(PositionTrait.class).y)>2){
             vel.y += 10.0;
+            log.debug("Enemy: Want to move up");
         }
         e.getTrait(PhysicalTrait.class).body.body.setLinearVelocity(vel);
     }

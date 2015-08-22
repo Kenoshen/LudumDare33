@@ -3,6 +3,8 @@ package ludum.dare.world;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.winger.physics.CBody;
 import com.winger.physics.body.BoxBody;
 import ludum.dare.trait.*;
@@ -23,8 +25,13 @@ public class EnemyThrower extends GameObject{
         traits.add(new EnemyThrowerBehaviorTrait(this));
         traits.add(new HealthTrait(this));
 
-        CBody body = new BoxBody(width, height).init(new Vector2(x, y));
-//        body.body.setFixedRotation(true);
+        FixtureDef fd = new FixtureDef();
+        BodyDef bd = new BodyDef();
+        bd.type = BodyDef.BodyType.DynamicBody;
+        bd.position.x = x;
+        bd.position.y = y;
+        bd.fixedRotation = true;
+        CBody body = new BoxBody(width, height).init(fd, bd);
         physical = new PhysicalTrait(this, body);
         traits.add(physical);
 
