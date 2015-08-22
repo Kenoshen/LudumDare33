@@ -16,6 +16,7 @@ import ludum.dare.trait.GameObject;
 import ludum.dare.utils.AtlasManager;
 import ludum.dare.utils.NamedAnimation;
 import ludum.dare.world.Boundary;
+import ludum.dare.world.EnemyBasic;
 import ludum.dare.world.Player;
 import ludum.dare.world.SquareProp;
 

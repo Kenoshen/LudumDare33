@@ -21,6 +21,7 @@ import ludum.dare.Game;
 import ludum.dare.level.Level;
 import ludum.dare.trait.*;
 import ludum.dare.utils.SkinManager;
+import ludum.dare.world.AIHiveMind;
 
 import java.util.ArrayList;
 import java.util.List;
