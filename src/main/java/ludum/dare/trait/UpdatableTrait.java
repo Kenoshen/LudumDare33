@@ -17,5 +17,5 @@ public class UpdatableTrait extends Trait {
     @Override
     public Class[] requires(){
         return new Class[0];
-    };
+    }
 }

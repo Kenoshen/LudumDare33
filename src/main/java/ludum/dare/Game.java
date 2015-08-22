@@ -8,9 +8,7 @@ import com.winger.input.raw.state.KeyboardKey;
 import com.winger.log.HTMLLogger;
 import com.winger.log.LogGroup;
 import com.winger.log.LogLevel;
-import ludum.dare.level.TestLevel2;
 import ludum.dare.screen.CutsceneScreen;
-import ludum.dare.screen.GameScreen;
 import ludum.dare.utils.AtlasManager;
 import ludum.dare.utils.SkinManager;
 
@@ -32,6 +30,7 @@ public class Game extends com.badlogic.gdx.Game
     public void create()
     {
         debug = Conf.instance.isDebug();
+        log.debug("Game created (debug: " + debug + ")");
         //
         if (debug) {
             HTMLLogger.setGlobalLogLevel(LogLevel.Debug);
@@ -47,9 +46,9 @@ public class Game extends com.badlogic.gdx.Game
         AtlasManager.instance.loadAtlas("packed/ui-background.atlas");
         SkinManager.instance.loadSkin("skins/menu-skin.json", "ui");
         //
-        //setScreen(new CutsceneScreen(this));
+        setScreen(new CutsceneScreen(this));
         //setScreen(new MainMenuScreen(this));
-        setScreen(new GameScreen(this, new TestLevel2()));
+        //setScreen(new GameScreen(this, new TestLevel2()));
     }
 
 
