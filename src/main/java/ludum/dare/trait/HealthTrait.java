@@ -4,7 +4,7 @@ package ludum.dare.trait;
  * Created by jake on 8/22/2015.
  */
 public class HealthTrait extends Trait {
-    public int Health;
+    public int health;
     public HealthTrait(GameObject obj) {
         super(obj);
     }
@@ -14,6 +14,6 @@ public class HealthTrait extends Trait {
         return new Class[0];
     }
     public void setHealth(int h){
-        Health = h;
+        health = h;
     }
 }
