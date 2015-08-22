@@ -26,6 +26,7 @@ public class NamedAnimation extends Animation{
 
     public NamedAnimation(String name, float frameDuration, TextureRegion... keyFrames) {
         super(frameDuration, keyFrames);
+        this.setPlayMode(PlayMode.LOOP);
         this.name = name;
     }
 

@@ -16,7 +16,7 @@ public class AnimatorTrait extends Trait {
     private String state = null;
     private DrawableTrait drawer;
     private float curTimer = 0;
-    private boolean loop = false;
+    private boolean loop = true;
 
     public AnimatorTrait(GameObject obj, Map<String, NamedAnimation> states){
         super(obj);
@@ -43,7 +43,7 @@ public class AnimatorTrait extends Trait {
     }
 
     public boolean setState(String state){
-        return setState(state, false);
+        return setState(state, true);
     }
 
     public boolean setState(String state, boolean loop){

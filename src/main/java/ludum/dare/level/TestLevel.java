@@ -2,6 +2,7 @@ package ludum.dare.level;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
@@ -39,20 +40,30 @@ public class TestLevel extends Level{
         // TODO: try out the animation trait with the player object
         AnimationBundle bundle = new AnimationBundle();
 
-        NamedAnimation animation = new NamedAnimation("basic", 0.2f, new TextureRegion[] {});
+        TextureAtlas.AtlasRegion frame = AtlasManager.instance.findRegion("cross");
+        NamedAnimation animation = new NamedAnimation("basic", 0.03f, new TextureRegion[] {frame, frame, frame, frame, frame});
         bundle.addNamedAnimation(animation);
 
         HitboxSequence sequence = new HitboxSequence();
         sequence.title = "basic";
 
-        HitboxGroup group = new HitboxGroup();
-        group.circles = new Circle[] {new Circle(0,0,10)};
+        HitboxGroup group1 = new HitboxGroup();
+        group1.circles = new Circle[] {new Circle(1,1,1)};
 
-        sequence.frames = new HitboxGroup[] {null, null, group, null, null};
+        HitboxGroup group2 = new HitboxGroup();
+        group2.circles = new Circle[] {new Circle(1,1.5f,1)};
+
+        HitboxGroup group3 = new HitboxGroup();
+        group3.circles = new Circle[] {new Circle(1,2,1)};
+
+        sequence.frames = new HitboxGroup[5];
+        sequence.frames[2] = group1;
+        sequence.frames[3] = group2;
+        sequence.frames[4] = group3;
         bundle.addHitboxSequence(sequence);
 
 
-        objs.add(new Player(0, 5, 0, 2, 4, new Sprite(AtlasManager.instance.findRegion("cross")), new HashMap<String, NamedAnimation>(), CMouse.instance, CKeyboard.instance, null));
+        objs.add(new Player(0, 5, 0, 2, 4, bundle, CMouse.instance, CKeyboard.instance, null));
 
         TextureRegion tex = AtlasManager.instance.findRegion("white");
         objs.add(new SquareProp(2, 7, 0, 1, 1,  new Sprite(tex)));
