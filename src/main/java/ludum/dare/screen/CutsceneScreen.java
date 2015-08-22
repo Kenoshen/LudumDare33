@@ -3,7 +3,6 @@ package ludum.dare.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -35,10 +34,7 @@ public class CutsceneScreen implements Screen {
 
     public CutsceneScreen(final Game game) {
 
-        FileHandle internal = Gdx.files.internal("src/main/resources/music/intro-withoutDelay.mp3");
-        System.out.println(internal.file().getAbsolutePath());
-
-        introMusic = Gdx.audio.newMusic(Gdx.files.internal("src/main/resources/music/intro-withoutDelay.mp3"));
+        introMusic = Gdx.audio.newMusic(Gdx.files.internal("music/intro-withoutDelay.mp3"));
         introMusic.setVolume(1);
         this.game = game;
 
@@ -129,17 +125,12 @@ public class CutsceneScreen implements Screen {
         }
 
         if (fade) {
-            try {
-                introMusic.setVolume(introMusic.getVolume() - .05f);
-                System.out.println(introMusic.getVolume());
-                if (introMusic.getVolume() <= 0) {
-                    introMusic.stop();
-                    game.setScreen(new SplashScreen(game));
-                    return;
-                }
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            introMusic.setVolume(introMusic.getVolume() - .008f);
+            System.out.println(introMusic.getVolume());
+            if (introMusic.getVolume() <= 0) {
+                introMusic.stop();
+                game.setScreen(new SplashScreen(game));
+                return;
             }
         }
     }
