@@ -33,6 +33,9 @@ public class AIHiveMind {
         if(enemyBasic.getTrait(EnemyBasicBehaviorTrait.class) != null){
             enemyBasic.getTrait(HealthTrait.class).setHealth(100);
         }
+        if(enemyBasic.getTrait(EnemyThrowerBehaviorTrait.class) != null){
+            enemyBasic.getTrait(HealthTrait.class).setHealth(80);
+        }
         Enemies.add(enemyBasic);
     }
     private void removeMarkedGameObjects() {
