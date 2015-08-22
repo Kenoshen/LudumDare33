@@ -31,4 +31,5 @@ public class PositionTrait extends Trait {
     public Class[] requires() {
         return new Class[0];
     }
+
 }
