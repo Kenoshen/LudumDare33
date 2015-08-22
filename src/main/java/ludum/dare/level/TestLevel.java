@@ -39,9 +39,9 @@ public class TestLevel extends Level{
         objs.add(new Player(0, 5, 0, 2, 4, CMouse.instance, CKeyboard.instance, null));
 
         TextureRegion tex = AtlasManager.instance.findRegion("white");
-        objs.add(new SquareProp(2, 7, 0, 1, 1,  new Sprite(tex)));
-        objs.add(new SquareProp(2, 7, 0, 1, 1, new Sprite(tex)));
-        objs.add(new SquareProp(2, 7, 0, 1, 1, new Sprite(tex)));
+//        objs.add(new SquareProp(2, 7, 0, 1, 1,  new Sprite(tex)));
+//        objs.add(new SquareProp(2, 7, 0, 1, 1, new Sprite(tex)));
+//        objs.add(new SquareProp(2, 7, 0, 1, 1, new Sprite(tex)));
 
         return objs;
     }
