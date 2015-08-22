@@ -1,14 +1,10 @@
 package ludum.dare.trait;
 
-import ludum.dare.world.Player;
-
 /**
  * Created by jake on 8/22/2015.
  */
-public class EnemyBasicBehaviorTrait extends Trait {
-
-
-    public EnemyBasicBehaviorTrait(GameObject obj) {
+public class AIMovementRangedTrait extends Trait {
+    public AIMovementRangedTrait(GameObject obj) {
         super(obj);
     }
 
@@ -16,6 +12,4 @@ public class EnemyBasicBehaviorTrait extends Trait {
     public Class[] requires() {
         return new Class[0];
     }
-
-
 }
