@@ -4,8 +4,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
-import ludum.dare.hitbox.HitboxGroup;
-import ludum.dare.hitbox.HitboxSequence;
+import ludum.dare.collision.AnimationBundle;
+import ludum.dare.collision.CollisionGroup;
+import ludum.dare.collision.CollisionSequence;
 import ludum.dare.utils.NamedAnimation;
 
 import java.util.Map;
@@ -13,15 +14,17 @@ import java.util.Map;
 /**
  * Created by Admin on 8/21/2015.
  */
-public class TimedHitboxTrait extends Trait {
+public class TimedCollisionTrait extends Trait {
     private static Class[] REQUIRES = new Class[]{AnimatorTrait.class, PositionTrait.class};
-    private Map<String, HitboxSequence> hitboxes;
+    private Map<String, CollisionSequence> hitboxes;
+    private Map<String, CollisionSequence> hurtboxes;
     private AnimatorTrait animations;
     private PositionTrait position;
 
-    public TimedHitboxTrait(GameObject obj, Map<String, HitboxSequence> hitboxes) {
+    public TimedCollisionTrait(GameObject obj, AnimationBundle bundle) {
         super(obj);
-        this.hitboxes = hitboxes;
+        this.hitboxes = bundle.getHitboxes();
+        this.hurtboxes = bundle.getHurtboxes();
     }
 
     @Override
@@ -36,11 +39,19 @@ public class TimedHitboxTrait extends Trait {
         return REQUIRES;
     }
 
-    public HitboxGroup getCurrentHitboxes() {
+    public CollisionGroup getCurrentHitboxes() {
+        return getCollisions(hitboxes);
+    }
+
+    public CollisionGroup getCurrentHurtboxes() {
+        return getCollisions(hurtboxes);
+    }
+
+    private CollisionGroup getCollisions(Map<String, CollisionSequence> data) {
         NamedAnimation animation = animations.getCurrentAnimation();
         String name = animation.getName();
-        if (hitboxes.containsKey(name)) {
-            HitboxSequence sequence = hitboxes.get(name);
+        if (data.containsKey(name)) {
+            CollisionSequence sequence = data.get(name);
             if (sequence.frames.length >= animation.getLastCalledFrame()) {
                 return sequence.frames[animation.getLastCalledFrame()];
             }
@@ -49,10 +60,24 @@ public class TimedHitboxTrait extends Trait {
     }
 
     public void draw(ShapeRenderer shaper) {
-        HitboxGroup hitboxes = getCurrentHitboxes();
+        CollisionGroup hurtboxes = getCurrentHurtboxes();
+        if (hurtboxes != null) {
+            shaper.setColor(Color.YELLOW.sub(0,0,0,.5f));
+            if (hurtboxes.circles != null) {
+                for (Circle circle : hurtboxes.circles) {
+                    shaper.circle(position.x + circle.x, position.y + circle.y, circle.radius);
+                }
+            }
+
+            if (hurtboxes.boxes != null) {
+                for (Rectangle rec : hurtboxes.boxes) {
+                    shaper.rect(position.x + rec.x, position.y + rec.y, rec.width, rec.height);
+                }
+            }
+        }
+        CollisionGroup hitboxes = getCurrentHitboxes();
         if (hitboxes != null) {
-//            System.out.println("hitboxes to render");
-            shaper.setColor(Color.RED);
+            shaper.setColor(Color.RED.sub(0,0,0,.5f));
             if (hitboxes.circles != null) {
                 for (Circle circle : hitboxes.circles) {
                     shaper.circle(position.x + circle.x, position.y + circle.y, circle.radius);

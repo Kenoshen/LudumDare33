@@ -1,6 +1,5 @@
 package ludum.dare.world;
 
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -10,13 +9,9 @@ import com.winger.input.raw.CKeyboard;
 import com.winger.input.raw.CMouse;
 import com.winger.physics.CBody;
 import com.winger.physics.body.BoxBody;
-import com.winger.physics.body.PlayerBody;
-import ludum.dare.hitbox.AnimationBundle;
+import ludum.dare.collision.AnimationBundle;
 import ludum.dare.Conf;
 import ludum.dare.trait.*;
-import ludum.dare.utils.NamedAnimation;
-
-import java.util.Map;
 
 /**
  * Created by mwingfield on 8/3/15.
@@ -24,7 +19,7 @@ import java.util.Map;
 public class Player extends GameObject {
     private PhysicalTrait physical;
     private AnimatorTrait animator;
-    private TimedHitboxTrait hitboxes;
+    private TimedCollisionTrait hitboxes;
 
     public Player(float x, float y, float z, float width, float height, AnimationBundle bundle, CMouse mouse, CKeyboard keyboard, CGamePad gamepad){
         traits.add(new PositionTrait(this, x, y, z));
@@ -33,7 +28,7 @@ public class Player extends GameObject {
         animator = new AnimatorTrait(this, bundle.getAnimations());
         traits.add(animator);
 
-        hitboxes = new TimedHitboxTrait(this, bundle.getHitboxes());
+        hitboxes = new TimedCollisionTrait(this, bundle);
         traits.add(hitboxes);
 
         traits.add(new ControlTrait(this, mouse, keyboard, gamepad));

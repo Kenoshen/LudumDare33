@@ -129,11 +129,11 @@ public class GameScreen implements Screen {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         shaper.setProjectionMatrix(camera.combined);
-        //batch.setTransformMatrix(camera.view);
+
         batch.begin();
         shaper.begin(ShapeRenderer.ShapeType.Filled);
         for (GameObject obj : gameObjects){
-            List<Trait> traits = obj.getTraits(AnimatorTrait.class, DrawableTrait.class, TimedHitboxTrait.class, CameraFollowTrait.class);
+            List<Trait> traits = obj.getTraits(AnimatorTrait.class, DrawableTrait.class, TimedCollisionTrait.class, CameraFollowTrait.class);
             if (traits.get(0) != null){
                 ((AnimatorTrait) traits.get(0)).update(delta);
             }
@@ -141,7 +141,7 @@ public class GameScreen implements Screen {
                 ((DrawableTrait) traits.get(1)).draw(batch);
             }
             if (traits.get(2) != null){
-                ((TimedHitboxTrait) traits.get(2)).draw(shaper);
+                ((TimedCollisionTrait) traits.get(2)).draw(shaper);
             }
             if (traits.get(3) != null){
                 ((CameraFollowTrait) traits.get(3)).updateCamera(camera);
