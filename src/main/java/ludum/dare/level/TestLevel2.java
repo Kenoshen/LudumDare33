@@ -1,28 +1,21 @@
 package ludum.dare.level;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.winger.input.raw.CKeyboard;
 import com.winger.input.raw.CMouse;
 import com.winger.utils.RandomUtils;
-import ludum.dare.hitbox.AnimationBundle;
-import ludum.dare.hitbox.HitboxGroup;
-import ludum.dare.hitbox.HitboxSequence;
 import ludum.dare.trait.CameraFollowTrait;
 import ludum.dare.trait.GameObject;
 import ludum.dare.utils.AtlasManager;
-import ludum.dare.utils.NamedAnimation;
 import ludum.dare.world.Boundary;
 import ludum.dare.world.CircleProp;
 import ludum.dare.world.Player;
 import ludum.dare.world.SquareProp;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**

@@ -52,7 +52,7 @@ public class TimedCollisionTrait extends Trait {
         String name = animation.getName();
         if (data.containsKey(name)) {
             CollisionSequence sequence = data.get(name);
-            if (sequence.frames.length >= animation.getLastCalledFrame()) {
+            if (animation.getLastCalledFrame() < sequence.frames.length) {
                 return sequence.frames[animation.getLastCalledFrame()];
             }
         }
@@ -62,7 +62,7 @@ public class TimedCollisionTrait extends Trait {
     public void draw(ShapeRenderer shaper) {
         CollisionGroup hurtboxes = getCurrentHurtboxes();
         if (hurtboxes != null) {
-            shaper.setColor(Color.YELLOW.sub(0,0,0,.5f));
+            shaper.setColor(Color.YELLOW);
             if (hurtboxes.circles != null) {
                 for (Circle circle : hurtboxes.circles) {
                     shaper.circle(position.x + circle.x, position.y + circle.y, circle.radius);
@@ -77,7 +77,7 @@ public class TimedCollisionTrait extends Trait {
         }
         CollisionGroup hitboxes = getCurrentHitboxes();
         if (hitboxes != null) {
-            shaper.setColor(Color.RED.sub(0,0,0,.5f));
+            shaper.setColor(Color.RED);
             if (hitboxes.circles != null) {
                 for (Circle circle : hitboxes.circles) {
                     shaper.circle(position.x + circle.x, position.y + circle.y, circle.radius);
