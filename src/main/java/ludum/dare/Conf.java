@@ -65,4 +65,12 @@ public class Conf extends com.winger.utils.Config {
     public float worldStepTime(){
         return get("world.step.time", Double.class).floatValue();
     }
+
+    public short physicsBitFilterBoundary(){
+        return get("world.filter.boundary", Double.class).shortValue();
+    }
+
+    public short physicsBitFilterActor(){
+        return get("world.filter.actor", Double.class).shortValue();
+    }
 }
