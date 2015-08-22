@@ -56,7 +56,7 @@ public class CollidableTrait extends Trait {
                                         boolean collisionFound = false;
 
                                         for(Tups.Tup2<GameObject, GameObject> tuple : listCollisions){
-                                            if(collision.i1() == tuple.i2() && collision.i2() == tuple.i1()){
+                                            if((collision.i1() == tuple.i2() && collision.i2() == tuple.i1()) || (collision.i1() == tuple.i1() && collision.i2() == tuple.i2())){
                                                 collisionFound = true;
                                             }
                                         }
