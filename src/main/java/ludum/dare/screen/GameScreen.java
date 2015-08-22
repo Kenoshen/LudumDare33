@@ -54,7 +54,7 @@ public class GameScreen implements Screen {
         camera.minZoom = 1;
         //
         world = new CWorld(camera);
-        world.init(new Vector2(0, -30), true);
+        world.init(new Vector2(0, 0), true);
         world.debug(Conf.instance.isDebug());
         //
         mouse = CMouse.instance;

@@ -56,9 +56,7 @@ public class TestLevel2 extends Level{
         sequence.frames[2] = group;
         bundle.addHitboxSequence(sequence);
 
-
-        objs.add(new Player(0, 5, 0, 2, 4, bundle, CMouse.instance, CKeyboard.instance, null));
-
+        o = new Player(0, 5, 0, 2, 4, bundle, CMouse.instance, CKeyboard.instance, null);
         o.addAndInitializeTrait(new CameraFollowTrait(o));
         objs.add(o);
 
