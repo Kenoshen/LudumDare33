@@ -15,4 +15,3 @@ public abstract class UpdatableTrait extends Trait {
         return new Class[0];
     }
 }
-//somewhere
