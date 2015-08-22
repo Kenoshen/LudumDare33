@@ -18,6 +18,7 @@ public class AnimatorTrait extends Trait {
     private DrawableTrait drawer;
     private float curTimer = 0;
     private boolean loop = true;
+    public boolean flipped = false;
 
     public AnimatorTrait(GameObject obj, Map<String, NamedAnimation> states){
         super(obj);
@@ -81,6 +82,7 @@ public class AnimatorTrait extends Trait {
         if (a != null){
             curTimer += delta;
             drawer.sprite.setRegion(a.getKeyFrame(curTimer, loop));
+            drawer.sprite.flip(flipped, false);
         }
     }
 }

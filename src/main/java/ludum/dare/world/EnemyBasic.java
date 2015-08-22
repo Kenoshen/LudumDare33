@@ -31,17 +31,8 @@ public class EnemyBasic extends GameObject{
 
         traits.add(new DebugTrait(this));
 
-        traits.add(new UpdatableTrait(this) {
-            @Override
-            public void update(float delta) {
-                ((EnemyBasic)self).update(delta);
-            }
-        });
-
         initializeTraits();
         body.setFriction(1);
-    }
-    public void update(float delta){
     }
 }
 
