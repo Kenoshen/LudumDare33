@@ -34,7 +34,7 @@ public class TestLevel extends Level{
         // TODO: try out the animation trait with the player object
         objs.add(new Player(0, 5, 0, 2, 4, new Sprite(AtlasManager.instance.findRegion("cross")), new HashMap<String, Animation>(), CMouse.instance, CKeyboard.instance, null));
         // Adding Enemy to objs
-        //objs.add(new Enemy(0, 9, 0, 2, 4, /*TODO ADD SPRITE HERE*/, new HashMap<String, Animation>()));
+        objs.add(new Enemy(9, 5, 0, 2, 4, new Sprite(AtlasManager.instance.findRegion("testEnemySprite")), new HashMap<String, Animation>()));
 
         TextureRegion tex = AtlasManager.instance.findRegion("white");
         objs.add(new SquareProp(2, 7, 0, 1, 1,  new Sprite(tex)));

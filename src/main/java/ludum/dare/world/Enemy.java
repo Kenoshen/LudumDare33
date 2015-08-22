@@ -1,7 +1,10 @@
 package ludum.dare.world;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import javafx.animation.Animation;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.math.Vector2;
+import com.winger.physics.CBody;
+import com.winger.physics.body.PlayerBody;
 import ludum.dare.trait.*;
 
 import java.util.Map;
@@ -17,7 +20,23 @@ public class Enemy extends GameObject{
         traits.add(new PositionTrait(this, x, y, z));
         traits.add(new SizeTrait(this, width, height));
         traits.add(new DrawableTrait(this, eSprite));
-        //animator = new AnimatorTrait(this, states);
+        animator = new AnimatorTrait(this, states);
+
+        CBody body = new PlayerBody(width, height).init(new Vector2(x, y));
+        physical = new PhysicalTrait(this, body);
+        traits.add(physical);
+
+        traits.add(new DebugTrait(this));
+
+        traits.add(new UpdatableTrait(this) {
+            @Override
+            public void update(float delta) {
+                ((Enemy)self).update(delta);
+            }
+        });
+
+        initializeTraits();
+        body.setFriction(1);
     }
     public void update(float delta){
 
