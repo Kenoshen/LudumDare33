@@ -27,7 +27,7 @@ public class SplashScreen implements Screen {
         stage = new Stage();
         ldWallpaper = new Image(AtlasManager.instance.findRegion("ludumdarewallpaper"));
         ldWallpaper.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        bdWallpaper = new Image(AtlasManager.instance.findRegion("bitdecaywallpaper"));
+        bdWallpaper = new Image(AtlasManager.instance.findRegion("bitDecayGamesInverted"));
         bdWallpaper.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage.addActor(ldWallpaper);
         stage.addActor(bdWallpaper);
