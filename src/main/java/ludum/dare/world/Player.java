@@ -37,9 +37,9 @@ public class Player extends GameObject {
 
         AnimationBundle bundle = new AnimationBundle();
 
-        bundle.addNamedAnimation(new NamedAnimation("stand", 0.1f, AtlasManager.instance.getAtlas("game").findRegions("bumStand"), new Vector2(0,0), new Vector2(6,6)));
-        bundle.addNamedAnimation(new NamedAnimation("walk", 0.1f, AtlasManager.instance.getAtlas("game").findRegions("bumWalk"), new Vector2(0,0), new Vector2(6,6)));
-        bundle.addNamedAnimation(new NamedAnimation("punch", 0.1f, AtlasManager.instance.getAtlas("game").findRegions("bumJab"), new Vector2(1.7f,0), new Vector2(8,6)));
+        bundle.addNamedAnimation(new NamedAnimation("stand", 0.1f, AtlasManager.instance.getAtlas("game").findRegions("bumStand"), new Vector2(0,-.3f), new Vector2(6,6)));
+        bundle.addNamedAnimation(new NamedAnimation("walk", 0.1f, AtlasManager.instance.getAtlas("game").findRegions("bumWalk"), new Vector2(0,-.3f), new Vector2(6,6)));
+        bundle.addNamedAnimation(new NamedAnimation("punch", 0.1f, AtlasManager.instance.getAtlas("game").findRegions("bumJab"), new Vector2(1.7f,-.3f), new Vector2(8,6)));
 
         CollisionSequence sequence = new CollisionSequence();
         sequence.name = "punch";

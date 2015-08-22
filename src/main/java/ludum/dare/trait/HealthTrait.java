@@ -5,15 +5,19 @@ package ludum.dare.trait;
  */
 public class HealthTrait extends Trait {
     public int health;
-    public HealthTrait(GameObject obj) {
+    public HealthTrait(GameObject obj, int h) {
         super(obj);
+        health = h;
     }
 
     @Override
     public Class[] requires() {
         return new Class[0];
     }
-    public void setHealth(int h){
-        health = h;
+    public void damage(int d){
+        health -= d;
+    }
+    public void heal(int h){
+        health += h;
     }
 }
