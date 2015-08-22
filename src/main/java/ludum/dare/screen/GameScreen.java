@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -42,6 +43,7 @@ public class GameScreen implements Screen {
     private CKeyboard keyboard;
 
     private SpriteBatch batch;
+    private ShapeRenderer shaper;
 
     public List<GameObject> gameObjects = new ArrayList<>();
     private List<GameObject> objsToDelete = new ArrayList<>();
@@ -56,13 +58,14 @@ public class GameScreen implements Screen {
         camera.minZoom = 1;
         //
         world = new CWorld(camera);
-        world.init(new Vector2(0, -30), true);
+        world.init(new Vector2(0, 0), true);
         world.debug(Conf.instance.isDebug());
         //
         mouse = CMouse.instance;
         keyboard = CKeyboard.instance;
         //
         batch = new SpriteBatch();
+        shaper = new ShapeRenderer();
         //
         TextButton btn = new TextButton("Back", SkinManager.instance.getSkin("menu-skin"), "simple");
         btn.setPosition(50, 50);
@@ -139,10 +142,12 @@ public class GameScreen implements Screen {
 
         camera.update();
         batch.setProjectionMatrix(camera.combined);
+        shaper.setProjectionMatrix(camera.combined);
         //batch.setTransformMatrix(camera.view);
         batch.begin();
+        shaper.begin(ShapeRenderer.ShapeType.Filled);
         for (GameObject obj : gameObjects){
-            List<Trait> traits = obj.getTraits(AnimatorTrait.class, DrawableTrait.class, CameraFollowTrait.class);
+            List<Trait> traits = obj.getTraits(AnimatorTrait.class, DrawableTrait.class, TimedHitboxTrait.class, CameraFollowTrait.class);
             if (traits.get(0) != null){
                 ((AnimatorTrait) traits.get(0)).update(delta);
             }
@@ -150,10 +155,14 @@ public class GameScreen implements Screen {
                 ((DrawableTrait) traits.get(1)).draw(batch);
             }
             if (traits.get(2) != null){
-                ((CameraFollowTrait) traits.get(2)).updateCamera(camera);
+                ((TimedHitboxTrait) traits.get(2)).draw(shaper);
+            }
+            if (traits.get(3) != null){
+                ((CameraFollowTrait) traits.get(3)).updateCamera(camera);
             }
         }
         batch.end();
+        shaper.end();
 
         if (CWorld.world.debug()){
             CWorld.world.draw();

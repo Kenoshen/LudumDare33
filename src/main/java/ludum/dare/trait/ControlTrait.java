@@ -8,6 +8,7 @@ import com.winger.input.raw.CGamePad;
 import com.winger.input.raw.CKeyboard;
 import com.winger.input.raw.CMouse;
 import com.winger.input.raw.state.*;
+import com.winger.physics.body.BoxBody;
 import com.winger.physics.body.PlayerBody;
 import ludum.dare.Conf;
 
@@ -22,7 +23,7 @@ public class ControlTrait extends Trait implements CMouseEventHandler, CKeyboard
     private CGamePad gamepad;
 
     private PhysicalTrait physical;
-    private PlayerBody player;
+    private BoxBody player;
 
 
     public ControlTrait(GameObject obj, CMouse mouse, CKeyboard keyboard) {
@@ -44,10 +45,10 @@ public class ControlTrait extends Trait implements CMouseEventHandler, CKeyboard
     public void initialize(){
         super.initialize();
         physical = self.getTrait(PhysicalTrait.class);
-        if (!(physical.body instanceof PlayerBody)){
-            throw new RuntimeException("ControlTrait requires PhysicalTrait, but it also requires a PlayerBody for the physicalTrait.body");
+        if (!(physical.body instanceof BoxBody)){
+            throw new RuntimeException("ControlTrait requires PhysicalTrait, but it also requires a BoxBody for the physicalTrait.body");
         }
-        player = (PlayerBody)physical.body;
+        player = (BoxBody)physical.body;
 
         if (mouse != null){
             mouse.subscribeToAllMouseClickEvents(this);
@@ -70,18 +71,40 @@ public class ControlTrait extends Trait implements CMouseEventHandler, CKeyboard
 
     public void update(){
         if (keyboard != null){
+            Vector2 movement = new Vector2(0, 0);
             if (keyboard.isKeyBeingPressed(KeyboardKey.LEFT) || keyboard.isKeyBeingPressed(KeyboardKey.A)){
                 if (keyboard.isKeyBeingPressed(KeyboardKey.LEFT_SHIFT) || keyboard.isKeyBeingPressed(KeyboardKey.RIGHT_SHIFT)){
-                    player.run(-Conf.instance.playerRunSpeed());
+                    movement.x -= Conf.instance.playerRunSpeed();
                 } else {
-                    player.walk(-Conf.instance.playerWalkSpeed());
+                    movement.x -= Conf.instance.playerWalkSpeed();
                 }
             } else if (keyboard.isKeyBeingPressed(KeyboardKey.RIGHT) || keyboard.isKeyBeingPressed(KeyboardKey.D)){
                 if (keyboard.isKeyBeingPressed(KeyboardKey.LEFT_SHIFT) || keyboard.isKeyBeingPressed(KeyboardKey.RIGHT_SHIFT)){
-                    player.run(Conf.instance.playerRunSpeed());
+                    movement.x += Conf.instance.playerRunSpeed();
                 } else {
-                    player.walk(Conf.instance.playerWalkSpeed());
+                    movement.x += Conf.instance.playerWalkSpeed();
                 }
+            }
+            if (keyboard.isKeyBeingPressed(KeyboardKey.UP) || keyboard.isKeyBeingPressed(KeyboardKey.W)){
+                if (keyboard.isKeyBeingPressed(KeyboardKey.LEFT_SHIFT) || keyboard.isKeyBeingPressed(KeyboardKey.RIGHT_SHIFT)){
+                    movement.y += Conf.instance.playerRunSpeed();
+                } else {
+                    movement.y += Conf.instance.playerWalkSpeed();
+                }
+            } else if (keyboard.isKeyBeingPressed(KeyboardKey.DOWN) || keyboard.isKeyBeingPressed(KeyboardKey.S)){
+                if (keyboard.isKeyBeingPressed(KeyboardKey.LEFT_SHIFT) || keyboard.isKeyBeingPressed(KeyboardKey.RIGHT_SHIFT)){
+                    movement.y -= Conf.instance.playerRunSpeed();
+                } else {
+                    movement.y -= Conf.instance.playerWalkSpeed();
+                }
+            }
+            if (movement.len() < 1){
+                Vector2 vel = physical.body.body.getLinearVelocity();
+                vel.x *= -1;
+                vel.y *= -1;
+                physical.body.body.applyLinearImpulse(vel, new Vector2(0, 0), true);
+            } else {
+                physical.body.body.setLinearVelocity(movement);
             }
         }
     }
@@ -104,15 +127,6 @@ public class ControlTrait extends Trait implements CMouseEventHandler, CKeyboard
 
     @Override
     public void handleKeyEvent(CKeyboard keyboard, KeyboardKey key, ButtonState state) {
-        switch(state){
-            case DOWN:
-                if (key == KeyboardKey.UP || key == KeyboardKey.W || key == KeyboardKey.SPACE){
-                    player.jump(Conf.instance.playerJumpForce());
-                }
-                break;
-            case UP:
-                break;
-        }
     }
 
     @Override
