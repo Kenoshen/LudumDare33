@@ -12,6 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Align;
+import com.winger.input.raw.CKeyboard;
+import com.winger.input.raw.state.KeyboardKey;
 import ludum.dare.Game;
 import ludum.dare.utils.SkinManager;
 
@@ -26,10 +28,13 @@ public class CutsceneScreen implements Screen {
     ArrayList<Label> listStoryText;
     BitmapFont bitmapFont;
 
+    CKeyboard keyboard;
+
     public CutsceneScreen(final Game game){
         this.game = game;
 
         listStoryText = new ArrayList<>();
+        keyboard = CKeyboard.instance;
 
         listStoryText.add(generateWrappableLabel("In the future... ", SkinManager.instance.getSkin("menu-skin"), true));
         listStoryText.add(generateWrappableLabel("Hobos are considered a myth... ", SkinManager.instance.getSkin("menu-skin"), true));
@@ -107,6 +112,12 @@ public class CutsceneScreen implements Screen {
 
         stage.act();
         stage.draw();
+
+        keyboard.update();
+
+        if (keyboard.isKeyJustPressed(KeyboardKey.S)){
+            game.setScreen(new MainMenuScreen(game));
+        }
     }
 
     @Override
