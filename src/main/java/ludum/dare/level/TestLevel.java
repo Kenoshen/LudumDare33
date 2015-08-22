@@ -3,11 +3,17 @@ package ludum.dare.level;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.winger.input.raw.CKeyboard;
 import com.winger.input.raw.CMouse;
+import ludum.dare.hitbox.AnimationBundle;
+import ludum.dare.hitbox.HitboxGroup;
+import ludum.dare.hitbox.HitboxSequence;
 import ludum.dare.trait.GameObject;
 import ludum.dare.utils.AtlasManager;
+import ludum.dare.utils.NamedAnimation;
 import ludum.dare.world.Boundary;
 import ludum.dare.world.Player;
 import ludum.dare.world.SquareProp;
@@ -31,7 +37,22 @@ public class TestLevel extends Level{
 
         objs.add(new Boundary(new Vector2(-20, 1), new Vector2(20, 1)));
         // TODO: try out the animation trait with the player object
-        objs.add(new Player(0, 5, 0, 2, 4, new Sprite(AtlasManager.instance.findRegion("cross")), new HashMap<String, Animation>(), CMouse.instance, CKeyboard.instance, null));
+        AnimationBundle bundle = new AnimationBundle();
+
+        NamedAnimation animation = new NamedAnimation("basic", 0.2f, new TextureRegion[] {});
+        bundle.addNamedAnimation(animation);
+
+        HitboxSequence sequence = new HitboxSequence();
+        sequence.title = "basic";
+
+        HitboxGroup group = new HitboxGroup();
+        group.circles = new Circle[] {new Circle(0,0,10)};
+
+        sequence.frames = new HitboxGroup[] {null, null, group, null, null};
+        bundle.addHitboxSequence(sequence);
+
+
+        objs.add(new Player(0, 5, 0, 2, 4, new Sprite(AtlasManager.instance.findRegion("cross")), new HashMap<String, NamedAnimation>(), CMouse.instance, CKeyboard.instance, null));
 
         TextureRegion tex = AtlasManager.instance.findRegion("white");
         objs.add(new SquareProp(2, 7, 0, 1, 1,  new Sprite(tex)));

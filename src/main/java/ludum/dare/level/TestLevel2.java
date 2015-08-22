@@ -11,6 +11,7 @@ import com.winger.utils.RandomUtils;
 import ludum.dare.trait.CameraFollowTrait;
 import ludum.dare.trait.GameObject;
 import ludum.dare.utils.AtlasManager;
+import ludum.dare.utils.NamedAnimation;
 import ludum.dare.world.Boundary;
 import ludum.dare.world.CircleProp;
 import ludum.dare.world.Player;
@@ -37,7 +38,7 @@ public class TestLevel2 extends Level{
         GameObject o = new Boundary(new Vector2(-boundarySize * 2, -boundarySize), new Vector2(boundarySize * 2, -boundarySize), new Vector2(boundarySize * 2, boundarySize), new Vector2(-boundarySize * 2, boundarySize), new Vector2(-boundarySize * 2, -boundarySize));
         objs.add(o);
 
-        o = new Player(0, 5, 0, 2, 4, new Sprite(AtlasManager.instance.findRegion("cross")), new HashMap<String, Animation>(), CMouse.instance, CKeyboard.instance, null);
+        o = new Player(0, 5, 0, 2, 4, new Sprite(AtlasManager.instance.findRegion("cross")), new HashMap<String, NamedAnimation>(), CMouse.instance, CKeyboard.instance, null);
         o.addAndInitializeTrait(new CameraFollowTrait(o));
         objs.add(o);
 

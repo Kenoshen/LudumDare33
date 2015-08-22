@@ -34,7 +34,7 @@ public class AnimatorTrait extends Trait {
         return REQUIRES;
     }
 
-    public Animation getCurrentAnimation(){
+    public NamedAnimation getCurrentAnimation(){
         if (state != null && states.containsKey(state)){
             return states.get(state);
         } else {
@@ -71,7 +71,7 @@ public class AnimatorTrait extends Trait {
     }
 
     public void update(float delta){
-        Animation a = getCurrentAnimation();
+        NamedAnimation a = getCurrentAnimation();
         if (a != null){
             curTimer += delta;
             drawer.sprite.setRegion(a.getKeyFrame(curTimer, loop));
