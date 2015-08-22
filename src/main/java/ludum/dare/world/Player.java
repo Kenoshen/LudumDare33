@@ -3,7 +3,6 @@ package ludum.dare.world;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -62,27 +61,11 @@ public class Player extends GameObject {
         sequence.frames[4] = group3;
         bundle.addHitboxSequence(sequence);
 
-        CollisionSequence collisionSequence = new CollisionSequence();
-        collisionSequence.name = "stand";
-        collisionSequence.frames = new CollisionGroup[9];
-
-        // Generating the hurtbox
-        CollisionGroup collisionGroup = new CollisionGroup();
-        collisionGroup.boxes = new Rectangle[]{new Rectangle(0,0,5,5)};
-
-        for(int i = 0; i < collisionSequence.frames.length; i++){
-            collisionSequence.frames[i] = collisionGroup;
-        }
-
-        bundle.addHurtboxSequence(collisionSequence);
-
         animator = new AnimatorTrait(this, bundle.getAnimations());
         traits.add(animator);
 
         hitboxes = new TimedCollisionTrait(this, bundle);
         traits.add(hitboxes);
-
-        traits.add(new CollidableTrait(this, null));
 
         traits.add(new ControlTrait(this, mouse, keyboard, gamepad));
         //

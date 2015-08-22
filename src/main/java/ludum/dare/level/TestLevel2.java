@@ -39,6 +39,12 @@ public class TestLevel2 extends Level{
         objs.add(o);
 
         TextureRegion tex = AtlasManager.instance.findRegion("white");
+        for (int i = 0; i < 10; i++){
+            Sprite s = new Sprite(tex);
+            s.setColor(RandomUtils.randomColor());
+            objs.add(new SquareProp(RandomUtils.rand(), RandomUtils.rand(), 0, 1, 1, s));
+        }
+
         Sprite s = new Sprite(tex);
         s.setColor(Color.YELLOW.cpy());
         o = new CircleProp(RandomUtils.rand(), RandomUtils.rand(), 0, 1, s);

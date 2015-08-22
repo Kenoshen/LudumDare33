@@ -101,7 +101,7 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         for(GameObject g : gameObjects){
-            List things = g.getTraits(ControlTrait.class, AITrait.class);
+            List things = g.getTraits(InputHandlerTrait.class, AITrait.class);
             if (things.get(0) != null){
                 AIHiveMind.addPlayer(g);
             }
@@ -120,18 +120,21 @@ public class GameScreen implements Screen {
 
         CWorld.world.update(Conf.instance.worldStepTime());
         for (GameObject obj : gameObjects){
-            List<Trait> traits = obj.getTraits(ControlTrait.class, PhysicalTrait.class, DebugTrait.class, UpdatableTrait.class);
+            List<Trait> traits = obj.getTraits(InputHandlerTrait.class, ControlTrait.class, PhysicalTrait.class, DebugTrait.class, UpdatableTrait.class);
             if (traits.get(0) != null) {
-                ((ControlTrait) traits.get(0)).update();
+                ((InputHandlerTrait) traits.get(0)).update();
             }
             if (traits.get(1) != null) {
-                ((PhysicalTrait) traits.get(1)).step();
+                ((ControlTrait) traits.get(1)).update();
             }
             if (traits.get(2) != null) {
-                ((DebugTrait) traits.get(2)).debug();
+                ((PhysicalTrait) traits.get(2)).step();
             }
             if (traits.get(3) != null) {
-                ((UpdatableTrait) traits.get(3)).update();
+                ((DebugTrait) traits.get(3)).debug();
+            }
+            if (traits.get(4) != null) {
+                ((UpdatableTrait) traits.get(4)).update();
             }
 
             // handle deletion of objects gracefully
