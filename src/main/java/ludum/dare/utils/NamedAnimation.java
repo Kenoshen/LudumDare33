@@ -1,6 +1,7 @@
 package ludum.dare.utils;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
@@ -25,6 +26,12 @@ public class NamedAnimation extends Animation{
     }
 
     public NamedAnimation(String name, float frameDuration, TextureRegion... keyFrames) {
+        super(frameDuration, keyFrames);
+        this.setPlayMode(PlayMode.LOOP);
+        this.name = name;
+    }
+
+    public NamedAnimation(String name, float frameDuration, TextureAtlas.AtlasRegion[] keyFrames) {
         super(frameDuration, keyFrames);
         this.setPlayMode(PlayMode.LOOP);
         this.name = name;
