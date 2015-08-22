@@ -1,8 +1,8 @@
 package ludum.dare.world;
 
-import ludum.dare.trait.AITrait;
-import ludum.dare.trait.GameObject;
-import ludum.dare.trait.PositionTrait;
+import com.badlogic.gdx.math.Vector2;
+import ludum.dare.Conf;
+import ludum.dare.trait.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +17,7 @@ public class AIHiveMind {
     public static void update() {
         for (GameObject p : Players){
             for (GameObject e : Enemies){
+                minionLogic(e, p);
                 }
             }
         }
@@ -38,6 +39,32 @@ public class AIHiveMind {
             if(p.shouldBeDeleted()){
                 Players.remove(p);
             }
+        }
+    }
+    public static void minionLogic(GameObject e, GameObject p){
+        if(e.getTrait(EnemyBasicBehaviorTrait.class) != null){
+            Vector2 vel = new Vector2(0, 0);
+            if(p.getTrait(PositionTrait.class).x < e.getTrait(PositionTrait.class).x){
+                vel.x -= 10.0;
+//                System.out.println("player x: " + p.getTrait(PositionTrait.class).x + "\nenemy x: " + e.getTrait(PositionTrait.class).x);
+                System.out.println("Enemy: Want to move left");
+            }
+            if(p.getTrait(PositionTrait.class).x >= e.getTrait(PositionTrait.class).x){
+                vel.x += 10.0;
+//                System.out.println("player x: " + p.getTrait(PositionTrait.class).x + "\nenemy x: " + e.getTrait(PositionTrait.class).x);
+                System.out.println("Enemy: Want to move right");
+            }
+            if(p.getTrait(PositionTrait.class).y < e.getTrait(PositionTrait.class).y){
+                vel.y -= 10.0;
+//                System.out.println("player y: " + p.getTrait(PositionTrait.class).y + "\nenemy y: " + e.getTrait(PositionTrait.class).y);
+                System.out.println("Enemy: Want to move down");
+            }
+            if(p.getTrait(PositionTrait.class).y >= e.getTrait(PositionTrait.class).y){
+                vel.y += 10.0;
+//                System.out.println("player y: " + p.getTrait(PositionTrait.class).y + "\nenemy y: " + e.getTrait(PositionTrait.class).y);
+                System.out.println("Enemy: Want to move up");
+            }
+            e.getTrait(PhysicalTrait.class).body.body.setLinearVelocity(vel);
         }
     }
 }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
 import com.winger.physics.CBody;
+import com.winger.physics.body.BoxBody;
 import com.winger.physics.body.PlayerBody;
 import ludum.dare.trait.*;
 
@@ -14,7 +15,7 @@ import java.util.Map;
  */
 public class EnemyBasic extends GameObject{
     private PhysicalTrait physical;
-    private AnimatorTrait animator;
+//    private AnimatorTrait animator;
 
     public EnemyBasic(float x, float y, float z, float width, float height, Sprite eSprite, Map<String, Animation> states){
         traits.add(new PositionTrait(this, x, y, z));
@@ -22,9 +23,9 @@ public class EnemyBasic extends GameObject{
         traits.add(new DrawableTrait(this, eSprite));
         traits.add(new AITrait(this));
         traits.add(new EnemyBasicBehaviorTrait(this));
-        animator = new AnimatorTrait(this, states);
+//        animator = new AnimatorTrait(this, states);
 
-        CBody body = new PlayerBody(width, height).init(new Vector2(x, y));
+        CBody body = new BoxBody(width, height).init(new Vector2(x, y));
         physical = new PhysicalTrait(this, body);
         traits.add(physical);
 
@@ -42,6 +43,5 @@ public class EnemyBasic extends GameObject{
     }
     public void update(float delta){
     }
-
 }
 

@@ -2,13 +2,20 @@ package ludum.dare.level;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.winger.input.raw.CKeyboard;
 import com.winger.input.raw.CMouse;
+import ludum.dare.hitbox.AnimationBundle;
+import ludum.dare.hitbox.HitboxGroup;
+import ludum.dare.hitbox.HitboxSequence;
 import ludum.dare.trait.GameObject;
 import ludum.dare.utils.AtlasManager;
+import ludum.dare.utils.NamedAnimation;
 import ludum.dare.world.Boundary;
+import ludum.dare.world.EnemyBasic;
 import ludum.dare.world.Player;
 import ludum.dare.world.SquareProp;
 
@@ -31,7 +38,7 @@ public class TestLevel extends Level{
 
         objs.add(new Boundary(new Vector2(-20, 1), new Vector2(20, 1)));
         // TODO: try out the animation trait with the player object
-        objs.add(new Player(0, 5, 0, 2, 4, new Sprite(AtlasManager.instance.findRegion("cross")), new HashMap<String, Animation>(), CMouse.instance, CKeyboard.instance, null));
+        //objs.add(new Player(0, 5, 0, 2, 4, new Sprite(AtlasManager.instance.findRegion("cross")), new HashMap<String, Animation>(), CMouse.instance, CKeyboard.instance, null));
         // Adding EnemyBasic to objs
         objs.add(new EnemyBasic(9, 5, 0, 2, 4, new Sprite(AtlasManager.instance.findRegion("testEnemySprite")), new HashMap<String, Animation>()));
         AnimationBundle bundle = new AnimationBundle();
