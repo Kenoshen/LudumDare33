@@ -42,17 +42,20 @@ public class TestLevel2 extends Level{
         for (int i = 0; i < 10; i++){
             Sprite s = new Sprite(tex);
             s.setColor(RandomUtils.randomColor());
+            s.setSize(2, 2);
             objs.add(new SquareProp(RandomUtils.rand(), RandomUtils.rand(), 0, 1, 1, s));
         }
 
         Sprite s = new Sprite(tex);
         s.setColor(Color.YELLOW.cpy());
+        s.setSize(2, 2);
         o = new CircleProp(RandomUtils.rand(), RandomUtils.rand(), 0, 1, s);
         o.addAndInitializeTrait(new CameraFollowTrait(o));
         objs.add(o);
 
         s = new Sprite(tex);
         s.setColor(Color.YELLOW.cpy());
+        s.setSize(2, 2);
         o = new CircleProp(RandomUtils.rand(), RandomUtils.rand(), 0, 1, s);
         o.addAndInitializeTrait(new CameraFollowTrait(o));
         objs.add(o);

@@ -83,6 +83,8 @@ public class AnimatorTrait extends Trait {
             curTimer += delta;
             drawer.sprite.setRegion(a.getKeyFrame(curTimer, loop));
             drawer.sprite.flip(flipped, false);
+            drawer.sprite.setSize(a.getSize().x, a.getSize().y);
+            drawer.offset = a.getOffset();
         }
     }
 }
