@@ -8,6 +8,7 @@ import com.winger.input.raw.state.KeyboardKey;
 import com.winger.log.HTMLLogger;
 import com.winger.log.LogGroup;
 import com.winger.log.LogLevel;
+import ludum.dare.level.TestLevel;
 import ludum.dare.level.TestLevel2;
 import ludum.dare.screen.CutsceneScreen;
 import ludum.dare.screen.GameScreen;

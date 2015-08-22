@@ -27,6 +27,9 @@ public class AIHiveMind {
         Players.add(player);
     }
     public static void addEnemy(GameObject enemyBasic){
+        if(enemyBasic.getTrait(EnemyBasicBehaviorTrait.class) != null){
+            enemyBasic.getTrait(HealthTrait.class).setHealth(100);
+        }
         Enemies.add(enemyBasic);
     }
     private void removeMarkedGameObjects() {
@@ -43,28 +46,24 @@ public class AIHiveMind {
     }
     public static void minionLogic(GameObject e, GameObject p){
         if(e.getTrait(EnemyBasicBehaviorTrait.class) != null){
-            Vector2 vel = new Vector2(0, 0);
-            if(p.getTrait(PositionTrait.class).x < e.getTrait(PositionTrait.class).x){
-                vel.x -= 10.0;
-//                System.out.println("player x: " + p.getTrait(PositionTrait.class).x + "\nenemy x: " + e.getTrait(PositionTrait.class).x);
-                System.out.println("Enemy: Want to move left");
-            }
-            if(p.getTrait(PositionTrait.class).x >= e.getTrait(PositionTrait.class).x){
-                vel.x += 10.0;
-//                System.out.println("player x: " + p.getTrait(PositionTrait.class).x + "\nenemy x: " + e.getTrait(PositionTrait.class).x);
-                System.out.println("Enemy: Want to move right");
-            }
-            if(p.getTrait(PositionTrait.class).y < e.getTrait(PositionTrait.class).y){
-                vel.y -= 10.0;
-//                System.out.println("player y: " + p.getTrait(PositionTrait.class).y + "\nenemy y: " + e.getTrait(PositionTrait.class).y);
-                System.out.println("Enemy: Want to move down");
-            }
-            if(p.getTrait(PositionTrait.class).y >= e.getTrait(PositionTrait.class).y){
-                vel.y += 10.0;
-//                System.out.println("player y: " + p.getTrait(PositionTrait.class).y + "\nenemy y: " + e.getTrait(PositionTrait.class).y);
-                System.out.println("Enemy: Want to move up");
-            }
-            e.getTrait(PhysicalTrait.class).body.body.setLinearVelocity(vel);
+            enemyBasicBehaviorLogic(e, p);
         }
+    }
+
+    public static void enemyBasicBehaviorLogic(GameObject e, GameObject p){
+        Vector2 vel = new Vector2(0, 0);
+        if(p.getTrait(PositionTrait.class).x < e.getTrait(PositionTrait.class).x){
+            vel.x -= 10.0;
+        }
+        if(p.getTrait(PositionTrait.class).x >= e.getTrait(PositionTrait.class).x){
+            vel.x += 10.0;
+        }
+        if(p.getTrait(PositionTrait.class).y < e.getTrait(PositionTrait.class).y){
+            vel.y -= 10.0;
+        }
+        if(p.getTrait(PositionTrait.class).y >= e.getTrait(PositionTrait.class).y){
+            vel.y += 10.0;
+        }
+        e.getTrait(PhysicalTrait.class).body.body.setLinearVelocity(vel);
     }
 }
