@@ -30,22 +30,13 @@ public class Game extends com.badlogic.gdx.Game
     public void create()
     {
         debug = Conf.instance.isDebug();
-        log.debug("Game created (debug: " + debug + ")");
         //
         if (debug) {
             HTMLLogger.setGlobalLogLevel(LogLevel.Debug);
         } else {
             HTMLLogger.setGlobalLogLevel(LogLevel.Info);
         }
-        //
-        // should only run if you are running from the IDE, not the JAR
-        if (Gdx.files.internal("src/main/resources/").exists()) {
-            TexturePacker.process("src/main/resources/imgs/ui/menu", "src/main/resources/packed", "ui");
-            TexturePacker.process("src/main/resources/imgs/ui/background", "src/main/resources/packed", "ui-background");
-            TexturePacker.process("src/main/resources/imgs/game", "src/main/resources/packed", "game");
-        }
-        //
-        log.debug("Game create(" + Conf.instance.version() + ")");
+        log.debug("Game created (" + Conf.instance.version() + ":" + (debug ? "debug" : "prod") + ")");
         keyboard = CKeyboard.instance;
         mouse = CMouse.instance;
         //
