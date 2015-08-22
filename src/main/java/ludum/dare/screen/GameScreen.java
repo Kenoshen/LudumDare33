@@ -16,6 +16,7 @@ import com.winger.input.raw.CMouse;
 import com.winger.log.HTMLLogger;
 import com.winger.log.LogGroup;
 import com.winger.physics.CWorld;
+import com.winger.struct.Tups;
 import ludum.dare.Conf;
 import ludum.dare.Game;
 import ludum.dare.level.Level;
@@ -44,6 +45,8 @@ public class GameScreen implements Screen {
     private SpriteBatch batch;
     private ShapeRenderer shaper;
 
+    List<Tups.Tup2<GameObject, GameObject>> listCollisions;
+
     public List<GameObject> gameObjects = new ArrayList<>();
     private List<GameObject> objsToDelete = new ArrayList<>();
 
@@ -55,6 +58,8 @@ public class GameScreen implements Screen {
         camera = new FollowOrthoCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.zoom = camera.minZoom;
         camera.minZoom = 1;
+        //
+        listCollisions = new ArrayList<>();
         //
         world = new CWorld(camera);
         world.init(new Vector2(0, 0), true);
@@ -148,7 +153,7 @@ public class GameScreen implements Screen {
         batch.begin();
         shaper.begin(ShapeRenderer.ShapeType.Filled);
         for (GameObject obj : gameObjects){
-            List<Trait> traits = obj.getTraits(AnimatorTrait.class, DrawableTrait.class, TimedCollisionTrait.class, CameraFollowTrait.class);
+            List<Trait> traits = obj.getTraits(AnimatorTrait.class, DrawableTrait.class, TimedCollisionTrait.class, CameraFollowTrait.class, CollidableTrait.class);
             if (traits.get(0) != null){
                 ((AnimatorTrait) traits.get(0)).update(delta);
             }
@@ -161,7 +166,12 @@ public class GameScreen implements Screen {
             if (traits.get(3) != null){
                 ((CameraFollowTrait) traits.get(3)).updateCamera(camera);
             }
+            if (traits.get(4) != null){
+                ((CollidableTrait) traits.get(4)).checkCollisions(gameObjects, listCollisions);
+            }
         }
+
+        listCollisions.clear();
         batch.end();
         shaper.end();
 
