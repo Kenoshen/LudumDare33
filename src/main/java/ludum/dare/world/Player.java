@@ -11,16 +11,14 @@ import com.winger.input.raw.CKeyboard;
 import com.winger.input.raw.CMouse;
 import com.winger.physics.CBody;
 import com.winger.physics.body.BoxBody;
-import com.winger.physics.body.PlayerBody;
-import ludum.dare.hitbox.AnimationBundle;
+import ludum.dare.collision.AnimationBundle;
 import ludum.dare.Conf;
-import ludum.dare.hitbox.HitboxGroup;
-import ludum.dare.hitbox.HitboxSequence;
+import ludum.dare.collision.CollisionGroup;
+import ludum.dare.collision.CollisionSequence;
 import ludum.dare.trait.*;
 import ludum.dare.utils.AtlasManager;
 import ludum.dare.utils.NamedAnimation;
 
-import java.util.Map;
 
 /**
  * Created by mwingfield on 8/3/15.
@@ -30,7 +28,7 @@ public class Player extends GameObject {
 
     private PhysicalTrait physical;
     private AnimatorTrait animator;
-    private TimedHitboxTrait hitboxes;
+    private TimedCollisionTrait hitboxes;
 
     public Player(float x, float y, float z, float width, float height, CMouse mouse, CKeyboard keyboard, CGamePad gamepad){
         traits.add(new PositionTrait(this, x, y, z));
@@ -45,19 +43,19 @@ public class Player extends GameObject {
         bundle.addNamedAnimation(animation);
         bundle.addNamedAnimation(new NamedAnimation("walk", 0.2f, AtlasManager.instance.getAtlas("game").findRegions("bumWalk")));
 
-        HitboxSequence sequence = new HitboxSequence();
-        sequence.title = "basic";
+        CollisionSequence sequence = new CollisionSequence();
+        sequence.name = "walk";
 
-        HitboxGroup group1 = new HitboxGroup();
+        CollisionGroup group1 = new CollisionGroup();
         group1.circles = new Circle[] {new Circle(1,1,1)};
 
-        HitboxGroup group2 = new HitboxGroup();
+        CollisionGroup group2 = new CollisionGroup();
         group2.circles = new Circle[] {new Circle(1,1.5f,1)};
 
-        HitboxGroup group3 = new HitboxGroup();
+        CollisionGroup group3 = new CollisionGroup();
         group3.circles = new Circle[] {new Circle(1,2,1)};
 
-        sequence.frames = new HitboxGroup[5];
+        sequence.frames = new CollisionGroup[5];
         sequence.frames[2] = group1;
         sequence.frames[3] = group2;
         sequence.frames[4] = group3;
@@ -66,7 +64,7 @@ public class Player extends GameObject {
         animator = new AnimatorTrait(this, bundle.getAnimations());
         traits.add(animator);
 
-        hitboxes = new TimedHitboxTrait(this, bundle.getHitboxes());
+        hitboxes = new TimedCollisionTrait(this, bundle);
         traits.add(hitboxes);
 
         traits.add(new ControlTrait(this, mouse, keyboard, gamepad));

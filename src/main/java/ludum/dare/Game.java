@@ -12,8 +12,7 @@ import ludum.dare.screen.CutsceneScreen;
 import ludum.dare.utils.AtlasManager;
 import ludum.dare.utils.SkinManager;
 
-public class Game extends com.badlogic.gdx.Game
-{
+public class Game extends com.badlogic.gdx.Game {
     private static final HTMLLogger log = HTMLLogger.getLogger(Game.class, LogGroup.System);
     com.badlogic.gdx.Application app;
 
@@ -22,13 +21,12 @@ public class Game extends com.badlogic.gdx.Game
     CKeyboard keyboard;
     CMouse mouse;
 
-    public Game(){
+    public Game() {
         super();
     }
 
     @Override
-    public void create()
-    {
+    public void create() {
         debug = Conf.instance.isDebug();
         log.debug("Game created (debug: " + debug + ")");
         //
@@ -53,21 +51,19 @@ public class Game extends com.badlogic.gdx.Game
 
 
     @Override
-    public void render()
-    {
+    public void render() {
         super.render();
         keyboard.update();
         mouse.update();
 
-        if (keyboard.isKeyJustPressed(KeyboardKey.ESCAPE)){
+        if (keyboard.isKeyJustPressed(KeyboardKey.ESCAPE)) {
             app.exit();
         }
     }
 
 
     @Override
-    public void dispose()
-    {
+    public void dispose() {
         log.debug("Game dispose()");
         super.dispose();
     }

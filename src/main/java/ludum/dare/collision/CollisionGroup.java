@@ -1,4 +1,4 @@
-package ludum.dare.hitbox;
+package ludum.dare.collision;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
  *
  * All shapes listed have coordinates relative to their OFFSET from the origin of the body they apply to.
  */
-public class HitboxGroup {
+public class CollisionGroup {
     public Circle[] circles;
     public Rectangle[] boxes;
 }
