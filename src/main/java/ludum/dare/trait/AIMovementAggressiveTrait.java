@@ -24,22 +24,30 @@ public class AIMovementAggressiveTrait extends Trait {
         if((target.x < self.getTrait(PositionTrait.class).x)
                 && (self.getTrait(PositionTrait.class).x - target.x)>minDist){
             vel.x -= speed;
+            self.getTrait(AnimatorTrait.class).changeStateIfUnique("walk", true);
+            self.getTrait(AnimatorTrait.class).flipped = false;
             log.debug("Enemy: Want to move left");
         }
         if((target.x >= self.getTrait(PositionTrait.class).x)
                 && (target.x - self.getTrait(PositionTrait.class).x)>minDist){
             vel.x += speed;
+            self.getTrait(AnimatorTrait.class).changeStateIfUnique("walk", true);
+            self.getTrait(AnimatorTrait.class).flipped = true;
             log.debug("Enemy: Want to move right");
         }
         if((target.y < self.getTrait(PositionTrait.class).y)
                 && (self.getTrait(PositionTrait.class).y - target.y)>minDist){
             vel.y -= speed;
+            self.getTrait(AnimatorTrait.class).changeStateIfUnique("walk", true);
             log.debug("Enemy: Want to move down");
         }
         if((target.y >= self.getTrait(PositionTrait.class).y)
                 && (target.y - self.getTrait(PositionTrait.class).y)>minDist){
             vel.y += speed;
+            self.getTrait(AnimatorTrait.class).changeStateIfUnique("walk", true);
             log.debug("Enemy: Want to move up");
+        }if(vel.x == 0 && vel.y == 0) {
+            self.getTrait(AnimatorTrait.class).changeStateIfUnique("stand", true);
         }
         self.getTrait(PhysicalTrait.class).body.body.setLinearVelocity(vel);
     }
