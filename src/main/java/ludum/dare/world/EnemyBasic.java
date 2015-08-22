@@ -12,14 +12,16 @@ import java.util.Map;
 /**
  * Created by jake on 8/21/2015.
  */
-public class Enemy extends GameObject{
+public class EnemyBasic extends GameObject{
     private PhysicalTrait physical;
     private AnimatorTrait animator;
 
-    public Enemy(float x, float y, float z, float width, float height, Sprite eSprite, Map<String, Animation> states){
+    public EnemyBasic(float x, float y, float z, float width, float height, Sprite eSprite, Map<String, Animation> states){
         traits.add(new PositionTrait(this, x, y, z));
         traits.add(new SizeTrait(this, width, height));
         traits.add(new DrawableTrait(this, eSprite));
+        traits.add(new AITrait(this));
+        traits.add(new EnemyBasicBehaviorTrait(this));
         animator = new AnimatorTrait(this, states);
 
         CBody body = new PlayerBody(width, height).init(new Vector2(x, y));
@@ -31,7 +33,7 @@ public class Enemy extends GameObject{
         traits.add(new UpdatableTrait(this) {
             @Override
             public void update(float delta) {
-                ((Enemy)self).update(delta);
+                ((EnemyBasic)self).update(delta);
             }
         });
 
@@ -39,7 +41,7 @@ public class Enemy extends GameObject{
         body.setFriction(1);
     }
     public void update(float delta){
-
     }
+
 }
 
