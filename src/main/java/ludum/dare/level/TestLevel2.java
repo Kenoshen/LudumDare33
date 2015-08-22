@@ -41,12 +41,7 @@ public class TestLevel2 extends Level{
 
         GameObject o = new Boundary(new Vector2(-boundarySize * 2, -boundarySize), new Vector2(boundarySize * 2, -boundarySize), new Vector2(boundarySize * 2, boundarySize), new Vector2(-boundarySize * 2, boundarySize), new Vector2(-boundarySize * 2, -boundarySize));
         objs.add(o);
-        AnimationBundle bundle = new AnimationBundle();
-
-        NamedAnimation animation = new NamedAnimation("basic", 0.2f, AtlasManager.instance.getAtlas("game").findRegions("bumStand"));
-        bundle.addNamedAnimation(animation);
-
-        o = new Player(0, 5, 0, 4, 4, bundle, CMouse.instance, CKeyboard.instance, null);
+        o = new Player(0, 5, 0, 4, 4, CMouse.instance, CKeyboard.instance, null);
         o.addAndInitializeTrait(new CameraFollowTrait(o));
         objs.add(o);
 

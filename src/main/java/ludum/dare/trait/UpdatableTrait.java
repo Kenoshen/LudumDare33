@@ -3,12 +3,16 @@ package ludum.dare.trait;
 /**
  * Created by mwingfield on 8/2/15.
  */
-public abstract class UpdatableTrait extends Trait {
-    public UpdatableTrait(GameObject obj) {
+public class UpdatableTrait extends Trait {
+    private Runnable runnable;
+    public UpdatableTrait(GameObject obj, Runnable runnable) {
         super(obj);
+        this.runnable = runnable;
     }
 
-    public abstract void update(float delta);
+    public void update(){
+        runnable.run();
+    }
 
     @Override
     public Class[] requires(){
