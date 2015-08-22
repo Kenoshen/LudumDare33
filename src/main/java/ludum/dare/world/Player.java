@@ -79,6 +79,7 @@ public class Player extends GameObject {
         bD.type = BodyDef.BodyType.DynamicBody;
         bD.position.x = x;
         bD.position.y = y;
+        bD.fixedRotation = true;
         CBody body = new BoxBody(width, height).init(fD, bD);
         physical = new PhysicalTrait(this, body);
         traits.add(physical);

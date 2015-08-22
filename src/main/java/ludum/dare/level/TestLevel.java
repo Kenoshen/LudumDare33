@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.winger.input.raw.CKeyboard;
 import com.winger.input.raw.CMouse;
+import ludum.dare.collision.AnimationBundle;
 import ludum.dare.trait.GameObject;
 import ludum.dare.utils.AtlasManager;
 import ludum.dare.world.Boundary;
