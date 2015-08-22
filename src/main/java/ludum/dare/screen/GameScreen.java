@@ -21,6 +21,8 @@ import ludum.dare.Game;
 import ludum.dare.level.Level;
 import ludum.dare.trait.*;
 import ludum.dare.utils.SkinManager;
+import ludum.dare.world.AIHiveMind;
+import ludum.dare.world.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +47,8 @@ public class GameScreen implements Screen {
 
     public List<GameObject> gameObjects = new ArrayList<>();
     private List<GameObject> objsToDelete = new ArrayList<>();
+
+    private AIHiveMind AIHM = new AIHiveMind();
 
     public GameScreen(final Game game, Level level){
         this.game = game;
@@ -92,6 +96,15 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
+        for(GameObject g : gameObjects){
+            List things = g.getTraits(ControlTrait.class, AITrait.class);
+            if (things.get(0) != null){
+                AIHiveMind.addPlayer(g);
+            }
+            if (things.get(1)!= null){
+                AIHiveMind.addEnemy(g);
+            }
+        }
 
     }
 
@@ -125,6 +138,7 @@ public class GameScreen implements Screen {
         }
 
         removeMarkedGameObjects();
+        AIHiveMind.update();
 
         camera.update();
         batch.setProjectionMatrix(camera.combined);
