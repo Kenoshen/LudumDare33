@@ -1,6 +1,7 @@
 package ludum.dare.world;
 
 import com.badlogic.gdx.math.Vector2;
+import com.winger.log.HTMLLogger;
 import ludum.dare.Conf;
 import ludum.dare.trait.*;
 
@@ -11,6 +12,8 @@ import java.util.List;
  * Created by jake on 8/21/2015.
  */
 public class AIHiveMind {
+    private final static HTMLLogger log = HTMLLogger.getLogger(AIHiveMind.class);
+
     static List<GameObject> Players = new ArrayList<>();
     static List<GameObject> Enemies = new ArrayList<>();
 
@@ -46,23 +49,23 @@ public class AIHiveMind {
             Vector2 vel = new Vector2(0, 0);
             if(p.getTrait(PositionTrait.class).x < e.getTrait(PositionTrait.class).x){
                 vel.x -= 10.0;
-//                System.out.println("player x: " + p.getTrait(PositionTrait.class).x + "\nenemy x: " + e.getTrait(PositionTrait.class).x);
-                System.out.println("Enemy: Want to move left");
+//                log.debug("player x: " + p.getTrait(PositionTrait.class).x + "\nenemy x: " + e.getTrait(PositionTrait.class).x);
+                log.debug("Enemy: Want to move left");
             }
             if(p.getTrait(PositionTrait.class).x >= e.getTrait(PositionTrait.class).x){
                 vel.x += 10.0;
-//                System.out.println("player x: " + p.getTrait(PositionTrait.class).x + "\nenemy x: " + e.getTrait(PositionTrait.class).x);
-                System.out.println("Enemy: Want to move right");
+//                log.debug("player x: " + p.getTrait(PositionTrait.class).x + "\nenemy x: " + e.getTrait(PositionTrait.class).x);
+                log.debug("Enemy: Want to move right");
             }
             if(p.getTrait(PositionTrait.class).y < e.getTrait(PositionTrait.class).y){
                 vel.y -= 10.0;
-//                System.out.println("player y: " + p.getTrait(PositionTrait.class).y + "\nenemy y: " + e.getTrait(PositionTrait.class).y);
-                System.out.println("Enemy: Want to move down");
+//                log.debug("player y: " + p.getTrait(PositionTrait.class).y + "\nenemy y: " + e.getTrait(PositionTrait.class).y);
+                log.debug("Enemy: Want to move down");
             }
             if(p.getTrait(PositionTrait.class).y >= e.getTrait(PositionTrait.class).y){
                 vel.y += 10.0;
-//                System.out.println("player y: " + p.getTrait(PositionTrait.class).y + "\nenemy y: " + e.getTrait(PositionTrait.class).y);
-                System.out.println("Enemy: Want to move up");
+//                log.debug("player y: " + p.getTrait(PositionTrait.class).y + "\nenemy y: " + e.getTrait(PositionTrait.class).y);
+                log.debug("Enemy: Want to move up");
             }
             e.getTrait(PhysicalTrait.class).body.body.setLinearVelocity(vel);
         }

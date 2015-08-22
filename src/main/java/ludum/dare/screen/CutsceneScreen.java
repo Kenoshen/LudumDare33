@@ -126,7 +126,6 @@ public class CutsceneScreen implements Screen {
 
         if (fade) {
             introMusic.setVolume(introMusic.getVolume() - .008f);
-            System.out.println(introMusic.getVolume());
             if (introMusic.getVolume() <= 0) {
                 introMusic.stop();
                 game.setScreen(new SplashScreen(game));

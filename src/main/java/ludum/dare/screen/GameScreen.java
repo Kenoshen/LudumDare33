@@ -22,7 +22,6 @@ import ludum.dare.level.Level;
 import ludum.dare.trait.*;
 import ludum.dare.utils.SkinManager;
 import ludum.dare.world.AIHiveMind;
-import ludum.dare.world.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,7 +104,6 @@ public class GameScreen implements Screen {
                 AIHiveMind.addEnemy(g);
             }
         }
-
     }
 
     @Override
@@ -128,7 +126,7 @@ public class GameScreen implements Screen {
                 ((DebugTrait) traits.get(2)).debug();
             }
             if (traits.get(3) != null) {
-                ((UpdatableTrait) traits.get(3)).update(delta);
+                ((UpdatableTrait) traits.get(3)).update();
             }
 
             // handle deletion of objects gracefully

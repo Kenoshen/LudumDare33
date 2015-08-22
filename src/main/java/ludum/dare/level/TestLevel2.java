@@ -1,6 +1,7 @@
 package ludum.dare.level;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Circle;
@@ -8,9 +9,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.winger.input.raw.CKeyboard;
 import com.winger.input.raw.CMouse;
 import com.winger.utils.RandomUtils;
-import ludum.dare.collision.AnimationBundle;
-import ludum.dare.collision.CollisionGroup;
-import ludum.dare.collision.CollisionSequence;
+import ludum.dare.hitbox.AnimationBundle;
+import ludum.dare.hitbox.HitboxGroup;
+import ludum.dare.hitbox.HitboxSequence;
 import ludum.dare.trait.CameraFollowTrait;
 import ludum.dare.trait.GameObject;
 import ludum.dare.utils.AtlasManager;
@@ -21,6 +22,7 @@ import ludum.dare.world.Player;
 import ludum.dare.world.SquareProp;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -39,22 +41,7 @@ public class TestLevel2 extends Level{
 
         GameObject o = new Boundary(new Vector2(-boundarySize * 2, -boundarySize), new Vector2(boundarySize * 2, -boundarySize), new Vector2(boundarySize * 2, boundarySize), new Vector2(-boundarySize * 2, boundarySize), new Vector2(-boundarySize * 2, -boundarySize));
         objs.add(o);
-        AnimationBundle bundle = new AnimationBundle();
-
-        NamedAnimation animation = new NamedAnimation("basic", 0.2f, AtlasManager.instance.findRegion("cross"));
-        bundle.addNamedAnimation(animation);
-
-        CollisionSequence sequence = new CollisionSequence();
-        sequence.name = "basic";
-
-        CollisionGroup group = new CollisionGroup();
-        group.circles = new Circle[] {new Circle(0,0,10)};
-
-        sequence.frames = new CollisionGroup[5];
-        sequence.frames[2] = group;
-        bundle.addHitboxSequence(sequence);
-
-        o = new Player(0, 5, 0, 2, 4, bundle, CMouse.instance, CKeyboard.instance, null);
+        o = new Player(0, 5, 0, 4, 4, CMouse.instance, CKeyboard.instance, null);
         o.addAndInitializeTrait(new CameraFollowTrait(o));
         objs.add(o);
 
