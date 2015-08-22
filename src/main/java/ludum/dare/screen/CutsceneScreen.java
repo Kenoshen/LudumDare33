@@ -120,7 +120,8 @@ public class CutsceneScreen implements Screen {
         keyboard.update();
 
         if (keyboard.isKeyJustPressed(KeyboardKey.S)) {
-            game.setScreen(new MainMenuScreen(game));
+            introMusic.stop();
+            game.setScreen(new SplashScreen(game));
         }
 
         if (fade) {
