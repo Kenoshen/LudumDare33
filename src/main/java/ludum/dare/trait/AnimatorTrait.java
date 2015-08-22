@@ -1,9 +1,11 @@
 package ludum.dare.trait;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import ludum.dare.utils.NamedAnimation;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by mwingfield on 8/10/15.
@@ -11,15 +13,20 @@ import java.util.Map;
 public class AnimatorTrait extends Trait {
     private static Class[] REQUIRES = new Class[]{ DrawableTrait.class };
 
-    private Map<String, Animation> states = new HashMap<>();
+    private Map<String, NamedAnimation> states = new HashMap<>();
     private String state = null;
     private DrawableTrait drawer;
     private float curTimer = 0;
-    private boolean loop = false;
+    private boolean loop = true;
 
-    public AnimatorTrait(GameObject obj, Map<String, Animation> states){
+    public AnimatorTrait(GameObject obj, Map<String, NamedAnimation> states){
         super(obj);
         this.states.putAll(states);
+        // This will probably leave. But for now just default to the first animation given
+        Set<String> givenKeys = states.keySet();
+        if (givenKeys.size() > 0) {
+            setState(givenKeys.iterator().next());
+        }
     }
 
     @Override
@@ -33,7 +40,7 @@ public class AnimatorTrait extends Trait {
         return REQUIRES;
     }
 
-    public Animation getCurrentAnimation(){
+    public NamedAnimation getCurrentAnimation(){
         if (state != null && states.containsKey(state)){
             return states.get(state);
         } else {
@@ -42,7 +49,7 @@ public class AnimatorTrait extends Trait {
     }
 
     public boolean setState(String state){
-        return setState(state, false);
+        return setState(state, true);
     }
 
     public boolean setState(String state, boolean loop){
@@ -70,7 +77,7 @@ public class AnimatorTrait extends Trait {
     }
 
     public void update(float delta){
-        Animation a = getCurrentAnimation();
+        NamedAnimation a = getCurrentAnimation();
         if (a != null){
             curTimer += delta;
             drawer.sprite.setRegion(a.getKeyFrame(curTimer, loop));

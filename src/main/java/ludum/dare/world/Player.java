@@ -8,7 +8,9 @@ import com.winger.input.raw.CKeyboard;
 import com.winger.input.raw.CMouse;
 import com.winger.physics.CBody;
 import com.winger.physics.body.PlayerBody;
+import ludum.dare.hitbox.AnimationBundle;
 import ludum.dare.trait.*;
+import ludum.dare.utils.NamedAnimation;
 
 import java.util.Map;
 
@@ -18,13 +20,18 @@ import java.util.Map;
 public class Player extends GameObject {
     private PhysicalTrait physical;
     private AnimatorTrait animator;
+    private TimedHitboxTrait hitboxes;
 
-    public Player(float x, float y, float z, float width, float height, Sprite defaultSprite, Map<String, Animation> states, CMouse mouse, CKeyboard keyboard, CGamePad gamepad){
+    public Player(float x, float y, float z, float width, float height, AnimationBundle bundle, CMouse mouse, CKeyboard keyboard, CGamePad gamepad){
         traits.add(new PositionTrait(this, x, y, z));
         traits.add(new SizeTrait(this, width, height));
-        traits.add(new DrawableTrait(this, defaultSprite));
-        animator = new AnimatorTrait(this, states);
-//        traits.add(animator);
+        traits.add(new DrawableTrait(this, new Sprite()));
+        animator = new AnimatorTrait(this, bundle.getAnimations());
+        traits.add(animator);
+
+        hitboxes = new TimedHitboxTrait(this, bundle.getHitboxes());
+        traits.add(hitboxes);
+
         traits.add(new ControlTrait(this, mouse, keyboard, gamepad));
         CBody body = new PlayerBody(width, height).init(new Vector2(x, y));
         physical = new PhysicalTrait(this, body);
