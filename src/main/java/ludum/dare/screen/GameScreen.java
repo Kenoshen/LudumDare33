@@ -95,7 +95,15 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-
+        for(GameObject g : gameObjects){
+            List things = g.getTraits(ControlTrait.class, AITrait.class);
+            if (things.get(0) != null){
+                AIHiveMind.addPlayer(g);
+            }
+            if (things.get(1)!= null){
+                AIHiveMind.addEnemy(g);
+            }
+        }
     }
 
     @Override
