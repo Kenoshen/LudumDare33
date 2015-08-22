@@ -27,7 +27,6 @@ public class Player extends GameObject {
         traits.add(new SizeTrait(this, width, height));
         traits.add(new DrawableTrait(this, new Sprite()));
         animator = new AnimatorTrait(this, bundle.getAnimations());
-        animator.setState("basic");
         traits.add(animator);
 
         hitboxes = new TimedHitboxTrait(this, bundle.getHitboxes());

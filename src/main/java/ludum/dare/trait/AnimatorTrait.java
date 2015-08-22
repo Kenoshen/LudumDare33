@@ -5,6 +5,7 @@ import ludum.dare.utils.NamedAnimation;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by mwingfield on 8/10/15.
@@ -21,6 +22,11 @@ public class AnimatorTrait extends Trait {
     public AnimatorTrait(GameObject obj, Map<String, NamedAnimation> states){
         super(obj);
         this.states.putAll(states);
+        // This will probably leave. But for now just default to the first animation given
+        Set<String> givenKeys = states.keySet();
+        if (givenKeys.size() > 0) {
+            setState(givenKeys.iterator().next());
+        }
     }
 
     @Override
