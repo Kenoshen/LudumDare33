@@ -1,6 +1,7 @@
 package ludum.dare.world;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import java.util.HashMap;
  */
 public class SoundLibrary {
     public static final HashMap<String, Sound> hashMapSoundLibrary = new HashMap<>();
+    public static final HashMap<String, Music> hashMapMusicLibrary = new HashMap<>();
 
 
     public static Sound GetSound(String name){
@@ -22,6 +24,18 @@ public class SoundLibrary {
         }
 
         return sound;
+    }
+
+    public static Music GetMusic(String name){
+        Music music;
+
+        music = hashMapMusicLibrary.get(name);
+        if (music == null){
+            music = Gdx.audio.newMusic(Gdx.files.internal("music/" + name + ".ogg"));
+            hashMapMusicLibrary.put(name, music);
+        }
+
+        return music;
     }
 
 }

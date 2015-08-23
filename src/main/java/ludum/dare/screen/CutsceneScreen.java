@@ -15,6 +15,7 @@ import com.winger.input.raw.CKeyboard;
 import com.winger.input.raw.state.KeyboardKey;
 import ludum.dare.Game;
 import ludum.dare.utils.SkinManager;
+import ludum.dare.world.SoundLibrary;
 
 import java.util.ArrayList;
 
@@ -34,7 +35,7 @@ public class CutsceneScreen implements Screen {
 
     public CutsceneScreen(final Game game) {
 
-        introMusic = Gdx.audio.newMusic(Gdx.files.internal("music/intro-withoutDelay.ogg"));
+        introMusic = SoundLibrary.GetMusic("intro-withoutDelay");
         introMusic.setVolume(1);
         this.game = game;
 
@@ -126,10 +127,9 @@ public class CutsceneScreen implements Screen {
 
         if (fade) {
             introMusic.setVolume(introMusic.getVolume() - .008f);
-            if (introMusic.getVolume() <= 0) {
+            if (introMusic.getVolume() <= .1) {
                 introMusic.stop();
                 game.setScreen(new SplashScreen(game));
-                return;
             }
         }
     }
@@ -156,7 +156,6 @@ public class CutsceneScreen implements Screen {
 
     @Override
     public void dispose() {
-
         stage.dispose();
     }
 }
