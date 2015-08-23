@@ -34,7 +34,7 @@ public class CutsceneScreen implements Screen {
 
     public CutsceneScreen(final Game game) {
 
-        introMusic = Gdx.audio.newMusic(Gdx.files.internal("music/intro-withoutDelay.mp3"));
+        introMusic = Gdx.audio.newMusic(Gdx.files.internal("music/intro-withoutDelay.ogg"));
         introMusic.setVolume(1);
         this.game = game;
 
