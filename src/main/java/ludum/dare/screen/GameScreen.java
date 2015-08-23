@@ -139,7 +139,7 @@ public class GameScreen implements Screen {
 
         CWorld.world.update(Conf.instance.worldStepTime());
         for (GameObject obj : gameObjects){
-            List<Trait> traits = obj.getTraits(InputHandlerTrait.class, ControlTrait.class, PhysicalTrait.class, DebugTrait.class, UpdatableTrait.class);
+            List<Trait> traits = obj.getTraits(InputHandlerTrait.class, ControlTrait.class, PhysicalTrait.class, DebugTrait.class, UpdatableTrait.class, PathFollowerTrait.class);
             if (traits.get(0) != null) {
                 ((InputHandlerTrait) traits.get(0)).update();
             }
@@ -154,6 +154,9 @@ public class GameScreen implements Screen {
             }
             if (traits.get(4) != null) {
                 ((UpdatableTrait) traits.get(4)).update();
+            }
+            if (traits.get(5) != null) {
+                ((PathFollowerTrait) traits.get(5)).travelOnPath(delta);
             }
 
             // handle deletion of objects gracefully
@@ -193,7 +196,7 @@ public class GameScreen implements Screen {
             }
             if (traits.get(5) != null){
                 if (currentNumberOfLights < MAX_LIGHTS) {
-                    ((LightTrait) traits.get(5)).updateShaderProgram(program, currentNumberOfLights, camera);
+                    ((LightTrait) traits.get(5)).updateShaderProgram(program, currentNumberOfLights, camera).debug(shaper);
                     currentNumberOfLights++;
                 } else {
                     log.debug("currentNumberOfLights("+ (currentNumberOfLights + 1) + ") cannot exceed MAX_LIGHTS("+ MAX_LIGHTS + ")");

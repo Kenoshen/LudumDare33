@@ -27,7 +27,6 @@ public class EnemyThrower extends GameObject{
     public EnemyThrower(float x, float y, float z, float width, float height){
         traits.add(new PositionTrait(this, x, y, z));
         traits.add(new DrawableTrait(this));
-        traits.add(new LightTrait(this, Color.GREEN));
 
         AnimationBundle bundle = new AnimationBundle();
 

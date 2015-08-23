@@ -65,7 +65,7 @@ public class Game extends com.badlogic.gdx.Game {
 //        setScreen(new CutsceneScreen(this));
         //setScreen(new GameScreen(this, new TestLevel3()));
 //        setScreen(new MainMenuScreen(this));
-        setScreen(new GameScreen(this, new ludum.dare.level.TestLamp()));
+        setScreen(new GameScreen(this, new TestLevel()));
     }
 
 

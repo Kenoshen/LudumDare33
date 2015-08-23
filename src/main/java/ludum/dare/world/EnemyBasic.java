@@ -30,7 +30,6 @@ public class EnemyBasic extends GameObject{
     public EnemyBasic(float x, float y, float z, float width, float height){
         traits.add(new PositionTrait(this, x, y, z));
         traits.add(new DrawableTrait(this));
-        traits.add(new LightTrait(this, Color.BLUE));
 
         AnimationBundle bundle = new AnimationBundle();
 
