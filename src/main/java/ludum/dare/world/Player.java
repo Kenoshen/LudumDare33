@@ -30,6 +30,7 @@ public class Player extends GameObject {
     private AnimatorTrait animator;
     private TimedCollisionTrait hitboxes;
     public boolean rightFacing = true;
+    public boolean hitFromRight;
 
     private CollisionCallback collisionFunc = new CollisionCallback() {
             @Override
@@ -66,12 +67,12 @@ public class Player extends GameObject {
         bundle.addNamedAnimation(new NamedAnimation("stand", 0.1f,
                 AtlasManager.instance.getAtlas("bum").findRegions("stand/bumStand"), AtlasManager.instance.getAtlas("bum_n").findRegions("stand/bumStand_n"),
                 new Vector2(0, 0), new Vector2(width, height)));
-        bundle.addNamedAnimation(new NamedAnimation("pain", .1f,
+        bundle.addNamedAnimation(new NamedAnimation("pain", .15f,
                 AtlasManager.instance.getAtlas("bum").findRegions("pain/bumPain"), AtlasManager.instance.getAtlas("bum").findRegions("pain/bumPain"),
-                new Vector2(0, 1.75f), new Vector2(width, height)));
-        bundle.addNamedAnimation(new NamedAnimation("backpain", .1f,
+                new Vector2(0, 0f), new Vector2(width, height)));
+        bundle.addNamedAnimation(new NamedAnimation("backpain", .15f,
                 AtlasManager.instance.getAtlas("bum").findRegions("backpain/bumBackPain"), AtlasManager.instance.getAtlas("bum").findRegions("backpain/bumBackPain"),
-                new Vector2(0, 1.75f), new Vector2(width, height)));
+                new Vector2(0, 0f), new Vector2(width, height)));
         CollisionSequence standSequence = new CollisionSequence();
         standSequence.name = "stand";
 
@@ -316,42 +317,46 @@ public class Player extends GameObject {
             if (getTrait(PositionTrait.class).x < o.getTrait(PositionTrait.class).x
                     && getTrait(PositionTrait.class).y < o.getTrait(PositionTrait.class).y){
                 getTrait(ImmobilizedTrait.class).imob = true;
+                hitFromRight = true;
                 myControl.queuedAttack = false;
                 myControl.attacking = false;
                 myControl.jumping = false;
                 myControl.landing = false;
-                v.x -= 5000;
-                v.y -= 5000;
+                v.x -= 10000;
+                v.y -= 50;
             }
             if (getTrait(PositionTrait.class).x >= o.getTrait(PositionTrait.class).x
                     && getTrait(PositionTrait.class).y < o.getTrait(PositionTrait.class).y){
                 getTrait(ImmobilizedTrait.class).imob = true;
+                hitFromRight = false;
                 myControl.queuedAttack = false;
                 myControl.attacking = false;
                 myControl.jumping = false;
                 myControl.landing = false;
-                v.x += 5000;
-                v.y -= 5000;
+                v.x += 10000;
+                v.y -= 50;
             }
             if (getTrait(PositionTrait.class).x >= o.getTrait(PositionTrait.class).x
                     && getTrait(PositionTrait.class).y >= o.getTrait(PositionTrait.class).y){
                 getTrait(ImmobilizedTrait.class).imob = true;
+                hitFromRight = false;
                 myControl.queuedAttack = false;
                 myControl.attacking = false;
                 myControl.jumping = false;
                 myControl.landing = false;
-                v.x += 5000;
-                v.y += 5000;
+                v.x += 10000;
+                v.y += 50;
             }
             if (getTrait(PositionTrait.class).x < o.getTrait(PositionTrait.class).x
                     && getTrait(PositionTrait.class).y >= o.getTrait(PositionTrait.class).y){
                 getTrait(ImmobilizedTrait.class).imob = true;
+                hitFromRight = true;
                 myControl.queuedAttack = false;
                 myControl.attacking = false;
                 myControl.jumping = false;
                 myControl.landing = false;
-                v.x -= 5000;
-                v.y += 5000;
+                v.x -= 10000;
+                v.y += 50;
             }
             getTrait(PhysicalTrait.class).body.body.setLinearVelocity(v);
         }

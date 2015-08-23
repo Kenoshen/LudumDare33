@@ -145,13 +145,13 @@ public class ControlTrait extends Trait implements AnimationCallback {
             }
         } else if (vel.len() > PLAYER_ANIMATION_VEL_CHANGE){
             animator.changeStateIfUnique("walk", true);
-        } else if(imob.imob && rightFacing && vel.x<=0){
+        } else if(imob.imob && rightFacing && ((Player)self).hitFromRight){
             animator.changeStateIfUnique("pain", false);
-        } else if(imob.imob && rightFacing && vel.x>0){
+        } else if(imob.imob && rightFacing && !((Player)self).hitFromRight){
             animator.changeStateIfUnique("backpain", false);
-        } else if(imob.imob && !rightFacing && vel.x<=0){
+        } else if(imob.imob && !rightFacing && ((Player)self).hitFromRight){
             animator.changeStateIfUnique("backpain", false);
-        } else if(imob.imob && !rightFacing && vel.x>0){
+        } else if(imob.imob && !rightFacing && !((Player)self).hitFromRight){
             animator.changeStateIfUnique("pain", false);
         }
         else if (!attacking) {
