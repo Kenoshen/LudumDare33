@@ -33,9 +33,9 @@ public class TestLevel extends Level{
 
 
         objs.add(new Boundary(new Vector2(-20, 1), new Vector2(20, 1)));
-        objs.add(new EnemyBasic(9, 5, 0, 12, 12));
-        objs.add(new Fourty(-10,5,0,3));
-        objs.add(new Chicken(-15,5,0,6));
+        objs.add(new EnemyBasic(20, 5, 0, 12, 12));
+        objs.add(new Fourty(-10,0,0,3));
+        objs.add(new Chicken(-15,0,0,6));
 
         objs.add(new Player(0, 5, 0, CMouse.instance, CKeyboard.instance, null));
         TextureRegion tex = AtlasManager.instance.findRegion("white");
