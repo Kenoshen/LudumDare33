@@ -36,6 +36,8 @@ import java.util.List;
 public class GameScreen implements Screen {
     private static final HTMLLogger log = HTMLLogger.getLogger(GameScreen.class, LogGroup.System);
 
+    private static final int MAX_LIGHTS = 10;
+
     private Game game;
     private Stage stage = new Stage();
 
@@ -71,7 +73,8 @@ public class GameScreen implements Screen {
         //
         camera = new FollowOrthoCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.zoom = camera.minZoom;
-        camera.minZoom = 1;
+        camera.minZoom = 1f;
+        camera.maxZoom = 0.0001f;
         //
         listCollisions = new ArrayList<>();
         //
@@ -136,7 +139,7 @@ public class GameScreen implements Screen {
 
         CWorld.world.update(Conf.instance.worldStepTime());
         for (GameObject obj : gameObjects){
-            List<Trait> traits = obj.getTraits(InputHandlerTrait.class, ControlTrait.class, PhysicalTrait.class, DebugTrait.class, UpdatableTrait.class);
+            List<Trait> traits = obj.getTraits(InputHandlerTrait.class, ControlTrait.class, PhysicalTrait.class, DebugTrait.class, UpdatableTrait.class, PathFollowerTrait.class);
             if (traits.get(0) != null) {
                 ((InputHandlerTrait) traits.get(0)).update();
             }
@@ -151,6 +154,9 @@ public class GameScreen implements Screen {
             }
             if (traits.get(4) != null) {
                 ((UpdatableTrait) traits.get(4)).update();
+            }
+            if (traits.get(5) != null) {
+                ((PathFollowerTrait) traits.get(5)).travelOnPath(delta);
             }
 
             // handle deletion of objects gracefully
@@ -168,9 +174,11 @@ public class GameScreen implements Screen {
 
         batch.begin();
         shaper.begin(ShapeRenderer.ShapeType.Line);
-        program.setUniformf("light", new Vector3(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY(), 0.05f));
+
+
+        int currentNumberOfLights = 0;
         for (GameObject obj : gameObjects){
-            List<Trait> traits = obj.getTraits(AnimatorTrait.class, DrawableTrait.class, TimedCollisionTrait.class, CameraFollowTrait.class, CollidableTrait.class);
+            List<Trait> traits = obj.getTraits(AnimatorTrait.class, DrawableTrait.class, TimedCollisionTrait.class, CameraFollowTrait.class, CollidableTrait.class, LightTrait.class);
             if (traits.get(0) != null){
                 ((AnimatorTrait) traits.get(0)).update(delta);
             }
@@ -185,6 +193,14 @@ public class GameScreen implements Screen {
             }
             if (traits.get(4) != null){
                 ((CollidableTrait) traits.get(4)).checkCollisions(gameObjects, listCollisions);
+            }
+            if (traits.get(5) != null){
+                if (currentNumberOfLights < MAX_LIGHTS) {
+                    ((LightTrait) traits.get(5)).updateShaderProgram(program, currentNumberOfLights, camera).debug(shaper);
+                    currentNumberOfLights++;
+                } else {
+                    log.debug("currentNumberOfLights("+ (currentNumberOfLights + 1) + ") cannot exceed MAX_LIGHTS("+ MAX_LIGHTS + ")");
+                }
             }
         }
 
@@ -246,70 +262,7 @@ public class GameScreen implements Screen {
     }
 
     private ShaderProgram createShader() {
-        String vert = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
-                + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" //
-                + "attribute vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" //
-                + "uniform mat4 u_proj;\n" //
-                + "uniform mat4 u_trans;\n" //
-                + "uniform mat4 u_projTrans;\n" //
-                + "varying vec4 v_color;\n" //
-                + "varying vec2 v_texCoords;\n" //
-                + "\n" //
-                + "void main()\n" //
-                + "{\n" //
-                + "   v_color = " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" //
-                + "   v_texCoords = " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" //
-                + "   gl_Position =  u_projTrans * " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
-                + "}\n";
-
-        String frag = "#ifdef GL_ES\n" +
-                "precision mediump float;\n" +
-                "#endif\n" +
-                "varying vec4 v_color;\n" +
-                "varying vec2 v_texCoords;\n" +
-
-                "uniform sampler2D u_texture;\n" +
-                "uniform sampler2D u_normals;\n" +
-                "uniform vec3 light;\n" +
-                "uniform vec3 ambientColor;\n" +
-                "uniform float ambientIntensity; \n" +
-                "uniform vec2 resolution;\n" +
-                "uniform vec3 lightColor;\n" +
-                "uniform bool useNormals;\n" +
-                "uniform bool useShadow;\n" +
-                "uniform vec3 attenuation;\n" +
-                "uniform float strength;\n" +
-                "uniform bool yInvert;\n"+
-                "\n" +
-                "void main() {\n" +
-                "       //sample color & normals from our textures\n" +
-                "       vec4 color = texture2D(u_texture, v_texCoords.st);\n" +
-                "       vec3 nColor = texture2D(u_normals, v_texCoords.st).rgb;\n\n" +
-                "       //some bump map programs will need the Y value flipped..\n" +
-                "       nColor.g = yInvert ? 1.0 - nColor.g : nColor.g;\n\n" +
-                "       //this is for debugging purposes, allowing us to lower the intensity of our bump map\n" +
-                "       vec3 nBase = vec3(0.5, 0.5, 1.0);\n" +
-                "       nColor = mix(nBase, nColor, strength);\n\n" +
-                "       //normals need to be converted to [-1.0, 1.0] range and normalized\n" +
-                "       vec3 normal = normalize(nColor * 2.0 - 1.0);\n\n" +
-                "       //here we do a simple distance calculation\n" +
-                "       vec3 deltaPos = vec3( (light.xy - gl_FragCoord.xy) / resolution.xy, light.z );\n\n" +
-                "       vec3 lightDir = normalize(deltaPos);\n" +
-                "       float lambert = useNormals ? clamp(dot(normal, lightDir), 0.0, 1.0) : 1.0;\n" +
-                "       \n" +
-                "       //now let's get a nice little falloff\n" +
-                "       float d = sqrt(dot(deltaPos, deltaPos));"+
-                "       \n" +
-                "       float att = useShadow ? 1.0 / ( attenuation.x + (attenuation.y*d) + (attenuation.z*d*d) ) : 1.0;\n" +
-                "       \n" +
-                "       vec3 result = (ambientColor * ambientIntensity) + (lightColor.rgb * lambert) * att;\n" +
-                "       result *= color.rgb;\n" +
-                "       \n" +
-                "       gl_FragColor = v_color * vec4(result, color.a);\n" +
-                "}";
-        System.out.println("VERTEX PROGRAM:\n------------\n\n"+vert);
-        System.out.println("FRAGMENT PROGRAM:\n------------\n\n"+frag);
-        ShaderProgram program = new ShaderProgram(vert, frag);
+        ShaderProgram program = new ShaderProgram(Gdx.files.internal("shaders/vertex.vert"), Gdx.files.internal("shaders/fragment.frag"));
         // u_proj and u_trans will not be active but SpriteBatch will still try to set them...
         program.pedantic = false;
         if (program.isCompiled() == false)
@@ -320,7 +273,6 @@ public class GameScreen implements Screen {
         program.begin();
         program.setUniformi("u_texture", 0);
         program.setUniformi("u_normals", 1);
-        program.setUniformf("light", new Vector3(0, 0, 0.001f));
         program.setUniformf("strength", 1);
         program.setUniformf("ambientIntensity", 0.3f);
         program.setUniformf("ambientColor", new Vector3(0.3f, 0.3f, 1f));

@@ -93,7 +93,7 @@ public class TestLamp implements ApplicationListener {
     public void create() {
         // load our textures
         rock = new Texture(Gdx.files.internal("imgs/game/bum/cross/bumCross_0.png"));
-        rock_n = new Texture(Gdx.files.internal("imgs/game/bum/cross/bumCross_n_0.png"));
+        rock_n = new Texture(Gdx.files.internal("imgs/game/bum_n/cross/bumCross_n_0.png"));
         teapot = new Texture(Gdx.files.internal("imgs/game/bum/walk/bumWalk_4.png"));
         teapot_n = new Texture(Gdx.files.internal("imgs/game/bum/walk/bumWalk_4.png"));
 
