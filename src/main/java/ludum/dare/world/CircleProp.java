@@ -16,7 +16,6 @@ import ludum.dare.trait.*;
 public class CircleProp extends GameObject {
     public CircleProp(float x, float y, float z, float radius, AnimationBundle animationBundle){
         traits.add(new PositionTrait(this, x, y, z));
-        traits.add(new SizeTrait(this, radius, radius));
 
         traits.add(new CollidableTrait(this, null));
         traits.add(new AnimatorTrait(this, animationBundle.getAnimations()));

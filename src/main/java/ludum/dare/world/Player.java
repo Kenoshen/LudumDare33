@@ -23,7 +23,6 @@ import ludum.dare.utils.NamedAnimation;
  * Created by mwingfield on 8/3/15.
  */
 public class Player extends GameObject {
-    private static final float PLAYER_ANIMATION_VEL_CHANGE = 0.1f;
 
     private PhysicalTrait physical;
     private AnimatorTrait animator;
@@ -31,7 +30,6 @@ public class Player extends GameObject {
 
     public Player(float x, float y, float z, float width, float height, CMouse mouse, CKeyboard keyboard, CGamePad gamepad){
         traits.add(new PositionTrait(this, x, y, z));
-        traits.add(new SizeTrait(this, width, height));
         traits.add(new DrawableTrait(this));
 
         ID = "Player";
@@ -105,7 +103,7 @@ public class Player extends GameObject {
         bD.type = BodyDef.BodyType.DynamicBody;
         bD.position.x = x;
         bD.position.y = y;
-        CBody body = new BoxBody(width, height).init(fD, bD);
+        CBody body = new BoxBody(width/2, height/2).init(fD, bD);
         physical = new PhysicalTrait(this, body);
         traits.add(physical);
 
