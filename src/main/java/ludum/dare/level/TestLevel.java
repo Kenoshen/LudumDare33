@@ -35,7 +35,7 @@ public class TestLevel extends Level{
         objs.add(new Boundary(new Vector2(-20, 1), new Vector2(20, 1)));
         Sprite enemySprite = new Sprite(AtlasManager.instance.findRegion("testEnemySprite"));
         enemySprite.setSize(2,4);
-        objs.add(new EnemyBasic(9, 5, 0, 2, 4, enemySprite));
+        objs.add(new EnemyBasic(9, 5, 0, 2, 4));
 
         objs.add(new Player(0, 5, 0, 6, 6, CMouse.instance, CKeyboard.instance, null));
         TextureRegion tex = AtlasManager.instance.findRegion("white");

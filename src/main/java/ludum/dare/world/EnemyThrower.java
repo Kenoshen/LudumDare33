@@ -21,9 +21,10 @@ public class EnemyThrower extends GameObject{
         traits.add(new PositionTrait(this, x, y, z));
         traits.add(new SizeTrait(this, width, height));
         traits.add(new DrawableTrait(this, eSprite));
+
         traits.add(new AITrait(this));
-        traits.add(new EnemyThrowerBehaviorTrait(this));
-        traits.add(new HealthTrait(this));
+//        traits.add(new AIMovementRangedTrait());
+        traits.add(new HealthTrait(this, 50));
 
         FixtureDef fd = new FixtureDef();
         BodyDef bd = new BodyDef();

@@ -75,7 +75,7 @@ public class Player extends GameObject {
             collisionSequence.frames[i] = collisionGroup;
         }
 
-//        bundle.addHurtboxSequence(collisionSequence);
+        bundle.addHurtboxSequence(collisionSequence);
 
         animator = new AnimatorTrait(this, bundle.getAnimations());
         traits.add(animator);

@@ -3,8 +3,8 @@ package ludum.dare.trait;
 /**
  * Created by jake on 8/22/2015.
  */
-public class EnemyThrowerBehaviorTrait extends Trait {
-    public EnemyThrowerBehaviorTrait(GameObject obj) {
+public class AIMovementRetreatTrait extends Trait {
+    public AIMovementRetreatTrait(GameObject obj) {
         super(obj);
     }
 
