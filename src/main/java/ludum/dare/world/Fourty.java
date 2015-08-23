@@ -56,6 +56,16 @@ public class Fourty extends GameObject{
         traits.add(animator);
         traits.add(new TimedCollisionTrait(this, bundle));
 
+        FixtureDef fd = new FixtureDef();
+        BodyDef bd = new BodyDef();
+        bd.type = BodyDef.BodyType.DynamicBody;
+        bd.position.x = x;
+        bd.position.y = y;
+        bd.fixedRotation = true;
+        CBody body = new BoxBody(0, 1).init(fd, bd);
+        PhysicalTrait physical = new PhysicalTrait(this, body);
+        traits.add(physical);
+
         traits.add(new DebugTrait(this));
 
         initializeTraits();

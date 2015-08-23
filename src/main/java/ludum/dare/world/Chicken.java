@@ -2,6 +2,10 @@ package ludum.dare.world;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.winger.physics.CBody;
+import com.winger.physics.body.BoxBody;
 import ludum.dare.collision.AnimationBundle;
 import ludum.dare.collision.CollisionGroup;
 import ludum.dare.collision.CollisionSequence;
@@ -49,6 +53,16 @@ public class Chicken extends GameObject{
         animator = new AnimatorTrait(this, bundle.getAnimations());
         traits.add(animator);
         traits.add(new TimedCollisionTrait(this, bundle));
+
+        FixtureDef fd = new FixtureDef();
+        BodyDef bd = new BodyDef();
+        bd.type = BodyDef.BodyType.DynamicBody;
+        bd.position.x = x;
+        bd.position.y = y;
+        bd.fixedRotation = true;
+        CBody body = new BoxBody(0, 1).init(fd, bd);
+        PhysicalTrait physical = new PhysicalTrait(this, body);
+        traits.add(physical);
 
         traits.add(new DebugTrait(this));
 
