@@ -9,6 +9,7 @@ import java.util.List;
 public abstract class GameObject {
     public List<Trait> traits = new ArrayList<>();
     private boolean shouldBeDeleted = false;
+    public String ID;
 
     public <T extends Trait> T getTrait(Class<T> traitType){
         for (Trait trait : traits){

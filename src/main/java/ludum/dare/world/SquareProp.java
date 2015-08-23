@@ -17,7 +17,6 @@ import ludum.dare.trait.*;
 public class SquareProp extends GameObject {
     public SquareProp(float x, float y, float z, float width, float height, AnimationBundle animationBundle){
         traits.add(new PositionTrait(this, x, y, z));
-        traits.add(new SizeTrait(this, width, height));
 
         traits.add(new CollidableTrait(this, null));
         traits.add(new AnimatorTrait(this, animationBundle.getAnimations()));
