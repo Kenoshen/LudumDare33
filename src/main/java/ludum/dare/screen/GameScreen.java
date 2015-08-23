@@ -151,7 +151,7 @@ public class GameScreen implements Screen {
         shaper.setProjectionMatrix(camera.combined);
 
         batch.begin();
-        shaper.begin(ShapeRenderer.ShapeType.Filled);
+        shaper.begin(ShapeRenderer.ShapeType.Line);
         for (GameObject obj : gameObjects){
             List<Trait> traits = obj.getTraits(AnimatorTrait.class, DrawableTrait.class, TimedCollisionTrait.class, CameraFollowTrait.class, CollidableTrait.class);
             if (traits.get(0) != null){

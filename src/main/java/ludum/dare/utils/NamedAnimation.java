@@ -10,9 +10,9 @@ import com.badlogic.gdx.utils.Array;
  * Created by Admin on 8/21/2015.
  */
 public class NamedAnimation extends Animation{
-    private static float scaleFactor = .5f;
     private String name;
-    private Vector2 offset;
+    private final Vector2 offset;
+    private final Vector2 flippedOffset;
     /**
      * Holds the last frame we last returned
      */
@@ -27,6 +27,7 @@ public class NamedAnimation extends Animation{
         super(frameDuration, keyFrames);
         this.name = name;
         this.offset = offset;
+        flippedOffset = new Vector2(offset.x * -1, offset.y * -1);
         this.size = size;
     }
 
@@ -51,8 +52,12 @@ public class NamedAnimation extends Animation{
         return lastCalledFrame;
     }
 
-    public Vector2 getOffset() {
-        return offset;
+    public Vector2 getOffset(boolean flipped) {
+        if (flipped) {
+            return flippedOffset;
+        } else {
+            return offset;
+        }
     }
 
     public Vector2 getSize() {
