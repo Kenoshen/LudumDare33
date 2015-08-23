@@ -31,7 +31,9 @@ public class EnemyBasic extends GameObject{
     private CollisionCallback collisionFunc = new CollisionCallback() {
         @Override
         public void collide(GameObject obj) {
-            System.out.println("Taskbot job successful.");
+            if (obj instanceof Player) {
+                ((Player) obj).collidedWith(EnemyBasic.this);
+            }
         }
     };
 
