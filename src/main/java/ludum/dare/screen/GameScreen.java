@@ -26,6 +26,7 @@ import ludum.dare.level.Level;
 import ludum.dare.trait.*;
 import ludum.dare.utils.SkinManager;
 import ludum.dare.world.AIHiveMind;
+import ludum.dare.world.SoundLibrary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +64,7 @@ public class GameScreen implements Screen {
 
     public GameScreen(final Game game, Level level){
 
-        music = Gdx.audio.newMusic(Gdx.files.internal("music/Main_song.ogg"));
+        music = SoundLibrary.GetMusic("Main_Song");
         music.setVolume(1);
         music.play();
 
