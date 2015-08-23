@@ -34,6 +34,8 @@ public class Player extends GameObject {
         traits.add(new SizeTrait(this, width, height));
         traits.add(new DrawableTrait(this));
 
+        ID = "Player";
+
 
         AnimationBundle bundle = new AnimationBundle();
         bundle.addNamedAnimation(new NamedAnimation("stand", 0.1f,
@@ -76,7 +78,7 @@ public class Player extends GameObject {
 
         // Generating the hurtbox
         CollisionGroup collisionGroup = new CollisionGroup();
-        collisionGroup.boxes = new Rectangle[]{new Rectangle(0,0,5,5)};
+        collisionGroup.boxes = new Rectangle[]{new Rectangle(-4,-4,8,8)};
 
         for(int i = 0; i < collisionSequence.frames.length; i++){
             collisionSequence.frames[i] = collisionGroup;
