@@ -1,5 +1,6 @@
 package ludum.dare.trait;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import ludum.dare.utils.Sprite;
@@ -8,14 +9,21 @@ import ludum.dare.utils.Sprite;
  * Created by mwingfield on 8/2/15.
  */
 public class DrawableTrait extends Trait {
-    private static Class[] REQUIRES = new Class[]{ PositionTrait.class, SizeTrait.class };
+    private static Class[] REQUIRES = new Class[]{ PositionTrait.class };
 
     public Sprite sprite;
     private PositionTrait pos;
-    private SizeTrait size;
+    public Vector2 offset;
+
+    public DrawableTrait(GameObject obj) {
+        this(obj, null);
+    }
 
     public DrawableTrait(GameObject obj, Sprite sprite) {
         super(obj);
+        if (sprite == null) {
+            sprite = new Sprite();
+        }
         this.sprite = sprite;
     }
 
@@ -23,7 +31,7 @@ public class DrawableTrait extends Trait {
     public void initialize(){
         super.initialize();
         pos = self.getTrait(PositionTrait.class);
-        size = self.getTrait(SizeTrait.class);
+        offset = new Vector2(0,0);
     }
 
     @Override
@@ -34,10 +42,9 @@ public class DrawableTrait extends Trait {
     public void draw(SpriteBatch spriteBatch){
         if (sprite != null) {
             // TODO: not sure why the size has to be double... that is really confusing me...
-            sprite.setSize(size.width * 2, size.height * 2);
             sprite.setOrigin(sprite.getWidth() / 2f, sprite.getHeight() / 2f);
-            sprite.setX(pos.x - sprite.getWidth() / 2f); // also, this stuff seems kind of hacky?
-            sprite.setY(pos.y - sprite.getHeight() / 2f);
+            sprite.setX(pos.x - sprite.getWidth() / 2f + offset.x); // also, this stuff seems kind of hacky?
+            sprite.setY(pos.y - sprite.getHeight() / 2f + offset.y);
 
             sprite.setRotation(pos.rotation);
 

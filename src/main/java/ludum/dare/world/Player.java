@@ -1,8 +1,7 @@
 package ludum.dare.world;
 
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -42,24 +41,46 @@ public class Player extends GameObject {
         bundle.addNamedAnimation(animation);
         bundle.addNamedAnimation(new NamedAnimation("walk", 0.1f, AtlasManager.instance.getAtlas("bum").findRegions("walk/bumWalk"), AtlasManager.instance.getAtlas("bum_n").findRegions("walk/bumWalk_n"), new Vector2(0,0), new Vector2(6,6)));
         bundle.addNamedAnimation(new NamedAnimation("punch", 0.1f, AtlasManager.instance.getAtlas("bum").findRegions("jab/bumJab"), AtlasManager.instance.getAtlas("bum_n").findRegions("jab/bumJab_n"), new Vector2(0,0), new Vector2(7,6)));
+        
+        bundle.addNamedAnimation(new NamedAnimation("stand", 0.1f, AtlasManager.instance.getAtlas("game").findRegions("bumStand"), new Vector2(0, 0), new Vector2(width, height)));
+        bundle.addNamedAnimation(new NamedAnimation("walk", 0.1f, AtlasManager.instance.getAtlas("game").findRegions("bumWalk"), new Vector2(0, 0), new Vector2(width, height)));
+        bundle.addNamedAnimation(new NamedAnimation("punch", 0.1f, AtlasManager.instance.getAtlas("game").findRegions("bumJab"), new Vector2(1.7f, 0), new Vector2(width * 1.25f, height)));
+        bundle.addNamedAnimation(new NamedAnimation("punch2", 0.1f, AtlasManager.instance.getAtlas("game").findRegions("bumCross"), new Vector2(1.7f, 0), new Vector2(width * 1.25f, height)));
 
-        CollisionSequence sequence = new CollisionSequence();
-        sequence.name = "walk";
+        CollisionSequence jabSequence = new CollisionSequence();
+        jabSequence.name = "punch";
 
         CollisionGroup group1 = new CollisionGroup();
-        group1.circles = new Circle[] {new Circle(1,1,1)};
+        group1.circles = new Circle[] {new Circle(7.2f,.5f,1.5f)};
+
+        jabSequence.frames = new CollisionGroup[3];
+        jabSequence.frames[0] = group1;
+        bundle.addHitboxSequence(jabSequence);
+
+        CollisionSequence crossSequence = new CollisionSequence();
+        crossSequence.name = "punch2";
 
         CollisionGroup group2 = new CollisionGroup();
-        group2.circles = new Circle[] {new Circle(1,1.5f,1)};
+        group2.circles = new Circle[] {new Circle(8f,1.5f,2f)};
 
-        CollisionGroup group3 = new CollisionGroup();
-        group3.circles = new Circle[] {new Circle(1,2,1)};
+        crossSequence.frames = new CollisionGroup[5];
+        crossSequence.frames[1] = group2;
+        bundle.addHitboxSequence(crossSequence);
 
-        sequence.frames = new CollisionGroup[5];
-        sequence.frames[2] = group1;
-        sequence.frames[3] = group2;
-        sequence.frames[4] = group3;
-        bundle.addHitboxSequence(sequence);
+
+        CollisionSequence collisionSequence = new CollisionSequence();
+        collisionSequence.name = "stand";
+        collisionSequence.frames = new CollisionGroup[9];
+
+        // Generating the hurtbox
+        CollisionGroup collisionGroup = new CollisionGroup();
+        collisionGroup.boxes = new Rectangle[]{new Rectangle(0,0,5,5)};
+
+        for(int i = 0; i < collisionSequence.frames.length; i++){
+            collisionSequence.frames[i] = collisionGroup;
+        }
+
+        bundle.addHurtboxSequence(collisionSequence);
 
         animator = new AnimatorTrait(this, bundle.getAnimations());
         traits.add(animator);
@@ -67,7 +88,8 @@ public class Player extends GameObject {
         hitboxes = new TimedCollisionTrait(this, bundle);
         traits.add(hitboxes);
 
-        traits.add(new ControlTrait(this, mouse, keyboard, gamepad));
+        traits.add(new InputHandlerTrait(this, mouse, keyboard, gamepad));
+        traits.add(new ControlTrait(this));
         //
         // this part sets the collision filter for the boundary object
         // all boundary objects collide with Actor objects
@@ -79,31 +101,11 @@ public class Player extends GameObject {
         bD.type = BodyDef.BodyType.DynamicBody;
         bD.position.x = x;
         bD.position.y = y;
-        bD.fixedRotation = true;
         CBody body = new BoxBody(width, height).init(fD, bD);
         physical = new PhysicalTrait(this, body);
         traits.add(physical);
 
         traits.add(new DebugTrait(this));
-
-        final Player self = this;
-        traits.add(new UpdatableTrait(this, new Runnable(){
-            @Override
-            public void run() {
-                Vector2 vel = physical.body.getLinearVelocity();
-                if (vel.len() > PLAYER_ANIMATION_VEL_CHANGE){
-                    animator.changeStateIfUnique("walk", true);
-                } else {
-                    animator.changeStateIfUnique("stand", true);
-                }
-                DrawableTrait drawable = self.getTrait(DrawableTrait.class);
-                if (vel.x > 0){
-                    animator.flipped = false;
-                } else if(vel.x < 0) {
-                    animator.flipped = true;
-                }
-            }
-        }));
 
         initializeTraits();
 

@@ -1,65 +1,51 @@
 package ludum.dare.trait;
 
 import com.badlogic.gdx.math.Vector2;
-import com.winger.input.delegate.CGamePadEventHandler;
-import com.winger.input.delegate.CKeyboardEventHandler;
-import com.winger.input.delegate.CMouseEventHandler;
-import com.winger.input.raw.CGamePad;
-import com.winger.input.raw.CKeyboard;
-import com.winger.input.raw.CMouse;
-import com.winger.input.raw.state.*;
 import com.winger.physics.body.BoxBody;
-import com.winger.physics.body.PlayerBody;
 import ludum.dare.Conf;
+import ludum.dare.utils.AnimationCallback;
 
 /**
- * Created by mwingfield on 8/2/15.
+ * Created by Admin on 8/22/2015.
  */
-public class ControlTrait extends Trait implements CMouseEventHandler, CKeyboardEventHandler, CGamePadEventHandler {
-    private static Class[] REQUIRES = new Class[]{ PhysicalTrait.class };
+public class ControlTrait extends Trait implements AnimationCallback {
+    private static final float PLAYER_ANIMATION_VEL_CHANGE = 0.1f;
+    private static Class[] REQUIRES = new Class[]{PhysicalTrait.class, AnimatorTrait.class};
 
-    private CMouse mouse;
-    private CKeyboard keyboard;
-    private CGamePad gamepad;
+    public enum ControlAction {
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT,
+        ATTACK,
+        NONE
+    }
 
     private PhysicalTrait physical;
+    private AnimatorTrait animator;
     private BoxBody player;
+    private boolean attacking = false;
+    private boolean queuedAttack = false;
 
+    private ControlAction leftRightRequest = ControlAction.NONE;
+    private ControlAction upDownRequest = ControlAction.NONE;
+    private ControlAction attackRequest = ControlAction.NONE;
 
-    public ControlTrait(GameObject obj, CMouse mouse, CKeyboard keyboard) {
-        this(obj, mouse, keyboard, null);
-    }
-
-    public ControlTrait(GameObject obj, CGamePad gamepad) {
-        this(obj, null, null, gamepad);
-    }
-
-    public ControlTrait(GameObject obj, CMouse mouse, CKeyboard keyboard, CGamePad gamepad) {
+    public ControlTrait(GameObject obj) {
         super(obj);
-        this.mouse = mouse;
-        this.keyboard = keyboard;
-        this.gamepad = gamepad;
     }
 
     @Override
     public void initialize(){
         super.initialize();
         physical = self.getTrait(PhysicalTrait.class);
+        animator = self.getTrait(AnimatorTrait.class);
+        animator.registerAnimationCallback(this);
         if (!(physical.body instanceof BoxBody)){
-            throw new RuntimeException("ControlTrait requires PhysicalTrait, but it also requires a BoxBody for the physicalTrait.body");
+            throw new RuntimeException("InputHandlerTrait requires PhysicalTrait, but it also requires a BoxBody for the physicalTrait.body");
         }
-        player = (BoxBody)physical.body;
 
-        if (mouse != null){
-            mouse.subscribeToAllMouseClickEvents(this);
-        }
-        if (keyboard != null){
-            keyboard.subscribeToAllKeyboardEvents(this, ButtonState.UP);
-            keyboard.subscribeToAllKeyboardEvents(this, ButtonState.DOWN);
-        }
-        if (gamepad != null){
-            gamepad.subscribeToAllGamePadEvents(this);
-        }
+        player = (BoxBody)physical.body;
     }
 
 
@@ -68,84 +54,86 @@ public class ControlTrait extends Trait implements CMouseEventHandler, CKeyboard
         return REQUIRES;
     }
 
-
-    public void update(){
-        if (keyboard != null){
-            Vector2 movement = new Vector2(0, 0);
-            if (keyboard.isKeyBeingPressed(KeyboardKey.LEFT) || keyboard.isKeyBeingPressed(KeyboardKey.A)){
-                if (keyboard.isKeyBeingPressed(KeyboardKey.LEFT_SHIFT) || keyboard.isKeyBeingPressed(KeyboardKey.RIGHT_SHIFT)){
-                    movement.x -= Conf.instance.playerRunSpeed();
-                } else {
-                    movement.x -= Conf.instance.playerWalkSpeed();
-                }
-            } else if (keyboard.isKeyBeingPressed(KeyboardKey.RIGHT) || keyboard.isKeyBeingPressed(KeyboardKey.D)){
-                if (keyboard.isKeyBeingPressed(KeyboardKey.LEFT_SHIFT) || keyboard.isKeyBeingPressed(KeyboardKey.RIGHT_SHIFT)){
-                    movement.x += Conf.instance.playerRunSpeed();
-                } else {
-                    movement.x += Conf.instance.playerWalkSpeed();
-                }
-            }
-            if (keyboard.isKeyBeingPressed(KeyboardKey.UP) || keyboard.isKeyBeingPressed(KeyboardKey.W)){
-                if (keyboard.isKeyBeingPressed(KeyboardKey.LEFT_SHIFT) || keyboard.isKeyBeingPressed(KeyboardKey.RIGHT_SHIFT)){
-                    movement.y += Conf.instance.playerRunSpeed();
-                } else {
-                    movement.y += Conf.instance.playerWalkSpeed();
-                }
-            } else if (keyboard.isKeyBeingPressed(KeyboardKey.DOWN) || keyboard.isKeyBeingPressed(KeyboardKey.S)){
-                if (keyboard.isKeyBeingPressed(KeyboardKey.LEFT_SHIFT) || keyboard.isKeyBeingPressed(KeyboardKey.RIGHT_SHIFT)){
-                    movement.y -= Conf.instance.playerRunSpeed();
-                } else {
-                    movement.y -= Conf.instance.playerWalkSpeed();
-                }
-            }
-            if (movement.len() < 1){
-                Vector2 vel = physical.body.body.getLinearVelocity();
-                vel.x *= -1;
-                vel.y *= -1;
-                physical.body.body.applyLinearImpulse(vel, new Vector2(0, 0), true);
-            } else {
-                physical.body.body.setLinearVelocity(movement);
-            }
+    public void requestMove(ControlAction action) {
+        switch (action) {
+             case UP:
+            case DOWN:
+                upDownRequest = action;
+                break;
+            case LEFT:
+            case RIGHT:
+                leftRightRequest = action;
+                break;
+            case ATTACK:
+                attackRequest = action;
+                break;
         }
     }
 
+    public void update() {
+        Vector2 movement = new Vector2(0, 0);
+        // character can either attack or move. not both.
+        if (attackRequest.equals(ControlAction.ATTACK)) {
+            if (attacking) {
+                queuedAttack = true;
+            } else {
+                attacking = true;
+                animator.setState("punch", false);
+            }
+        } else if (!attacking) {
+            if (upDownRequest.equals(ControlAction.UP)) {
+                movement.y += Conf.instance.playerWalkSpeed();
+            } else if (upDownRequest.equals(ControlAction.DOWN)) {
+                movement.y -= Conf.instance.playerWalkSpeed();
+            }
 
-    @Override
-    public void handleButtonEvent(CGamePad gamePad, CGamePadButton button, ButtonState state) {
+            if (leftRightRequest.equals(ControlAction.LEFT)) {
+                movement.x -= Conf.instance.playerWalkSpeed();
+            } else if (leftRightRequest.equals(ControlAction.RIGHT)) {
+                movement.x += Conf.instance.playerWalkSpeed();
+            }
+        }
 
+        movement = movement.nor().scl(Conf.instance.playerWalkSpeed());
+
+        if (movement.len() < 1){
+            Vector2 vel = physical.body.body.getLinearVelocity();
+            vel.x *= -1;
+            vel.y *= -1;
+            physical.body.body.applyLinearImpulse(vel, new Vector2(0, 0), true);
+        } else {
+            physical.body.body.setLinearVelocity(movement);
+        }
+
+        Vector2 vel = physical.body.getLinearVelocity();
+        if (vel.len() > PLAYER_ANIMATION_VEL_CHANGE){
+            animator.changeStateIfUnique("walk", true);
+        } else if (!attacking) {
+            animator.changeStateIfUnique("stand", true);
+        }
+
+        if (vel.x > 0){
+            animator.flipped = false;
+        } else if(vel.x < 0) {
+            animator.flipped = true;
+        }
+
+        leftRightRequest = ControlAction.NONE;
+        upDownRequest = ControlAction.NONE;
+        attackRequest = ControlAction.NONE;
     }
 
     @Override
-    public void handleTriggerEvent(CGamePad gamePad, CGamePadTrigger trigger, float state) {
-
-    }
-
-    @Override
-    public void handleStickEvent(CGamePad gamePad, CGamePadStick stick, Vector2 state) {
-
-    }
-
-    @Override
-    public void handleKeyEvent(CKeyboard keyboard, KeyboardKey key, ButtonState state) {
-    }
-
-    @Override
-    public void handleClickEvent(CMouse mouse, CMouseButton button, ButtonState state) {
-
-    }
-
-    @Override
-    public void handleScrollEvent(CMouse mouse, float difference) {
-
-    }
-
-    @Override
-    public void handleMoveEvent(CMouse mouse, Vector2 position) {
-
-    }
-
-    @Override
-    public void handleDragEvent(CMouse mouse, CMouseButton button, CMouseDrag state) {
-
+    public void animationEnded(String name) {
+        if (name.equals("punch")) {
+            if (queuedAttack) {
+                animator.setState("punch2", false);
+                queuedAttack = false;
+            } else {
+                attacking = false;
+            }
+        } else if (name.equals("punch2")) {
+            attacking = false;
+        }
     }
 }

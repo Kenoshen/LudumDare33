@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.winger.input.raw.CKeyboard;
 import com.winger.input.raw.CMouse;
+import ludum.dare.collision.AnimationBundle;
 import ludum.dare.trait.GameObject;
 import ludum.dare.utils.AtlasManager;
 import ludum.dare.world.Boundary;
@@ -36,12 +37,11 @@ public class TestLevel extends Level{
         enemySprite.setSize(2,4);
         objs.add(new EnemyBasic(9, 5, 0, 2, 4, enemySprite));
 
-        objs.add(new Player(0, 5, 0, 2, 4, CMouse.instance, CKeyboard.instance, null));
-
+        objs.add(new Player(0, 5, 0, 6, 6, CMouse.instance, CKeyboard.instance, null));
         TextureRegion tex = AtlasManager.instance.findRegion("white");
-        objs.add(new SquareProp(2, 7, 0, 1, 1,  new Sprite(tex)));
-        objs.add(new SquareProp(2, 7, 0, 1, 1, new Sprite(tex)));
-        objs.add(new SquareProp(2, 7, 0, 1, 1, new Sprite(tex)));
+//        objs.add(new SquareProp(2, 7, 0, 1, 1,  new Sprite(tex)));
+//        objs.add(new SquareProp(2, 7, 0, 1, 1, new Sprite(tex)));
+//        objs.add(new SquareProp(2, 7, 0, 1, 1, new Sprite(tex)));
 
         return objs;
     }

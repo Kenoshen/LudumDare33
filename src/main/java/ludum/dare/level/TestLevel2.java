@@ -10,10 +10,7 @@ import com.winger.utils.RandomUtils;
 import ludum.dare.trait.CameraFollowTrait;
 import ludum.dare.trait.GameObject;
 import ludum.dare.utils.AtlasManager;
-import ludum.dare.world.Boundary;
-import ludum.dare.world.CircleProp;
-import ludum.dare.world.Player;
-import ludum.dare.world.SquareProp;
+import ludum.dare.world.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,16 +31,24 @@ public class TestLevel2 extends Level{
 
         GameObject o = new Boundary(new Vector2(-boundarySize * 2, -boundarySize), new Vector2(boundarySize * 2, -boundarySize), new Vector2(boundarySize * 2, boundarySize), new Vector2(-boundarySize * 2, boundarySize), new Vector2(-boundarySize * 2, -boundarySize));
         objs.add(o);
-        o = new Player(0, 5, 0, 4, 4, CMouse.instance, CKeyboard.instance, null);
+        o = new Player(0, 5, 0, 6, 6, CMouse.instance, CKeyboard.instance, null);
         o.addAndInitializeTrait(new CameraFollowTrait(o));
         objs.add(o);
 
+        o = new EnemyBasic(10, 5, 0, 3, 6);
+        o.addAndInitializeTrait(new CameraFollowTrait(o));
+        objs.add(o);
+
+//        o = new EnemyThrower(10, 5, 0, 2, 4,  new Sprite(AtlasManager.instance.findRegion("testEnemySprite")));
+//        o.addAndInitializeTrait(new CameraFollowTrait(o));
+//        objs.add(o);
+
         TextureRegion tex = AtlasManager.instance.findRegion("white");
-        for (int i = 0; i < 10; i++){
-            Sprite s = new Sprite(tex);
-            s.setColor(RandomUtils.randomColor());
-            objs.add(new SquareProp(RandomUtils.rand(), RandomUtils.rand(), 0, 1, 1, s));
-        }
+//        for (int i = 0; i < 10; i++){
+//            Sprite s = new Sprite(tex);
+//            s.setColor(RandomUtils.randomColor());
+//            objs.add(new SquareProp(RandomUtils.rand(), RandomUtils.rand(), 0, 1, 1, s));
+//        }
 
         Sprite s = new Sprite(tex);
         s.setColor(Color.YELLOW.cpy());

@@ -18,6 +18,7 @@ import com.winger.input.raw.CMouse;
 import com.winger.log.HTMLLogger;
 import com.winger.log.LogGroup;
 import com.winger.physics.CWorld;
+import com.winger.struct.Tups;
 import ludum.dare.Conf;
 import ludum.dare.Game;
 import ludum.dare.level.Level;
@@ -46,6 +47,8 @@ public class GameScreen implements Screen {
     private SpriteBatch batch;
     private ShapeRenderer shaper;
 
+    List<Tups.Tup2<GameObject, GameObject>> listCollisions;
+
     public List<GameObject> gameObjects = new ArrayList<>();
     private List<GameObject> objsToDelete = new ArrayList<>();
 
@@ -57,9 +60,10 @@ public class GameScreen implements Screen {
         this.game = game;
         //
         camera = new FollowOrthoCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.zoom = camera.minZoom;
         camera.minZoom = 1;
-        camera.maxZoom = 0.001f;
-        camera.zoom = camera.maxZoom;
+        //
+        listCollisions = new ArrayList<>();
         //
         world = new CWorld(camera);
         world.init(new Vector2(0, 0), true);
@@ -103,7 +107,7 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         for(GameObject g : gameObjects){
-            List things = g.getTraits(ControlTrait.class, AITrait.class);
+            List things = g.getTraits(InputHandlerTrait.class, AITrait.class);
             if (things.get(0) != null){
                 AIHiveMind.addPlayer(g);
             }
@@ -122,18 +126,21 @@ public class GameScreen implements Screen {
 
         CWorld.world.update(Conf.instance.worldStepTime());
         for (GameObject obj : gameObjects){
-            List<Trait> traits = obj.getTraits(ControlTrait.class, PhysicalTrait.class, DebugTrait.class, UpdatableTrait.class);
+            List<Trait> traits = obj.getTraits(InputHandlerTrait.class, ControlTrait.class, PhysicalTrait.class, DebugTrait.class, UpdatableTrait.class);
             if (traits.get(0) != null) {
-                ((ControlTrait) traits.get(0)).update();
+                ((InputHandlerTrait) traits.get(0)).update();
             }
             if (traits.get(1) != null) {
-                ((PhysicalTrait) traits.get(1)).step();
+                ((ControlTrait) traits.get(1)).update();
             }
             if (traits.get(2) != null) {
-                ((DebugTrait) traits.get(2)).debug();
+                ((PhysicalTrait) traits.get(2)).step();
             }
             if (traits.get(3) != null) {
-                ((UpdatableTrait) traits.get(3)).update();
+                ((DebugTrait) traits.get(3)).debug();
+            }
+            if (traits.get(4) != null) {
+                ((UpdatableTrait) traits.get(4)).update();
             }
 
             // handle deletion of objects gracefully
@@ -149,15 +156,11 @@ public class GameScreen implements Screen {
         batch.setProjectionMatrix(camera.combined);
         shaper.setProjectionMatrix(camera.combined);
 
-
-
-
-
         batch.begin();
+        shaper.begin(ShapeRenderer.ShapeType.Line);
         program.setUniformf("light", new Vector3(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY(), 0.05f));
-        shaper.begin(ShapeRenderer.ShapeType.Filled);
         for (GameObject obj : gameObjects){
-            List<Trait> traits = obj.getTraits(AnimatorTrait.class, DrawableTrait.class, TimedCollisionTrait.class, CameraFollowTrait.class);
+            List<Trait> traits = obj.getTraits(AnimatorTrait.class, DrawableTrait.class, TimedCollisionTrait.class, CameraFollowTrait.class, CollidableTrait.class);
             if (traits.get(0) != null){
                 ((AnimatorTrait) traits.get(0)).update(delta);
             }
@@ -170,7 +173,12 @@ public class GameScreen implements Screen {
             if (traits.get(3) != null){
                 ((CameraFollowTrait) traits.get(3)).updateCamera(camera);
             }
+            if (traits.get(4) != null){
+                ((CollidableTrait) traits.get(4)).checkCollisions(gameObjects, listCollisions);
+            }
         }
+
+        listCollisions.clear();
         batch.end();
         shaper.end();
 

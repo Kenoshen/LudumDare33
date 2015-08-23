@@ -8,6 +8,7 @@ import ludum.dare.collision.AnimationBundle;
 import ludum.dare.collision.CollisionGroup;
 import ludum.dare.collision.CollisionSequence;
 import ludum.dare.utils.NamedAnimation;
+import org.w3c.dom.css.Rect;
 
 import java.util.Map;
 
@@ -53,10 +54,43 @@ public class TimedCollisionTrait extends Trait {
         if (data.containsKey(name)) {
             CollisionSequence sequence = data.get(name);
             if (animation.getLastCalledFrame() < sequence.frames.length) {
-                return sequence.frames[animation.getLastCalledFrame()];
+                return getFlipped(sequence.frames[animation.getLastCalledFrame()], animations.flipped);
             }
         }
         return null;
+    }
+
+    private CollisionGroup getFlipped(CollisionGroup frame, boolean flipped) {
+        if (frame == null) {
+            return null;
+        }
+        if (flipped) {
+            CollisionGroup flippedGroup = new CollisionGroup();
+            if (frame.boxes != null) {
+                flippedGroup.boxes = new Rectangle[frame.boxes.length];
+                for (int i = 0; i < frame.boxes.length; i++) {
+                    if (frame.boxes[i] != null) {
+                        Rectangle copy = new Rectangle(frame.boxes[i]);
+                        copy.x *= -1;
+                        copy.width *= -1;
+                        flippedGroup.boxes[i] = copy;
+                    }
+                }
+            }
+            if (frame.circles != null) {
+                flippedGroup.circles = new Circle[frame.circles.length];
+                for (int i = 0; i < frame.circles.length; i++) {
+                    if (frame.circles[i] != null) {
+                        Circle copy = new Circle(frame.circles[i]);
+                        copy.x *= -1;
+                        flippedGroup.circles[i] = copy;
+                    }
+                }
+            }
+            return flippedGroup;
+        } else {
+            return frame;
+        }
     }
 
     public void draw(ShapeRenderer shaper) {

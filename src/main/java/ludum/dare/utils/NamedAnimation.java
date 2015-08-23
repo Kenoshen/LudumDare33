@@ -3,6 +3,7 @@ package ludum.dare.utils;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.winger.struct.Tups;
 
@@ -12,12 +13,14 @@ import com.winger.struct.Tups;
 public class NamedAnimation extends Animation{
     private Animation animation;
     private Animation normalAnimation;
-    private static float scaleFactor = .5f;
     private String name;
+    private final Vector2 offset;
+    private final Vector2 flippedOffset;
     /**
      * Holds the last frame we last returned
      */
     private int lastCalledFrame;
+    private Vector2 size = new Vector2();
 
     public NamedAnimation(String name, float frameDuration, Array<? extends TextureRegion> keyFrames, Array<? extends TextureRegion> normalKeyFrames) {
         this(name, frameDuration, keyFrames, normalKeyFrames, new Vector2(0, 0), new Vector2(1, 1));
@@ -30,6 +33,9 @@ public class NamedAnimation extends Animation{
             this.normalAnimation = null;
         }
         this.name = name;
+        this.offset = offset;
+        flippedOffset = new Vector2(offset.x * -1, offset.y);
+        this.size = size;
     }
 
     public Tups.Tup2<TextureRegion, TextureRegion> getKeyFrame(float stateTime) {
@@ -56,5 +62,17 @@ public class NamedAnimation extends Animation{
 
     public int getLastCalledFrame() {
         return lastCalledFrame;
+    }
+
+    public Vector2 getOffset(boolean flipped) {
+        if (flipped) {
+            return flippedOffset;
+        } else {
+            return offset;
+        }
+    }
+
+    public Vector2 getSize() {
+        return size;
     }
 }
