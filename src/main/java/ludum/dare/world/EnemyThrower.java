@@ -1,5 +1,6 @@
 package ludum.dare.world;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import ludum.dare.utils.Sprite;
 import com.badlogic.gdx.math.Vector2;
@@ -26,6 +27,7 @@ public class EnemyThrower extends GameObject{
     public EnemyThrower(float x, float y, float z, float width, float height){
         traits.add(new PositionTrait(this, x, y, z));
         traits.add(new DrawableTrait(this));
+        traits.add(new LightTrait(this, Color.GREEN));
 
         AnimationBundle bundle = new AnimationBundle();
 
