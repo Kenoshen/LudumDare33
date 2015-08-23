@@ -35,13 +35,13 @@ public class TestLevel2 extends Level{
         o.addAndInitializeTrait(new CameraFollowTrait(o));
         objs.add(o);
 
-        o = new EnemyBasic(10, 5, 0, 3, 6);
+        o = new EnemyBasic(10, 5, 0, 6, 6);
         o.addAndInitializeTrait(new CameraFollowTrait(o));
         objs.add(o);
 
-//        o = new EnemyThrower(10, 5, 0, 2, 4,  new Sprite(AtlasManager.instance.findRegion("testEnemySprite")));
-//        o.addAndInitializeTrait(new CameraFollowTrait(o));
-//        objs.add(o);
+        o = new EnemyThrower(10, 5, 0, 6, 6);
+        o.addAndInitializeTrait(new CameraFollowTrait(o));
+        objs.add(o);
 
         TextureRegion tex = AtlasManager.instance.findRegion("white");
 //        for (int i = 0; i < 10; i++){

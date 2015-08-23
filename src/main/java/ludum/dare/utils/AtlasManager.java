@@ -26,7 +26,7 @@ public class AtlasManager {
         if (name != null && atlases.containsKey(name)){
             return atlases.get(name);
         }
-        return null;
+        throw new RuntimeException("Atlas by name:" + name + " does not exist, check game.java to load atlas.");
     }
 
     public void loadAtlas(String atlasLocation){
