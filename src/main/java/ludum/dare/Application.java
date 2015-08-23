@@ -13,7 +13,7 @@ public class Application
     public static void main(String[] arg)
     {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "HOBO BALLS IN MY FACE";
+        config.title = "Scabs";
         config.foregroundFPS = 60;
         config.backgroundFPS = 0;
         config.resizable = false;
