@@ -19,6 +19,7 @@ import ludum.dare.level.Level;
 import ludum.dare.level.TestLevel;
 import ludum.dare.level.TestLevel2;
 import ludum.dare.utils.SkinManager;
+import ludum.dare.world.SoundLibrary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +58,7 @@ public class LevelSelectScreen implements Screen {
             btn.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    soundSelect.play(.25f);
+                    SoundLibrary.GetSound("Menu_Select").play(.25f);
 
                     stage.getRoot().setColor(Color.WHITE);
                     stage.addAction(Actions.sequence(Actions.fadeOut(2f),

@@ -36,6 +36,7 @@ public class Player extends GameObject {
             @Override
         public void collide(GameObject obj) {
             System.out.println("Those are my cans");
+            SoundLibrary.GetSound("Hit_Robot").play();
         }
     };
 
@@ -310,6 +311,9 @@ public class Player extends GameObject {
         Vector2 v = new Vector2(0,0);
         ControlTrait myControl = getTrait(ControlTrait.class);
         if(o instanceof EnemyBasic){
+
+            SoundLibrary.GetSound("Get_Hit").play();
+
             if (getTrait(PositionTrait.class).x < o.getTrait(PositionTrait.class).x
                     && getTrait(PositionTrait.class).y < o.getTrait(PositionTrait.class).y){
                 getTrait(ImmobilizedTrait.class).imob = true;
