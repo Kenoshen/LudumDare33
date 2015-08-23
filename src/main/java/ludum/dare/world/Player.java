@@ -32,6 +32,8 @@ public class Player extends GameObject {
     public Player(float x, float y, float z, float width, float height, CMouse mouse, CKeyboard keyboard, CGamePad gamepad){
         traits.add(new PositionTrait(this, x, y, z));
         traits.add(new DrawableTrait(this));
+        traits.add(new CollidableTrait(this, null));
+        traits.add(new ImmobilizedTrait(this));
 
         ID = "Player";
 
@@ -272,5 +274,36 @@ public class Player extends GameObject {
         initializeTraits();
 
         body.setFriction(1);
+    }
+
+    public void collidedWith(GameObject o) {
+        Vector2 v = new Vector2(0,0);
+        if(o instanceof EnemyBasic){
+            if (getTrait(PositionTrait.class).x < o.getTrait(PositionTrait.class).x
+                    && getTrait(PositionTrait.class).y < o.getTrait(PositionTrait.class).y){
+                getTrait(ImmobilizedTrait.class).imob = true;
+                v.x -= 5000;
+                v.y -= 5000;
+            }
+            if (getTrait(PositionTrait.class).x >= o.getTrait(PositionTrait.class).x
+                    && getTrait(PositionTrait.class).y < o.getTrait(PositionTrait.class).y){
+                getTrait(ImmobilizedTrait.class).imob = true;
+                v.x += 5000;
+                v.y -= 5000;
+            }
+            if (getTrait(PositionTrait.class).x >= o.getTrait(PositionTrait.class).x
+                    && getTrait(PositionTrait.class).y >= o.getTrait(PositionTrait.class).y){
+                getTrait(ImmobilizedTrait.class).imob = true;
+                v.x += 5000;
+                v.y += 5000;
+            }
+            if (getTrait(PositionTrait.class).x < o.getTrait(PositionTrait.class).x
+                    && getTrait(PositionTrait.class).y >= o.getTrait(PositionTrait.class).y){
+                getTrait(ImmobilizedTrait.class).imob = true;
+                v.x -= 5000;
+                v.y += 5000;
+            }
+            getTrait(PhysicalTrait.class).body.body.setLinearVelocity(v);
+        }
     }
 }

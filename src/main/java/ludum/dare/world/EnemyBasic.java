@@ -49,8 +49,8 @@ public class EnemyBasic extends GameObject{
 
         hitSequence.frames = new CollisionGroup[8];
         hitSequence.frames[6] = group1;
-        bundle.addHitboxSequence(hitSequence);
-
+//        bundle.addHitboxSequence(hitSequence);
+        bundle.addHurtboxSequence(hitSequence);
 
 
         animator = new AnimatorTrait(this, bundle.getAnimations());
