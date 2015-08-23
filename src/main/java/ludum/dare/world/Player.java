@@ -1,6 +1,5 @@
 package ludum.dare.world;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -17,6 +16,8 @@ import ludum.dare.collision.CollisionGroup;
 import ludum.dare.collision.CollisionSequence;
 import ludum.dare.trait.*;
 import ludum.dare.utils.AtlasManager;
+import ludum.dare.utils.CollisionCallback;
+import ludum.dare.utils.HealthCallback;
 import ludum.dare.utils.NamedAnimation;
 
 
@@ -38,11 +39,25 @@ public class Player extends GameObject {
         }
     };
 
+    private HealthCallback healthCallback = new HealthCallback() {
+        @Override
+        public void damageReceived(int amount, GameObject from) {
+            collidedWith(from);
+        }
+
+        @Override
+        public void healthRegained(int amount, GameObject from) {
+
+        }
+    };
+
     public Player(float x, float y, float z, float width, float height, CMouse mouse, CKeyboard keyboard, CGamePad gamepad){
         traits.add(new PositionTrait(this, x, y, z));
         traits.add(new DrawableTrait(this));
         traits.add(new CollidableTrait(this, collisionFunc));
         traits.add(new ImmobilizedTrait(this));
+
+        traits.add(new HealthTrait(this, 100, healthCallback));
 
         ID = "Player";
 

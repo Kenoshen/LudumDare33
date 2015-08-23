@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.winger.struct.Tups;
 import ludum.dare.collision.CollisionGroup;
-import ludum.dare.world.Player;
+import ludum.dare.utils.CollisionCallback;
 
 import java.util.List;
 
