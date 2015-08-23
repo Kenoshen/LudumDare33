@@ -30,10 +30,16 @@ public class Player extends GameObject {
     private AnimatorTrait animator;
     private TimedCollisionTrait hitboxes;
     public boolean rightFacing = true;
+    public boolean hitFromRight;
 
     private CollisionCallback collisionFunc = new CollisionCallback() {
             @Override
         public void collide(GameObject obj) {
+                HealthTrait health = obj.getTrait(HealthTrait.class);
+                if (health != null) {
+                    health.damage(10, Player.this);
+                    System.out.println("I doth remain standing.");
+                }
             System.out.println("Those are my cans");
             SoundLibrary.GetSound("Hit_Robot").play();
         }
@@ -51,13 +57,16 @@ public class Player extends GameObject {
         }
     };
 
-    public Player(float x, float y, float z, float width, float height, CMouse mouse, CKeyboard keyboard, CGamePad gamepad){
+    public Player(float x, float y, float z, CMouse mouse, CKeyboard keyboard, CGamePad gamepad){
+        float width = 12;
+        float height = 12;
+
         traits.add(new PositionTrait(this, x, y, z));
         traits.add(new DrawableTrait(this));
         traits.add(new CollidableTrait(this, collisionFunc));
         traits.add(new ImmobilizedTrait(this));
 
-        traits.add(new HealthTrait(this, 100, healthCallback));
+        traits.add(new HealthTrait(this, 1, healthCallback));
 
         ID = "Player";
 
@@ -66,12 +75,12 @@ public class Player extends GameObject {
         bundle.addNamedAnimation(new NamedAnimation("stand", 0.1f,
                 AtlasManager.instance.getAtlas("bum").findRegions("stand/bumStand"), AtlasManager.instance.getAtlas("bum_n").findRegions("stand/bumStand_n"),
                 new Vector2(0, 0), new Vector2(width, height)));
-        bundle.addNamedAnimation(new NamedAnimation("pain", .1f,
+        bundle.addNamedAnimation(new NamedAnimation("pain", .15f,
                 AtlasManager.instance.getAtlas("bum").findRegions("pain/bumPain"), AtlasManager.instance.getAtlas("bum").findRegions("pain/bumPain"),
-                new Vector2(0, 1.75f), new Vector2(width, height)));
-        bundle.addNamedAnimation(new NamedAnimation("backpain", .1f,
+                new Vector2(0, 0f), new Vector2(width, height)));
+        bundle.addNamedAnimation(new NamedAnimation("backpain", .15f,
                 AtlasManager.instance.getAtlas("bum").findRegions("backpain/bumBackPain"), AtlasManager.instance.getAtlas("bum").findRegions("backpain/bumBackPain"),
-                new Vector2(0, 1.75f), new Vector2(width, height)));
+                new Vector2(0, 0f), new Vector2(width, height)));
         CollisionSequence standSequence = new CollisionSequence();
         standSequence.name = "stand";
 
@@ -274,6 +283,10 @@ public class Player extends GameObject {
         landSequence.frames = new CollisionGroup[] {landSeq1, landSeq2, landSeq3};
         bundle.addHurtboxSequence(landSequence);
 
+        bundle.addNamedAnimation(new NamedAnimation("death", .1f,
+                AtlasManager.instance.getAtlas("bum").findRegions("death/bumDeath"), AtlasManager.instance.getAtlas("bum").findRegions("death/bumDeath"),
+                new Vector2(5f, 0), new Vector2(width * 1.25f, height)));
+
 
         animator = new AnimatorTrait(this, bundle.getAnimations());
         traits.add(animator);
@@ -316,42 +329,46 @@ public class Player extends GameObject {
             if (getTrait(PositionTrait.class).x < o.getTrait(PositionTrait.class).x
                     && getTrait(PositionTrait.class).y < o.getTrait(PositionTrait.class).y){
                 getTrait(ImmobilizedTrait.class).imob = true;
+                hitFromRight = true;
                 myControl.queuedAttack = false;
                 myControl.attacking = false;
                 myControl.jumping = false;
                 myControl.landing = false;
-                v.x -= 5000;
-                v.y -= 5000;
+                v.x -= 10000;
+                v.y -= 50;
             }
             if (getTrait(PositionTrait.class).x >= o.getTrait(PositionTrait.class).x
                     && getTrait(PositionTrait.class).y < o.getTrait(PositionTrait.class).y){
                 getTrait(ImmobilizedTrait.class).imob = true;
+                hitFromRight = false;
                 myControl.queuedAttack = false;
                 myControl.attacking = false;
                 myControl.jumping = false;
                 myControl.landing = false;
-                v.x += 5000;
-                v.y -= 5000;
+                v.x += 10000;
+                v.y -= 50;
             }
             if (getTrait(PositionTrait.class).x >= o.getTrait(PositionTrait.class).x
                     && getTrait(PositionTrait.class).y >= o.getTrait(PositionTrait.class).y){
                 getTrait(ImmobilizedTrait.class).imob = true;
+                hitFromRight = false;
                 myControl.queuedAttack = false;
                 myControl.attacking = false;
                 myControl.jumping = false;
                 myControl.landing = false;
-                v.x += 5000;
-                v.y += 5000;
+                v.x += 10000;
+                v.y += 50;
             }
             if (getTrait(PositionTrait.class).x < o.getTrait(PositionTrait.class).x
                     && getTrait(PositionTrait.class).y >= o.getTrait(PositionTrait.class).y){
                 getTrait(ImmobilizedTrait.class).imob = true;
+                hitFromRight = true;
                 myControl.queuedAttack = false;
                 myControl.attacking = false;
                 myControl.jumping = false;
                 myControl.landing = false;
-                v.x -= 5000;
-                v.y += 5000;
+                v.x -= 10000;
+                v.y += 50;
             }
             getTrait(PhysicalTrait.class).body.body.setLinearVelocity(v);
         }

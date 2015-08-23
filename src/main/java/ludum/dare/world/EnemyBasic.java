@@ -30,6 +30,7 @@ public class EnemyBasic extends GameObject{
             HealthTrait health = obj.getTrait(HealthTrait.class);
             if (health != null) {
                 health.damage(10, EnemyBasic.this);
+                System.out.println("doing deeps. Beep boop.");
             }
         }
     };

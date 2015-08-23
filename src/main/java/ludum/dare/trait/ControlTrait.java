@@ -17,7 +17,7 @@ import java.util.HashMap;
  */
 public class ControlTrait extends Trait implements AnimationCallback {
     private static final float PLAYER_ANIMATION_VEL_CHANGE = 0.1f;
-    private static Class[] REQUIRES = new Class[]{PhysicalTrait.class, AnimatorTrait.class};
+    private static Class[] REQUIRES = new Class[]{PhysicalTrait.class, AnimatorTrait.class, HealthTrait.class};
 
     public enum ControlAction {
         UP,
@@ -32,6 +32,7 @@ public class ControlTrait extends Trait implements AnimationCallback {
     private PhysicalTrait physical;
     private AnimatorTrait animator;
     private ImmobilizedTrait imob;
+    private HealthTrait health;
     private BoxBody player;
     private boolean rightFacing;
 
@@ -40,6 +41,8 @@ public class ControlTrait extends Trait implements AnimationCallback {
 
     public boolean jumping = false;
     public boolean landing = false;
+
+    public boolean dead = false;
 
     private ControlAction leftRightRequest = ControlAction.NONE;
     private ControlAction upDownRequest = ControlAction.NONE;
@@ -55,8 +58,9 @@ public class ControlTrait extends Trait implements AnimationCallback {
         super.initialize();
         physical = self.getTrait(PhysicalTrait.class);
         animator = self.getTrait(AnimatorTrait.class);
-        imob = self.getTrait(ImmobilizedTrait.class);
         animator.registerAnimationCallback(this);
+        imob = self.getTrait(ImmobilizedTrait.class);
+        health = self.getTrait(HealthTrait.class);
         rightFacing = ((Player)self).rightFacing;
 
         if (!(physical.body instanceof BoxBody)){
@@ -92,6 +96,18 @@ public class ControlTrait extends Trait implements AnimationCallback {
     }
 
     public void update() {
+        if (dead) {
+            // wipe yo'self off. You dead.
+            zeroOutVelocity();
+            return;
+        }
+        if (health.health <= 0) {
+            System.out.println("I'M FUCKING DEAD");
+            animator.changeStateIfUnique("death", false);
+            dead = true;
+            physical.setActive(false);
+            return;
+        }
         Vector2 movement = new Vector2(0, 0);
         // character can either attack or move. not both.
         if (landing || imob.imob) {
@@ -130,10 +146,7 @@ public class ControlTrait extends Trait implements AnimationCallback {
         movement = movement.nor().scl(Conf.instance.playerWalkSpeed());
 
         if (movement.len() < 1){
-            Vector2 vel = physical.body.body.getLinearVelocity();
-            vel.x *= -1;
-            vel.y *= -1;
-            physical.body.body.applyLinearImpulse(vel, new Vector2(0, 0), true);
+            zeroOutVelocity();
         } else {
             physical.body.body.setLinearVelocity(movement);
         }
@@ -145,13 +158,13 @@ public class ControlTrait extends Trait implements AnimationCallback {
             }
         } else if (vel.len() > PLAYER_ANIMATION_VEL_CHANGE){
             animator.changeStateIfUnique("walk", true);
-        } else if(imob.imob && rightFacing && vel.x<=0){
+        } else if(imob.imob && rightFacing && ((Player)self).hitFromRight){
             animator.changeStateIfUnique("pain", false);
-        } else if(imob.imob && rightFacing && vel.x>0){
+        } else if(imob.imob && rightFacing && !((Player)self).hitFromRight){
             animator.changeStateIfUnique("backpain", false);
-        } else if(imob.imob && !rightFacing && vel.x<=0){
+        } else if(imob.imob && !rightFacing && ((Player)self).hitFromRight){
             animator.changeStateIfUnique("backpain", false);
-        } else if(imob.imob && !rightFacing && vel.x>0){
+        } else if(imob.imob && !rightFacing && !((Player)self).hitFromRight){
             animator.changeStateIfUnique("pain", false);
         }
         else if (!attacking) {
@@ -168,6 +181,13 @@ public class ControlTrait extends Trait implements AnimationCallback {
         upDownRequest = ControlAction.NONE;
         attackRequest = false;
         jumpRequest = false;
+    }
+
+    private void zeroOutVelocity() {
+        Vector2 vel = physical.body.body.getLinearVelocity();
+        vel.x *= -1;
+        vel.y *= -1;
+        physical.body.body.applyLinearImpulse(vel, new Vector2(0, 0), true);
     }
 
     @Override
