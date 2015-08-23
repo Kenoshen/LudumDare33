@@ -62,7 +62,7 @@ public class Fourty extends GameObject{
         bd.position.x = x;
         bd.position.y = y;
         bd.fixedRotation = true;
-        CBody body = new BoxBody(0, 1).init(fd, bd);
+        CBody body = new BoxBody(0, 0).init(fd, bd);
         PhysicalTrait physical = new PhysicalTrait(this, body);
         traits.add(physical);
 
