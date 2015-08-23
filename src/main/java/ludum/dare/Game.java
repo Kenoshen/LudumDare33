@@ -10,8 +10,11 @@ import com.winger.log.LogGroup;
 import com.winger.log.LogLevel;
 import ludum.dare.level.TestLevel;
 import ludum.dare.level.TestLevel2;
+import ludum.dare.level.TestLevel;
+import ludum.dare.level.TestLevel2;
 import ludum.dare.level.TestLevel3;
 import ludum.dare.screen.CutsceneScreen;
+import ludum.dare.screen.GameScreen;
 import ludum.dare.screen.GameScreen;
 import ludum.dare.screen.MainMenuScreen;
 import ludum.dare.screen.SplashScreen;
@@ -45,14 +48,21 @@ public class Game extends com.badlogic.gdx.Game {
         keyboard = CKeyboard.instance;
         mouse = CMouse.instance;
         //
-        AtlasManager.instance.loadAtlas("packed/game.atlas");
         AtlasManager.instance.loadAtlas("packed/ui.atlas");
         AtlasManager.instance.loadAtlas("packed/ui-background.atlas");
+        //
         SkinManager.instance.loadSkin("skins/menu-skin.json", "ui");
         //
-//        setScreen(new CutsceneScreen(this));
+        AtlasManager.instance.loadAtlas("packed/misc.atlas");
+
+        AtlasManager.instance.loadAtlas("packed/bum.atlas");
+        AtlasManager.instance.loadAtlas("packed/bum_n.atlas");
+        AtlasManager.instance.loadAtlas("packed/bot.atlas");
+        AtlasManager.instance.loadAtlas("packed/bot_n.atlas");
+        //
+        //setScreen(new CutsceneScreen(this));
         //setScreen(new MainMenuScreen(this));
-        setScreen(new GameScreen(this, new TestLevel3()));
+        setScreen(new GameScreen(this, new ludum.dare.level.TestLamp()));
     }
 
 

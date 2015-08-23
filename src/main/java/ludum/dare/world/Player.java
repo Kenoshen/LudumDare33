@@ -36,11 +36,18 @@ public class Player extends GameObject {
 
 
         AnimationBundle bundle = new AnimationBundle();
-
-        bundle.addNamedAnimation(new NamedAnimation("stand", 0.1f, AtlasManager.instance.getAtlas("game").findRegions("bumStand"), new Vector2(0, 0), new Vector2(width, height)));
-        bundle.addNamedAnimation(new NamedAnimation("walk", 0.1f, AtlasManager.instance.getAtlas("game").findRegions("bumWalk"), new Vector2(0, 0), new Vector2(width, height)));
-        bundle.addNamedAnimation(new NamedAnimation("punch", 0.1f, AtlasManager.instance.getAtlas("game").findRegions("bumJab"), new Vector2(1.7f, 0), new Vector2(width * 1.25f, height)));
-        bundle.addNamedAnimation(new NamedAnimation("punch2", 0.1f, AtlasManager.instance.getAtlas("game").findRegions("bumCross"), new Vector2(1.7f, 0), new Vector2(width * 1.25f, height)));
+        bundle.addNamedAnimation(new NamedAnimation("stand", 0.1f,
+                AtlasManager.instance.getAtlas("bum").findRegions("stand/bumStand"), AtlasManager.instance.getAtlas("bum_n").findRegions("stand/bumStand_n"),
+                new Vector2(0, 0), new Vector2(width, height)));
+        bundle.addNamedAnimation(new NamedAnimation("walk", 0.1f,
+                AtlasManager.instance.getAtlas("bum").findRegions("walk/bumWalk"), AtlasManager.instance.getAtlas("bum_n").findRegions("walk/bumWalk_n"),
+                new Vector2(0, 0), new Vector2(width, height)));
+        bundle.addNamedAnimation(new NamedAnimation("punch", 0.1f,
+                AtlasManager.instance.getAtlas("bum").findRegions("jab/bumJab"), AtlasManager.instance.getAtlas("bum_n").findRegions("jab/bumJab_n"),
+                new Vector2(1.7f, 0), new Vector2(width * 1.25f, height)));
+        bundle.addNamedAnimation(new NamedAnimation("punch2", 0.1f,
+                AtlasManager.instance.getAtlas("bum").findRegions("cross/bumCross"), AtlasManager.instance.getAtlas("bum_n").findRegions("cross/bumCross_n"),
+                new Vector2(1.7f, 0), new Vector2(width * 1.25f, height)));
 
         CollisionSequence jabSequence = new CollisionSequence();
         jabSequence.name = "punch";
@@ -96,8 +103,7 @@ public class Player extends GameObject {
         bD.type = BodyDef.BodyType.DynamicBody;
         bD.position.x = x;
         bD.position.y = y;
-        bD.fixedRotation = true;
-        CBody body = new BoxBody(width/2, height/2).init(fD, bD);
+        CBody body = new BoxBody(width, height).init(fD, bD);
         physical = new PhysicalTrait(this, body);
         traits.add(physical);
 

@@ -48,7 +48,7 @@ public class TestLevel3 extends Level{
         AnimationBundle animationBundle = new AnimationBundle();
         Array<TextureRegion> textures = new Array<>();
         textures.add(tex);
-        animationBundle.addNamedAnimation(new NamedAnimation("still", 1, textures));
+        animationBundle.addNamedAnimation(new NamedAnimation("still", 1, textures, textures));
 
         CollisionSequence collisionSequence = new CollisionSequence();
         collisionSequence.name = "still";
