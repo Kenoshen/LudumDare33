@@ -28,6 +28,7 @@ public class Player extends GameObject {
     private PhysicalTrait physical;
     private AnimatorTrait animator;
     private TimedCollisionTrait hitboxes;
+    public boolean rightFacing = true;
 
     public Player(float x, float y, float z, float width, float height, CMouse mouse, CKeyboard keyboard, CGamePad gamepad){
         traits.add(new PositionTrait(this, x, y, z));
@@ -42,6 +43,12 @@ public class Player extends GameObject {
         bundle.addNamedAnimation(new NamedAnimation("stand", 0.1f,
                 AtlasManager.instance.getAtlas("bum").findRegions("stand/bumStand"), AtlasManager.instance.getAtlas("bum_n").findRegions("stand/bumStand_n"),
                 new Vector2(0, 0), new Vector2(width, height)));
+        bundle.addNamedAnimation(new NamedAnimation("pain", .1f,
+                AtlasManager.instance.getAtlas("bum").findRegions("pain/bumPain"), AtlasManager.instance.getAtlas("bum").findRegions("pain/bumPain"),
+                new Vector2(0, 1.75f), new Vector2(width, height)));
+        bundle.addNamedAnimation(new NamedAnimation("backpain", .1f,
+                AtlasManager.instance.getAtlas("bum").findRegions("backpain/bumBackPain"), AtlasManager.instance.getAtlas("bum").findRegions("backpain/bumBackPain"),
+                new Vector2(0, 1.75f), new Vector2(width, height)));
         CollisionSequence standSequence = new CollisionSequence();
         standSequence.name = "stand";
 
