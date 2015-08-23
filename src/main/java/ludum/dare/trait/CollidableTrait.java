@@ -45,7 +45,7 @@ public class CollidableTrait extends Trait {
             PositionTrait theirPos = obj.getTrait(PositionTrait.class);
             if (theirCollisions != null && theirPos != null) {
                 if (tryCollide(myHitBoxes, new Vector2(position.x, position.y), theirCollisions.getCurrentHurtboxes(), new Vector2(theirPos.x, theirPos.y))) {
-                    if(System.currentTimeMillis() - gracePeriod > 500){
+                    if(System.currentTimeMillis() - gracePeriod > 100){
                         gracePeriod = System.currentTimeMillis();
                         callback.collide(obj);
                     }
