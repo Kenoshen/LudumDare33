@@ -46,8 +46,8 @@ public class EnemyBasic extends GameObject{
         CollisionGroup group1 = new CollisionGroup();
         group1.circles = new Circle[]{ new Circle(-6.0f,1.5f,2.5f)};
 
-        hitSequence.frames = new CollisionGroup[5];
-        hitSequence.frames[3] = group1;
+        hitSequence.frames = new CollisionGroup[8];
+        hitSequence.frames[6] = group1;
         bundle.addHitboxSequence(hitSequence);
 
 
