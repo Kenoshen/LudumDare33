@@ -80,6 +80,7 @@ public class LightTrait extends Trait {
     }
 
     public LightTrait debug(ShapeRenderer renderer){
+        renderer.setColor(Color.WHITE);
         renderer.circle(pos.x, pos.y, 1);
         return this;
     }
