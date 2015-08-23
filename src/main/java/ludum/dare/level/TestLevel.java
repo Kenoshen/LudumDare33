@@ -1,11 +1,16 @@
 package ludum.dare.level;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.winger.input.raw.CKeyboard;
 import com.winger.input.raw.CMouse;
 import ludum.dare.trait.GameObject;
+import ludum.dare.trait.LightTrait;
+import ludum.dare.trait.PathFollowerTrait;
+import ludum.dare.trait.PositionTrait;
 import ludum.dare.utils.AtlasManager;
+import ludum.dare.world.BlankObject;
 import ludum.dare.world.Boundary;
 import ludum.dare.world.EnemyBasic;
 import ludum.dare.world.Player;
@@ -34,6 +39,17 @@ public class TestLevel extends Level{
 //        objs.add(new SquareProp(2, 7, 0, 1, 1,  new Sprite(tex)));
 //        objs.add(new SquareProp(2, 7, 0, 1, 1, new Sprite(tex)));
 //        objs.add(new SquareProp(2, 7, 0, 1, 1, new Sprite(tex)));
+
+        BlankObject lightPather = new BlankObject();
+        lightPather.traits.add(new PositionTrait(lightPather, 0, 0, 0));
+        lightPather.traits.add(new LightTrait(lightPather));
+        lightPather.traits.add(new PathFollowerTrait(lightPather, PathFollowerTrait.PathFollowStyle.LOOP, 0,
+                new Vector2(-20, 0),
+                new Vector2(0, 15),
+                new Vector2(20, 0),
+                new Vector2(0, -5)));
+        lightPather.initializeTraits();
+        objs.add(lightPather);
 
         return objs;
     }

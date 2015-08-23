@@ -3,6 +3,7 @@ package ludum.dare.trait;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 
 /**
@@ -36,7 +37,7 @@ public class LightTrait extends Trait {
         return REQUIRES;
     }
 
-    public void updateShaderProgram(ShaderProgram program, int lightIndex, Camera cam)
+    public LightTrait updateShaderProgram(ShaderProgram program, int lightIndex, Camera cam)
     {
         //log.info("Light" + lightIndex + " " + new Vector3(pos.x, pos.y, pos.z + 0.05f));
         Vector3 p = new Vector3(pos.x, pos.y, pos.z);
@@ -44,5 +45,11 @@ public class LightTrait extends Trait {
         pScreen.z += 0.05f;
         program.setUniformf("light" + lightIndex, pScreen);
         program.setUniformf("lightColor" + lightIndex, new Vector3(color.r, color.g, color.b));
+        return this;
+    }
+
+    public LightTrait debug(ShapeRenderer renderer){
+        renderer.circle(pos.x, pos.y, 1);
+        return this;
     }
 }
