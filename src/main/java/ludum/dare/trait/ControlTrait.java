@@ -18,13 +18,14 @@ public class ControlTrait extends Trait implements AnimationCallback {
         LEFT,
         RIGHT,
         ATTACK,
-        NONE;
+        NONE
     }
 
     private PhysicalTrait physical;
     private AnimatorTrait animator;
     private BoxBody player;
     private boolean attacking = false;
+    private boolean queuedAttack = false;
 
     private ControlAction leftRightRequest = ControlAction.NONE;
     private ControlAction upDownRequest = ControlAction.NONE;
@@ -73,8 +74,12 @@ public class ControlTrait extends Trait implements AnimationCallback {
         Vector2 movement = new Vector2(0, 0);
         // character can either attack or move. not both.
         if (attackRequest.equals(ControlAction.ATTACK)) {
-            attacking = true;
-            animator.setState("punch", false);
+            if (attacking) {
+                queuedAttack = true;
+            } else {
+                attacking = true;
+                animator.setState("punch", false);
+            }
         } else if (!attacking) {
             if (upDownRequest.equals(ControlAction.UP)) {
                 movement.y += Conf.instance.playerWalkSpeed();
@@ -106,6 +111,7 @@ public class ControlTrait extends Trait implements AnimationCallback {
         } else if (!attacking) {
             animator.changeStateIfUnique("stand", true);
         }
+
         if (vel.x > 0){
             animator.flipped = false;
         } else if(vel.x < 0) {
@@ -120,6 +126,13 @@ public class ControlTrait extends Trait implements AnimationCallback {
     @Override
     public void animationEnded(String name) {
         if (name.equals("punch")) {
+            if (queuedAttack) {
+                animator.setState("punch2", false);
+                queuedAttack = false;
+            } else {
+                attacking = false;
+            }
+        } else {
             attacking = false;
         }
     }

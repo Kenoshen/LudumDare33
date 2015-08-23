@@ -4,8 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -52,6 +54,8 @@ public class GameScreen implements Screen {
 
     private AIHiveMind AIHM = new AIHiveMind();
 
+    ShaderProgram program;
+
     public GameScreen(final Game game, Level level){
         this.game = game;
         //
@@ -69,6 +73,8 @@ public class GameScreen implements Screen {
         keyboard = CKeyboard.instance;
         //
         batch = new SpriteBatch();
+        program = createShader();
+        batch.setShader(program);
         shaper = new ShapeRenderer();
         //
         TextButton btn = new TextButton("Back", SkinManager.instance.getSkin("menu-skin"), "simple");
@@ -151,7 +157,8 @@ public class GameScreen implements Screen {
         shaper.setProjectionMatrix(camera.combined);
 
         batch.begin();
-        shaper.begin(ShapeRenderer.ShapeType.Filled);
+        shaper.begin(ShapeRenderer.ShapeType.Line);
+        program.setUniformf("light", new Vector3(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY(), 0.05f));
         for (GameObject obj : gameObjects){
             List<Trait> traits = obj.getTraits(AnimatorTrait.class, DrawableTrait.class, TimedCollisionTrait.class, CameraFollowTrait.class, CollidableTrait.class);
             if (traits.get(0) != null){
@@ -226,5 +233,95 @@ public class GameScreen implements Screen {
             }
             objsToDelete = new ArrayList<>();
         }
+    }
+
+    private ShaderProgram createShader() {
+        String vert = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
+                + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" //
+                + "attribute vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" //
+                + "uniform mat4 u_proj;\n" //
+                + "uniform mat4 u_trans;\n" //
+                + "uniform mat4 u_projTrans;\n" //
+                + "varying vec4 v_color;\n" //
+                + "varying vec2 v_texCoords;\n" //
+                + "\n" //
+                + "void main()\n" //
+                + "{\n" //
+                + "   v_color = " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" //
+                + "   v_texCoords = " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" //
+                + "   gl_Position =  u_projTrans * " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
+                + "}\n";
+
+        String frag = "#ifdef GL_ES\n" +
+                "precision mediump float;\n" +
+                "#endif\n" +
+                "varying vec4 v_color;\n" +
+                "varying vec2 v_texCoords;\n" +
+
+                "uniform sampler2D u_texture;\n" +
+                "uniform sampler2D u_normals;\n" +
+                "uniform vec3 light;\n" +
+                "uniform vec3 ambientColor;\n" +
+                "uniform float ambientIntensity; \n" +
+                "uniform vec2 resolution;\n" +
+                "uniform vec3 lightColor;\n" +
+                "uniform bool useNormals;\n" +
+                "uniform bool useShadow;\n" +
+                "uniform vec3 attenuation;\n" +
+                "uniform float strength;\n" +
+                "uniform bool yInvert;\n"+
+                "\n" +
+                "void main() {\n" +
+                "       //sample color & normals from our textures\n" +
+                "       vec4 color = texture2D(u_texture, v_texCoords.st);\n" +
+                "       vec3 nColor = texture2D(u_normals, v_texCoords.st).rgb;\n\n" +
+                "       //some bump map programs will need the Y value flipped..\n" +
+                "       nColor.g = yInvert ? 1.0 - nColor.g : nColor.g;\n\n" +
+                "       //this is for debugging purposes, allowing us to lower the intensity of our bump map\n" +
+                "       vec3 nBase = vec3(0.5, 0.5, 1.0);\n" +
+                "       nColor = mix(nBase, nColor, strength);\n\n" +
+                "       //normals need to be converted to [-1.0, 1.0] range and normalized\n" +
+                "       vec3 normal = normalize(nColor * 2.0 - 1.0);\n\n" +
+                "       //here we do a simple distance calculation\n" +
+                "       vec3 deltaPos = vec3( (light.xy - gl_FragCoord.xy) / resolution.xy, light.z );\n\n" +
+                "       vec3 lightDir = normalize(deltaPos);\n" +
+                "       float lambert = useNormals ? clamp(dot(normal, lightDir), 0.0, 1.0) : 1.0;\n" +
+                "       \n" +
+                "       //now let's get a nice little falloff\n" +
+                "       float d = sqrt(dot(deltaPos, deltaPos));"+
+                "       \n" +
+                "       float att = useShadow ? 1.0 / ( attenuation.x + (attenuation.y*d) + (attenuation.z*d*d) ) : 1.0;\n" +
+                "       \n" +
+                "       vec3 result = (ambientColor * ambientIntensity) + (lightColor.rgb * lambert) * att;\n" +
+                "       result *= color.rgb;\n" +
+                "       \n" +
+                "       gl_FragColor = v_color * vec4(result, color.a);\n" +
+                "}";
+        System.out.println("VERTEX PROGRAM:\n------------\n\n"+vert);
+        System.out.println("FRAGMENT PROGRAM:\n------------\n\n"+frag);
+        ShaderProgram program = new ShaderProgram(vert, frag);
+        // u_proj and u_trans will not be active but SpriteBatch will still try to set them...
+        program.pedantic = false;
+        if (program.isCompiled() == false)
+            throw new IllegalArgumentException("couldn't compile shader: "
+                    + program.getLog());
+
+        // we are only using this many uniforms for testing purposes...!!
+        program.begin();
+        program.setUniformi("u_texture", 0);
+        program.setUniformi("u_normals", 1);
+        program.setUniformf("light", new Vector3(0, 0, 0.001f));
+        program.setUniformf("strength", 1);
+        program.setUniformf("ambientIntensity", 0.3f);
+        program.setUniformf("ambientColor", new Vector3(0.3f, 0.3f, 1f));
+        program.setUniformf("resolution", new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        program.setUniformf("lightColor", new Vector3(1f, 0.7f, 0.6f));
+        program.setUniformf("attenuation", new Vector3(0.4f, 3f, 20f));
+        program.setUniformi("useShadow", true ? 1 : 0);
+        program.setUniformi("useNormals", true ? 1 : 0);
+        program.setUniformi("yInvert", false ? 1 : 0);
+        program.end();
+
+        return program;
     }
 }
