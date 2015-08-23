@@ -27,7 +27,7 @@ public class NamedAnimation extends Animation{
         super(frameDuration, keyFrames);
         this.name = name;
         this.offset = offset;
-        flippedOffset = new Vector2(offset.x * -1, offset.y * -1);
+        flippedOffset = new Vector2(offset.x * -1, offset.y);
         this.size = size;
     }
 
