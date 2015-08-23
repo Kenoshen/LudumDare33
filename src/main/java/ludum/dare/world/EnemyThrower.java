@@ -31,10 +31,10 @@ public class EnemyThrower extends GameObject{
 
         AnimationBundle bundle = new AnimationBundle();
 
-        final NamedAnimation animation = new NamedAnimation("stand", .1f,AtlasManager.instance.getAtlas("spark").findRegions("stand/sparkStand"), AtlasManager.instance.getAtlas("spark").findRegions("stand/sparkStand"), new Vector2(0, 0), new Vector2(6, 6));
+        final NamedAnimation animation = new NamedAnimation("stand", .1f,AtlasManager.instance.getAtlas("spark").findRegions("stand/sparkStand"), AtlasManager.instance.getAtlas("spark").findRegions("stand/sparkStand"), new Vector2(0, 0), new Vector2(width*1.5f, height));
         bundle.addNamedAnimation(animation);
-        bundle.addNamedAnimation(new NamedAnimation("walk", .1f,AtlasManager.instance.getAtlas("spark").findRegions("walk/sparkWalk"), AtlasManager.instance.getAtlas("spark").findRegions("walk/sparkWalk"), new Vector2(0,0), new Vector2(7,7)));
-        bundle.addNamedAnimation(new NamedAnimation("shoot", .1f,AtlasManager.instance.getAtlas("spark").findRegions("shoot/sparkShoot"), AtlasManager.instance.getAtlas("spark").findRegions("shoot/sparkShoot"), new Vector2(0,1), new Vector2(8,8)));
+        bundle.addNamedAnimation(new NamedAnimation("walk", .1f,AtlasManager.instance.getAtlas("spark").findRegions("walk/sparkWalk"), AtlasManager.instance.getAtlas("spark").findRegions("walk/sparkWalk"), new Vector2(0,0), new Vector2(width*1.5f, height)));
+        bundle.addNamedAnimation(new NamedAnimation("shoot", .1f,AtlasManager.instance.getAtlas("spark").findRegions("shoot/sparkShoot"), AtlasManager.instance.getAtlas("spark").findRegions("shoot/sparkShoot"), new Vector2(0,1), new Vector2(width*1.5f,height*1.25f)));
 
         animator = new AnimatorTrait(this, bundle.getAnimations());
         traits.add(animator);

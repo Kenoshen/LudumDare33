@@ -45,14 +45,16 @@ public class AIHiveMind {
         }
     }
     public static void minionLogic(GameObject e, GameObject p){
-        if(e.getTrait(AIMovementAggressiveTrait.class) != null) {
-            e.getTrait(AIMovementAggressiveTrait.class).updateMovement(new Vector2(p.getTrait(PositionTrait.class).x, p.getTrait(PositionTrait.class).y));
+        List traits = e.getTraits(AIMovementAggressiveTrait.class, AIMovementRangedTrait.class, AIMovementRetreatTrait.class );
+        Vector2 pPos = new Vector2(p.getTrait(PositionTrait.class).x, p.getTrait(PositionTrait.class).y);
+        if(traits.get(0) != null) {
+            e.getTrait(AIMovementAggressiveTrait.class).updateMovement(pPos);
         }
-        if(e.getTrait(AIMovementRangedTrait.class) != null){
-            e.getTrait(AIMovementRangedTrait.class).updateMovement(new Vector2(p.getTrait(PositionTrait.class).x, p.getTrait(PositionTrait.class).y));
+        if(traits.get(1) != null){
+            e.getTrait(AIMovementRangedTrait.class).updateMovement(pPos);
         }
-        if(e.getTrait(AIMovementRetreatTrait.class) != null){
-            e.getTrait(AIMovementRetreatTrait.class).updateMovement(new Vector2(p.getTrait(PositionTrait.class).x, p.getTrait(PositionTrait.class).y));
+        if(traits.get(2) != null){
+            e.getTrait(AIMovementRetreatTrait.class).updateMovement(pPos);
         }
     }
 

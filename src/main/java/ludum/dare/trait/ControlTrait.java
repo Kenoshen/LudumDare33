@@ -18,18 +18,24 @@ public class ControlTrait extends Trait implements AnimationCallback {
         LEFT,
         RIGHT,
         ATTACK,
+        JUMP,
         NONE
     }
 
     private PhysicalTrait physical;
     private AnimatorTrait animator;
     private BoxBody player;
+
     private boolean attacking = false;
     private boolean queuedAttack = false;
 
+    private boolean jumping = false;
+    private boolean landing = false;
+
     private ControlAction leftRightRequest = ControlAction.NONE;
     private ControlAction upDownRequest = ControlAction.NONE;
-    private ControlAction attackRequest = ControlAction.NONE;
+    private boolean attackRequest = false;
+    private boolean jumpRequest = false;
 
     public ControlTrait(GameObject obj) {
         super(obj);
@@ -65,7 +71,10 @@ public class ControlTrait extends Trait implements AnimationCallback {
                 leftRightRequest = action;
                 break;
             case ATTACK:
-                attackRequest = action;
+                attackRequest = true;
+                break;
+            case JUMP:
+                jumpRequest = true;
                 break;
         }
     }
@@ -73,14 +82,22 @@ public class ControlTrait extends Trait implements AnimationCallback {
     public void update() {
         Vector2 movement = new Vector2(0, 0);
         // character can either attack or move. not both.
-        if (attackRequest.equals(ControlAction.ATTACK)) {
-            if (attacking) {
+        if (landing) {
+            // can't do shit when you recovering from them dank hops.
+        } else if (attackRequest) {
+            if (jumping && !attacking) {
+                attacking = true;
+                animator.setState("jumpKick", false, true);
+            } else if (attacking) {
                 queuedAttack = true;
             } else {
                 attacking = true;
                 animator.setState("punch", false);
             }
-        } else if (!attacking) {
+        } else if (!attacking || jumping) {
+            if (jumpRequest && !jumping) {
+                jumping = true;
+            }
             if (upDownRequest.equals(ControlAction.UP)) {
                 movement.y += Conf.instance.playerWalkSpeed();
             } else if (upDownRequest.equals(ControlAction.DOWN)) {
@@ -106,7 +123,11 @@ public class ControlTrait extends Trait implements AnimationCallback {
         }
 
         Vector2 vel = physical.body.getLinearVelocity();
-        if (vel.len() > PLAYER_ANIMATION_VEL_CHANGE){
+        if (jumping) {
+            if (!landing && !attacking){
+                animator.changeStateIfUnique("jump", false);
+            }
+        } else if (vel.len() > PLAYER_ANIMATION_VEL_CHANGE){
             animator.changeStateIfUnique("walk", true);
         } else if (!attacking) {
             animator.changeStateIfUnique("stand", true);
@@ -120,7 +141,12 @@ public class ControlTrait extends Trait implements AnimationCallback {
 
         leftRightRequest = ControlAction.NONE;
         upDownRequest = ControlAction.NONE;
-        attackRequest = ControlAction.NONE;
+        attackRequest = false;
+        jumpRequest = false;
+    }
+
+    @Override
+    public void animationStarted(String name) {
     }
 
     @Override
@@ -134,6 +160,13 @@ public class ControlTrait extends Trait implements AnimationCallback {
             }
         } else if (name.equals("punch2")) {
             queuedAttack = false;
+            attacking = false;
+        } else if (name.equals("jump") || name.equals("jumpKick")) {
+            animator.setState("land", false);
+            landing = true;
+        } else if (name.equals("land")) {
+            landing = false;
+            jumping = false;
             attacking = false;
         } else {
             attacking = false;
