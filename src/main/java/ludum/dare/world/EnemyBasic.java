@@ -2,6 +2,7 @@ package ludum.dare.world;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Rectangle;
 import ludum.dare.collision.CollisionGroup;
 import ludum.dare.collision.CollisionSequence;
 import ludum.dare.utils.Sprite;
@@ -27,18 +28,26 @@ public class EnemyBasic extends GameObject{
     private Vector2 target;
     private AnimatorTrait animator;
 
+    private CollisionCallback collisionFunc = new CollisionCallback() {
+        @Override
+        public void collide(GameObject obj) {
+            System.out.println("Taskbot job successful.");
+        }
+    };
+
     public EnemyBasic(float x, float y, float z, float width, float height){
         traits.add(new PositionTrait(this, x, y, z));
         traits.add(new DrawableTrait(this));
+        traits.add(new CollidableTrait(this, collisionFunc));
 
         AnimationBundle bundle = new AnimationBundle();
 
         final NamedAnimation animation = new NamedAnimation("stand", .1f,AtlasManager.instance.getAtlas("bot").findRegions("stand/botStand"),
                 AtlasManager.instance.getAtlas("bot").findRegions("stand/botStand"), new Vector2(0, -.7f), new Vector2(width, height));
         bundle.addNamedAnimation(animation);
-        bundle.addNamedAnimation(new NamedAnimation("walk", .1f,AtlasManager.instance.getAtlas("bot").findRegions("walk/botWalk"),
+        bundle.addNamedAnimation(new NamedAnimation("walk", .1f, AtlasManager.instance.getAtlas("bot").findRegions("walk/botWalk"),
                 AtlasManager.instance.getAtlas("bot").findRegions("walk/botWalk"), new Vector2(0, -.7f), new Vector2(width, height)));
-        bundle.addNamedAnimation(new NamedAnimation("hit", .1f,AtlasManager.instance.getAtlas("bot").findRegions("hit/botHit"),
+        bundle.addNamedAnimation(new NamedAnimation("hit", .1f, AtlasManager.instance.getAtlas("bot").findRegions("hit/botHit"),
                 AtlasManager.instance.getAtlas("bot").findRegions("hit/botHit"), new Vector2(0, -.7f), new Vector2(width * 1.5f, height)));
 
         CollisionSequence hitSequence = new CollisionSequence();
@@ -49,8 +58,16 @@ public class EnemyBasic extends GameObject{
 
         hitSequence.frames = new CollisionGroup[8];
         hitSequence.frames[6] = group1;
-//        bundle.addHitboxSequence(hitSequence);
-        bundle.addHurtboxSequence(hitSequence);
+        bundle.addHitboxSequence(hitSequence);
+
+        CollisionSequence hurtSequence = new CollisionSequence();
+        hurtSequence.name = "hit";
+
+        CollisionGroup hurtGroup = new CollisionGroup();
+        hurtGroup.boxes = new Rectangle[] {new Rectangle(-2,-6,4,12)};
+
+        hurtSequence.frames = new CollisionGroup[] {hurtGroup, hurtGroup, hurtGroup, hurtGroup, hurtGroup, hurtGroup, hurtGroup, hurtGroup, hurtGroup};
+        bundle.addHurtboxSequence(hurtSequence);
 
 
         animator = new AnimatorTrait(this, bundle.getAnimations());

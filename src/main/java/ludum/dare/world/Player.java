@@ -29,10 +29,17 @@ public class Player extends GameObject {
     private AnimatorTrait animator;
     private TimedCollisionTrait hitboxes;
 
+    private CollisionCallback collisionFunc = new CollisionCallback() {
+            @Override
+        public void collide(GameObject obj) {
+            System.out.println("Those are my cans");
+        }
+    };
+
     public Player(float x, float y, float z, float width, float height, CMouse mouse, CKeyboard keyboard, CGamePad gamepad){
         traits.add(new PositionTrait(this, x, y, z));
         traits.add(new DrawableTrait(this));
-        traits.add(new CollidableTrait(this, null));
+        traits.add(new CollidableTrait(this, collisionFunc));
         traits.add(new ImmobilizedTrait(this));
 
         ID = "Player";
