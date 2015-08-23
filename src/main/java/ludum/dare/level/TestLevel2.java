@@ -50,17 +50,17 @@ public class TestLevel2 extends Level{
 //            objs.add(new SquareProp(RandomUtils.rand(), RandomUtils.rand(), 0, 1, 1, s));
 //        }
 
-        Sprite s = new Sprite(tex);
-        s.setColor(Color.YELLOW.cpy());
-        o = new CircleProp(RandomUtils.rand(), RandomUtils.rand(), 0, 1, s);
-        o.addAndInitializeTrait(new CameraFollowTrait(o));
-        objs.add(o);
-
-        s = new Sprite(tex);
-        s.setColor(Color.YELLOW.cpy());
-        o = new CircleProp(RandomUtils.rand(), RandomUtils.rand(), 0, 1, s);
-        o.addAndInitializeTrait(new CameraFollowTrait(o));
-        objs.add(o);
+//        Sprite s = new Sprite(tex);
+//        s.setColor(Color.YELLOW.cpy());
+//        o = new CircleProp(RandomUtils.rand(), RandomUtils.rand(), 0, 1, s);
+//        o.addAndInitializeTrait(new CameraFollowTrait(o));
+//        objs.add(o);
+//
+//        s = new Sprite(tex);
+//        s.setColor(Color.YELLOW.cpy());
+//        o = new CircleProp(RandomUtils.rand(), RandomUtils.rand(), 0, 1, s);
+//        o.addAndInitializeTrait(new CameraFollowTrait(o));
+//        objs.add(o);
 
         return objs;
     }

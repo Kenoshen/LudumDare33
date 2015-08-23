@@ -14,6 +14,7 @@ import ludum.dare.collision.CollisionGroup;
 import ludum.dare.collision.CollisionSequence;
 import ludum.dare.trait.*;
 import ludum.dare.utils.AtlasManager;
+import ludum.dare.utils.InteractableGenerator;
 import ludum.dare.utils.NamedAnimation;
 import ludum.dare.world.Boundary;
 import ludum.dare.world.CircleProp;
@@ -43,38 +44,16 @@ public class TestLevel3 extends Level{
         o.addAndInitializeTrait(new CameraFollowTrait(o));
         objs.add(o);
 
-        TextureRegion tex = AtlasManager.instance.findRegion("white");
+        o = InteractableGenerator.GenerateRectangle(10, 0, 10, 10);
+        o.ID = "Square1";
+        objs.add(o);
 
-        AnimationBundle animationBundle = new AnimationBundle();
-        Array<TextureRegion> textures = new Array<>();
-        textures.add(tex);
-        animationBundle.addNamedAnimation(new NamedAnimation("still", 1, textures));
+        o = InteractableGenerator.GenerateRectangle(-10, 0, 10, 10);
+        o.ID = "Square2";
+        objs.add(o);
 
-        CollisionSequence collisionSequence = new CollisionSequence();
-        collisionSequence.name = "still";
-        collisionSequence.frames = new CollisionGroup[1];
-
-        // Generating the hurtbox
-        CollisionGroup collisionGroup = new CollisionGroup();
-        collisionGroup.boxes = new Rectangle[]{new Rectangle(-5,-5,10,10)};
-
-        collisionSequence.frames[0] = collisionGroup;
-
-        animationBundle.addHurtboxSequence(collisionSequence);
-
-
-        Sprite s = new Sprite(tex);
-        s.setColor(Color.BLACK);
-        o = new SquareProp(10, 0, 0, 5, 5, animationBundle);
-
-
-
-        o.addAndInitializeTrait(new CollectableTrait(o, new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("Collision!");
-            }
-        }));
+        o = InteractableGenerator.GenerateCircle(0, 15, 5);
+        o.ID = "Circle1";
         objs.add(o);
 
         return objs;
