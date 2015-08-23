@@ -70,6 +70,8 @@ public class Player extends GameObject {
 
         ID = "Player";
 
+        traits.add(new LightTrait(this));
+
 
         AnimationBundle bundle = new AnimationBundle();
         bundle.addNamedAnimation(new NamedAnimation("stand", 0.1f,
@@ -109,7 +111,6 @@ public class Player extends GameObject {
             walkSequence.frames[i] = walkGroup;
         }
         bundle.addHurtboxSequence(walkSequence);
-
 
         bundle.addNamedAnimation(new NamedAnimation("punch", 0.1f,
                 AtlasManager.instance.getAtlas("bum").findRegions("jab/bumJab"), AtlasManager.instance.getAtlas("bum_n").findRegions("jab/bumJab_n"),

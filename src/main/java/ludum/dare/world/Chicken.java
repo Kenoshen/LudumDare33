@@ -60,8 +60,9 @@ public class Chicken extends GameObject{
         bd.position.x = x;
         bd.position.y = y;
         bd.fixedRotation = true;
-        CBody body = new BoxBody(0, 0).init(fd, bd);
+        CBody body = new BoxBody(1, 1).init(fd, bd);
         PhysicalTrait physical = new PhysicalTrait(this, body);
+        physical.setOffset(0, (size*.75f)/2-.5f);
         traits.add(physical);
 
         traits.add(new DebugTrait(this));
