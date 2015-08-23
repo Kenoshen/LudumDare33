@@ -18,6 +18,7 @@ public class CollidableTrait extends Trait {
     private CollisionCallback callback;
     private TimedCollisionTrait collisions;
     private PositionTrait position;
+    private long gracePeriod;
 
     public CollidableTrait(GameObject obj, CollisionCallback callback) {
         super(obj);
@@ -44,7 +45,10 @@ public class CollidableTrait extends Trait {
             PositionTrait theirPos = obj.getTrait(PositionTrait.class);
             if (theirCollisions != null && theirPos != null) {
                 if (tryCollide(myHitBoxes, new Vector2(position.x, position.y), theirCollisions.getCurrentHurtboxes(), new Vector2(theirPos.x, theirPos.y))) {
-                    callback.collide(obj);
+                    if(System.currentTimeMillis() - gracePeriod > 500){
+                        gracePeriod = System.currentTimeMillis();
+                        callback.collide(obj);
+                    }
                 }
             }
         }
