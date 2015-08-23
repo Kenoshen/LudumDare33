@@ -3,8 +3,8 @@ package ludum.dare.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -29,12 +29,12 @@ import ludum.dare.level.Level;
 import ludum.dare.trait.*;
 import ludum.dare.utils.AtlasManager;
 import ludum.dare.utils.SkinManager;
-import ludum.dare.utils.Sprite;
 import ludum.dare.world.AIHiveMind;
 import ludum.dare.world.SoundLibrary;
-import ludum.dare.world.BlankObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -183,6 +183,16 @@ public class GameScreen implements Screen {
         batch.begin();
         shaper.begin(ShapeRenderer.ShapeType.Line);
 
+        Collections.sort(gameObjects, new Comparator<GameObject>() {
+            @Override
+            public int compare(GameObject o1, GameObject o2) {
+                if (o1.getTrait(PhysicalTrait.class) != null && o2.getTrait(PhysicalTrait.class) != null) {
+                    return o1.getTrait(PhysicalTrait.class).body.getPosition().y >= o2.getTrait(PhysicalTrait.class).body.getPosition().y ? -1 : 1;
+                } else {
+                    return o1.getTrait(PositionTrait.class).y >= o2.getTrait(PositionTrait.class).y ? -1 : 1;
+                }
+            }
+        });
 
         int currentNumberOfLights = 0;
         for (GameObject obj : gameObjects){
