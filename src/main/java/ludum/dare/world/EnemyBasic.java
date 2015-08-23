@@ -30,15 +30,18 @@ public class EnemyBasic extends GameObject{
 
         AnimationBundle bundle = new AnimationBundle();
 
-        bundle.addNamedAnimation(new NamedAnimation("stand", .1f, AtlasManager.instance.getAtlas("bot").findRegions("stand/botStand"), AtlasManager.instance.getAtlas("bot_n").findRegions("stand/botStand_n"), new Vector2(0, -.7f), new Vector2(6, 6)));
-        bundle.addNamedAnimation(new NamedAnimation("walk", .1f, AtlasManager.instance.getAtlas("bot").findRegions("walk/botWalk"), AtlasManager.instance.getAtlas("bot_n").findRegions("walk/botWalk_n"), new Vector2(0, -.7f), new Vector2(6, 6)));
+        final NamedAnimation animation = new NamedAnimation("stand", .1f,AtlasManager.instance.getAtlas("bot").findRegions("stand/botStand"), AtlasManager.instance.getAtlas("bot").findRegions("stand/botStand"), new Vector2(0, -.7f), new Vector2(6, 6));
+        bundle.addNamedAnimation(animation);
+        bundle.addNamedAnimation(new NamedAnimation("walk", .1f,AtlasManager.instance.getAtlas("bot").findRegions("walk/botWalk"), AtlasManager.instance.getAtlas("bot").findRegions("walk/botWalk"), new Vector2(0, -.7f), new Vector2(6, 6)));
+        bundle.addNamedAnimation(new NamedAnimation("hit", .1f,AtlasManager.instance.getAtlas("bot").findRegions("hit/botHit"), AtlasManager.instance.getAtlas("bot").findRegions("hit/botHit"), new Vector2(0, -.7f), new Vector2(9, 6)));
 
         animator = new AnimatorTrait(this, bundle.getAnimations());
         traits.add(animator);
 
         traits.add(new AITrait(this));
-        traits.add(new AIMovementAggressiveTrait(this, target, 3.0f, 3.0f));
+        traits.add(new AIMovementAggressiveTrait(this, 7.0f, 5.0f));
         traits.add(new HealthTrait(this, 100));
+        traits.add(new AIMeleeAttackTrait(this));
 
         FixtureDef fd = new FixtureDef();
         BodyDef bd = new BodyDef();

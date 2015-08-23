@@ -20,6 +20,7 @@ public class PackTextures
         TexturePacker.process(settings, "src/main/resources/imgs/game/bot", "src/main/resources/packed", "bot");
         TexturePacker.process(settings, "src/main/resources/imgs/game/bot_n", "src/main/resources/packed", "bot_n");
         TexturePacker.process(settings, "src/main/resources/imgs/game/misc", "src/main/resources/packed", "misc");
+        TexturePacker.process(settings, "src/main/resources/imgs/game/spark", "src/main/resources/packed", "spark");
         System.out.println("Finished packing textures");
     }
 }
