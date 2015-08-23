@@ -3,7 +3,8 @@ package ludum.dare.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -11,6 +12,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.winger.camera.FollowOrthoCamera;
@@ -24,8 +27,11 @@ import ludum.dare.Conf;
 import ludum.dare.Game;
 import ludum.dare.level.Level;
 import ludum.dare.trait.*;
+import ludum.dare.utils.AtlasManager;
 import ludum.dare.utils.SkinManager;
+import ludum.dare.utils.Sprite;
 import ludum.dare.world.AIHiveMind;
+import ludum.dare.world.BlankObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,12 +93,15 @@ public class GameScreen implements Screen {
         batch.setShader(program);
         shaper = new ShapeRenderer();
         //
+        final GameScreen self = this;
         TextButton btn = new TextButton("Back", SkinManager.instance.getSkin("menu-skin"), "simple");
         btn.setPosition(50, 50);
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new LevelSelectScreen(game));
+                //game.setScreen(new LevelSelectScreen(game));
+                self.endGame();
+
             }
         });
         stage.addActor(btn);
@@ -129,12 +138,13 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.39f, 0.58f, 0.92f, 1);
+        //Gdx.gl.glClearColor(0.39f, 0.58f, 0.92f, 1);
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.act();
 
-        CWorld.world.update(Conf.instance.worldStepTime());
+        world.update(Conf.instance.worldStepTime());
         for (GameObject obj : gameObjects){
             List<Trait> traits = obj.getTraits(InputHandlerTrait.class, ControlTrait.class, PhysicalTrait.class, DebugTrait.class, UpdatableTrait.class, PathFollowerTrait.class);
             if (traits.get(0) != null) {
@@ -205,8 +215,8 @@ public class GameScreen implements Screen {
         batch.end();
         shaper.end();
 
-        if (CWorld.world.debug()){
-            CWorld.world.draw();
+        if (world.debug()){
+            world.draw();
         }
 
         stage.draw();
@@ -234,7 +244,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        stage.dispose();
         objsToDelete = new ArrayList<>();
         for (GameObject obj : gameObjects){
             obj.markForDeletion();
@@ -242,6 +251,9 @@ public class GameScreen implements Screen {
         }
         removeMarkedGameObjects();
         world._world.dispose();
+        //batch.dispose();
+        //program.dispose();
+        stage.dispose();
 
         music.stop();
         music.dispose();
@@ -286,4 +298,21 @@ public class GameScreen implements Screen {
 
         return program;
     }
+
+    public void endGame(){
+        Image fader = new Image(AtlasManager.instance.findRegion("white"));
+        fader.setColor(Color.BLACK);
+        fader.setBounds(-100, -100, Gdx.graphics.getWidth() + 200, Gdx.graphics.getHeight() + 200);
+        fader.addAction(Actions.sequence(Actions.alpha(0),
+                Actions.fadeIn(2.5f),
+                Actions.delay(1.5f),
+                Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        game.setScreen(new MainMenuScreen(game));
+                    }
+                })));
+        stage.addActor(fader);
+    }
+
 }
