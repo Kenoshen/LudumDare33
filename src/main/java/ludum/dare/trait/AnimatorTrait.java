@@ -85,7 +85,7 @@ public class AnimatorTrait extends Trait {
             drawer.sprite.setRegion(a.getKeyFrame(curTimer, loop));
             drawer.sprite.flip(flipped, false);
             drawer.sprite.setSize(a.getSize().x, a.getSize().y);
-            drawer.offset = a.getOffset();
+            drawer.offset = a.getOffset(flipped);
 
             if (!loop && a.isAnimationFinished(curTimer)) {
                 for(AnimationCallback callback : callbackList) {

@@ -34,7 +34,7 @@ public class SquareProp extends GameObject {
         bD.type = BodyDef.BodyType.DynamicBody;
         bD.position.x = x;
         bD.position.y = y;
-        CBody body = new BoxBody(width, height).init(fD, bD);
+        CBody body = new BoxBody(width/2, height/2).init(fD, bD);
         traits.add(new PhysicalTrait(this, body));
 
         initializeTraits();

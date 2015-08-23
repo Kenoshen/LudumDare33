@@ -37,19 +37,31 @@ public class Player extends GameObject {
 
         AnimationBundle bundle = new AnimationBundle();
 
-        bundle.addNamedAnimation(new NamedAnimation("stand", 0.1f, AtlasManager.instance.getAtlas("game").findRegions("bumStand"), new Vector2(0,-.3f), new Vector2(6,6)));
-        bundle.addNamedAnimation(new NamedAnimation("walk", 0.1f, AtlasManager.instance.getAtlas("game").findRegions("bumWalk"), new Vector2(0,-.3f), new Vector2(6,6)));
-        bundle.addNamedAnimation(new NamedAnimation("punch", 0.1f, AtlasManager.instance.getAtlas("game").findRegions("bumJab"), new Vector2(1.7f,-.3f), new Vector2(8,6)));
+        bundle.addNamedAnimation(new NamedAnimation("stand", 0.1f, AtlasManager.instance.getAtlas("game").findRegions("bumStand"), new Vector2(0, 0), new Vector2(width, height)));
+        bundle.addNamedAnimation(new NamedAnimation("walk", 0.1f, AtlasManager.instance.getAtlas("game").findRegions("bumWalk"), new Vector2(0, 0), new Vector2(width, height)));
+        bundle.addNamedAnimation(new NamedAnimation("punch", 0.1f, AtlasManager.instance.getAtlas("game").findRegions("bumJab"), new Vector2(1.7f, 0), new Vector2(width * 1.25f, height)));
+        bundle.addNamedAnimation(new NamedAnimation("punch2", 0.1f, AtlasManager.instance.getAtlas("game").findRegions("bumCross"), new Vector2(1.7f, 0), new Vector2(width * 1.25f, height)));
 
-        CollisionSequence sequence = new CollisionSequence();
-        sequence.name = "punch";
+        CollisionSequence jabSequence = new CollisionSequence();
+        jabSequence.name = "punch";
 
         CollisionGroup group1 = new CollisionGroup();
         group1.circles = new Circle[] {new Circle(7.2f,.5f,1.5f)};
 
-        sequence.frames = new CollisionGroup[3];
-        sequence.frames[0] = group1;
-        bundle.addHitboxSequence(sequence);
+        jabSequence.frames = new CollisionGroup[3];
+        jabSequence.frames[0] = group1;
+        bundle.addHitboxSequence(jabSequence);
+
+        CollisionSequence crossSequence = new CollisionSequence();
+        crossSequence.name = "punch2";
+
+        CollisionGroup group2 = new CollisionGroup();
+        group2.circles = new Circle[] {new Circle(8f,1.5f,2f)};
+
+        crossSequence.frames = new CollisionGroup[5];
+        crossSequence.frames[1] = group2;
+        bundle.addHitboxSequence(crossSequence);
+
 
         CollisionSequence collisionSequence = new CollisionSequence();
         collisionSequence.name = "stand";
@@ -85,7 +97,7 @@ public class Player extends GameObject {
         bD.position.x = x;
         bD.position.y = y;
         bD.fixedRotation = true;
-        CBody body = new BoxBody(width, height).init(fD, bD);
+        CBody body = new BoxBody(width/2, height/2).init(fD, bD);
         physical = new PhysicalTrait(this, body);
         traits.add(physical);
 
