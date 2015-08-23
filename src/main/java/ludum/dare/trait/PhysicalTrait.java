@@ -14,6 +14,8 @@ public class PhysicalTrait extends Trait {
     private PositionTrait pos;
     private Vector2 offset;
 
+    private boolean active = true;
+
     public PhysicalTrait(GameObject obj, CBody<?> body) {
         super(obj);
         this.body = body;
@@ -44,6 +46,14 @@ public class PhysicalTrait extends Trait {
 
     public void delete(){
         body.removeFromWorld();
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public void setOffset(int x, float y) {

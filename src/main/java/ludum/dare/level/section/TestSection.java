@@ -1,18 +1,19 @@
-package ludum.dare.level;
+package ludum.dare.level.section;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.winger.input.raw.CKeyboard;
 import com.winger.input.raw.CMouse;
+import ludum.dare.level.Level;
 import ludum.dare.trait.GameObject;
 import ludum.dare.trait.LightTrait;
 import ludum.dare.trait.PathFollowerTrait;
 import ludum.dare.trait.PositionTrait;
 import ludum.dare.utils.AtlasManager;
-import ludum.dare.world.*;
+import ludum.dare.world.BlankObject;
+import ludum.dare.world.Boundary;
+import ludum.dare.world.EnemyBasic;
+import ludum.dare.world.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +21,7 @@ import java.util.List;
 /**
  * Created by mwingfield on 8/6/15.
  */
-public class TestLevel extends Level{
-
+public class TestSection extends Level{
     @Override
     public String name(){
         return this.getClass().getSimpleName();
@@ -31,11 +31,8 @@ public class TestLevel extends Level{
     public List<GameObject> loadLevel(){
         List<GameObject> objs = new ArrayList<>();
 
-
         objs.add(new Boundary(new Vector2(-20, 1), new Vector2(20, 1)));
-        objs.add(new EnemyBasic(20, 5, 0, 12, 12));
-        objs.add(new Fourty(-10,0,0,3));
-        objs.add(new Chicken(-15,0,0,6));
+        objs.add(new EnemyBasic(9, 5, 0, 12, 12));
 
         objs.add(new Player(0, 5, 0, CMouse.instance, CKeyboard.instance, null));
         TextureRegion tex = AtlasManager.instance.findRegion("white");
