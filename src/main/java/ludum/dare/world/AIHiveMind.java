@@ -57,41 +57,4 @@ public class AIHiveMind {
             e.getTrait(AIMovementRetreatTrait.class).updateMovement(pPos);
         }
     }
-
-    private static void enemyThrowerBehaviorLogic(GameObject e, GameObject p) {
-        Vector2 vel = new Vector2(0,0);
-        if((p.getTrait(PositionTrait.class).x < e.getTrait(PositionTrait.class).x)
-                && (e.getTrait(PositionTrait.class).x - p.getTrait(PositionTrait.class).x)>20){
-            vel.x -= 10.0;
-        }
-        if((p.getTrait(PositionTrait.class).x >= e.getTrait(PositionTrait.class).x)
-                && (p.getTrait(PositionTrait.class).x - e.getTrait(PositionTrait.class).x)>20){
-            vel.x += 10.0;
-        }
-        if((p.getTrait(PositionTrait.class).y < e.getTrait(PositionTrait.class).y)
-                && (e.getTrait(PositionTrait.class).y - p.getTrait(PositionTrait.class).y)>20){
-            vel.y -= 10.0;
-        }
-        if((p.getTrait(PositionTrait.class).y >= e.getTrait(PositionTrait.class).y)
-                && (p.getTrait(PositionTrait.class).y - e.getTrait(PositionTrait.class).y)>20){
-            vel.y += 10.0;
-        }
-        if((p.getTrait(PositionTrait.class).x < e.getTrait(PositionTrait.class).x)
-                && (e.getTrait(PositionTrait.class).x - p.getTrait(PositionTrait.class).x)<15){
-            vel.x += 7.0;
-        }
-        if((p.getTrait(PositionTrait.class).x >= e.getTrait(PositionTrait.class).x)
-                && (p.getTrait(PositionTrait.class).x - e.getTrait(PositionTrait.class).x)<15){
-            vel.x -= 7.0;
-        }
-        if((p.getTrait(PositionTrait.class).y < e.getTrait(PositionTrait.class).y)
-                && (e.getTrait(PositionTrait.class).y - p.getTrait(PositionTrait.class).y)<15){
-            vel.y += 7.0;
-        }
-        if((p.getTrait(PositionTrait.class).y >= e.getTrait(PositionTrait.class).y)
-                && (p.getTrait(PositionTrait.class).y - e.getTrait(PositionTrait.class).y)<15){
-            vel.y -= 7.0;
-        }
-        e.getTrait(PhysicalTrait.class).body.body.setLinearVelocity(vel);
-    }
 }

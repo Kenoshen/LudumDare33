@@ -28,20 +28,20 @@ public class EnemyThrower extends GameObject{
         traits.add(new PositionTrait(this, x, y, z));
         traits.add(new DrawableTrait(this));
 
+        traits.add(new HealthTrait(this, 50, null));
+
         AnimationBundle bundle = new AnimationBundle();
 
         final NamedAnimation animation = new NamedAnimation("stand", .1f,AtlasManager.instance.getAtlas("spark").findRegions("stand/sparkStand"), AtlasManager.instance.getAtlas("spark").findRegions("stand/sparkStand"), new Vector2(0, 0), new Vector2(width*1.5f, height));
         bundle.addNamedAnimation(animation);
         bundle.addNamedAnimation(new NamedAnimation("walk", .1f,AtlasManager.instance.getAtlas("spark").findRegions("walk/sparkWalk"), AtlasManager.instance.getAtlas("spark").findRegions("walk/sparkWalk"), new Vector2(0,0), new Vector2(width*1.5f, height)));
-        bundle.addNamedAnimation(new NamedAnimation("shoot", .1f,AtlasManager.instance.getAtlas("spark").findRegions("shoot/sparkShoot"), AtlasManager.instance.getAtlas("spark").findRegions("shoot/sparkShoot"), new Vector2(0,1), new Vector2(width*1.5f,height*1.25f)));
+        bundle.addNamedAnimation(new NamedAnimation("shoot", .1f, AtlasManager.instance.getAtlas("spark").findRegions("shoot/sparkShoot"), AtlasManager.instance.getAtlas("spark").findRegions("shoot/sparkShoot"), new Vector2(0, 1), new Vector2(width * 1.5f, height * 1.25f)));
 
         animator = new AnimatorTrait(this, bundle.getAnimations());
         traits.add(animator);
 
         traits.add(new AITrait(this));
         traits.add(new AIMovementRangedTrait(this, 6.0f, 25.0f));
-//        traits.add(new AIMovementRetreatTrait(this, 5.0f, 4.0f, 25.0f));
-        traits.add(new HealthTrait(this, 50));
 
         FixtureDef fd = new FixtureDef();
         BodyDef bd = new BodyDef();

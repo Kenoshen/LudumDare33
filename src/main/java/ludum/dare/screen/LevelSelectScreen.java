@@ -2,10 +2,13 @@ package ludum.dare.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -16,6 +19,7 @@ import ludum.dare.level.Level;
 import ludum.dare.level.TestLevel;
 import ludum.dare.level.TestLevel2;
 import ludum.dare.utils.SkinManager;
+import ludum.dare.world.SoundLibrary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +40,8 @@ public class LevelSelectScreen implements Screen {
 
         Skin skin = SkinManager.instance.getSkin("menu-skin");
 
+        final Sound soundSelect = Gdx.audio.newSound(Gdx.files.internal("sfx/Menu_Select.ogg"));
+
         levelButtons = new Table();
         levelButtons.setFillParent(true);
         stage.addActor(levelButtons);
@@ -52,7 +58,16 @@ public class LevelSelectScreen implements Screen {
             btn.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    game.setScreen(new GameScreen(game, level));
+                    SoundLibrary.GetSound("Menu_Select").play(.25f);
+
+                    stage.getRoot().setColor(Color.WHITE);
+                    stage.addAction(Actions.sequence(Actions.fadeOut(2f),
+                            Actions.run(new Runnable() {
+                                @Override
+                                public void run() {
+                                    game.setScreen(new GameScreen(game, level));
+                                }
+                            })));
                 }
             });
             levelButtons.add(btn); // TODO: do any button positioning
@@ -79,7 +94,7 @@ public class LevelSelectScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.39f, 0.58f, 0.92f, 1);
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.act();

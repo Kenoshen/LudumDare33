@@ -1,6 +1,5 @@
 package ludum.dare.world;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -17,6 +16,8 @@ import ludum.dare.collision.CollisionGroup;
 import ludum.dare.collision.CollisionSequence;
 import ludum.dare.trait.*;
 import ludum.dare.utils.AtlasManager;
+import ludum.dare.utils.CollisionCallback;
+import ludum.dare.utils.HealthCallback;
 import ludum.dare.utils.NamedAnimation;
 
 
@@ -28,6 +29,28 @@ public class Player extends GameObject {
     private PhysicalTrait physical;
     private AnimatorTrait animator;
     private TimedCollisionTrait hitboxes;
+    public boolean rightFacing = true;
+    public boolean hitFromRight;
+
+    private CollisionCallback collisionFunc = new CollisionCallback() {
+            @Override
+        public void collide(GameObject obj) {
+            System.out.println("Those are my cans");
+            SoundLibrary.GetSound("Hit_Robot").play();
+        }
+    };
+
+    private HealthCallback healthCallback = new HealthCallback() {
+        @Override
+        public void damageReceived(int amount, GameObject from) {
+            collidedWith(from);
+        }
+
+        @Override
+        public void healthRegained(int amount, GameObject from) {
+
+        }
+    };
 
     public Player(float x, float y, float z, CMouse mouse, CKeyboard keyboard, CGamePad gamepad){
         float width = 12;
@@ -35,6 +58,10 @@ public class Player extends GameObject {
 
         traits.add(new PositionTrait(this, x, y, z));
         traits.add(new DrawableTrait(this));
+        traits.add(new CollidableTrait(this, collisionFunc));
+        traits.add(new ImmobilizedTrait(this));
+
+        traits.add(new HealthTrait(this, 100, healthCallback));
 
         ID = "Player";
 
@@ -43,6 +70,12 @@ public class Player extends GameObject {
         bundle.addNamedAnimation(new NamedAnimation("stand", 0.1f,
                 AtlasManager.instance.getAtlas("bum").findRegions("stand/bumStand"), AtlasManager.instance.getAtlas("bum_n").findRegions("stand/bumStand_n"),
                 new Vector2(0, 0), new Vector2(width, height)));
+        bundle.addNamedAnimation(new NamedAnimation("pain", .15f,
+                AtlasManager.instance.getAtlas("bum").findRegions("pain/bumPain"), AtlasManager.instance.getAtlas("bum").findRegions("pain/bumPain"),
+                new Vector2(0, 0f), new Vector2(width, height)));
+        bundle.addNamedAnimation(new NamedAnimation("backpain", .15f,
+                AtlasManager.instance.getAtlas("bum").findRegions("backpain/bumBackPain"), AtlasManager.instance.getAtlas("bum").findRegions("backpain/bumBackPain"),
+                new Vector2(0, 0f), new Vector2(width, height)));
         CollisionSequence standSequence = new CollisionSequence();
         standSequence.name = "stand";
 
@@ -275,5 +308,60 @@ public class Player extends GameObject {
         initializeTraits();
 
         body.setFriction(1);
+    }
+
+    public void collidedWith(GameObject o) {
+        Vector2 v = new Vector2(0,0);
+        ControlTrait myControl = getTrait(ControlTrait.class);
+        if(o instanceof EnemyBasic){
+
+            SoundLibrary.GetSound("Get_Hit").play();
+
+            if (getTrait(PositionTrait.class).x < o.getTrait(PositionTrait.class).x
+                    && getTrait(PositionTrait.class).y < o.getTrait(PositionTrait.class).y){
+                getTrait(ImmobilizedTrait.class).imob = true;
+                hitFromRight = true;
+                myControl.queuedAttack = false;
+                myControl.attacking = false;
+                myControl.jumping = false;
+                myControl.landing = false;
+                v.x -= 10000;
+                v.y -= 50;
+            }
+            if (getTrait(PositionTrait.class).x >= o.getTrait(PositionTrait.class).x
+                    && getTrait(PositionTrait.class).y < o.getTrait(PositionTrait.class).y){
+                getTrait(ImmobilizedTrait.class).imob = true;
+                hitFromRight = false;
+                myControl.queuedAttack = false;
+                myControl.attacking = false;
+                myControl.jumping = false;
+                myControl.landing = false;
+                v.x += 10000;
+                v.y -= 50;
+            }
+            if (getTrait(PositionTrait.class).x >= o.getTrait(PositionTrait.class).x
+                    && getTrait(PositionTrait.class).y >= o.getTrait(PositionTrait.class).y){
+                getTrait(ImmobilizedTrait.class).imob = true;
+                hitFromRight = false;
+                myControl.queuedAttack = false;
+                myControl.attacking = false;
+                myControl.jumping = false;
+                myControl.landing = false;
+                v.x += 10000;
+                v.y += 50;
+            }
+            if (getTrait(PositionTrait.class).x < o.getTrait(PositionTrait.class).x
+                    && getTrait(PositionTrait.class).y >= o.getTrait(PositionTrait.class).y){
+                getTrait(ImmobilizedTrait.class).imob = true;
+                hitFromRight = true;
+                myControl.queuedAttack = false;
+                myControl.attacking = false;
+                myControl.jumping = false;
+                myControl.landing = false;
+                v.x -= 10000;
+                v.y += 50;
+            }
+            getTrait(PhysicalTrait.class).body.body.setLinearVelocity(v);
+        }
     }
 }

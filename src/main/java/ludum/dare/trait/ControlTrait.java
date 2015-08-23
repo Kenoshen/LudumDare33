@@ -1,9 +1,16 @@
 package ludum.dare.trait;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
 import com.winger.physics.body.BoxBody;
 import ludum.dare.Conf;
 import ludum.dare.utils.AnimationCallback;
+import ludum.dare.world.Player;
+import ludum.dare.world.SoundLibrary;
+
+import java.util.HashMap;
 
 /**
  * Created by Admin on 8/22/2015.
@@ -24,13 +31,15 @@ public class ControlTrait extends Trait implements AnimationCallback {
 
     private PhysicalTrait physical;
     private AnimatorTrait animator;
+    private ImmobilizedTrait imob;
     private BoxBody player;
+    private boolean rightFacing;
 
-    private boolean attacking = false;
-    private boolean queuedAttack = false;
+    public boolean attacking = false;
+    public boolean queuedAttack = false;
 
-    private boolean jumping = false;
-    private boolean landing = false;
+    public boolean jumping = false;
+    public boolean landing = false;
 
     private ControlAction leftRightRequest = ControlAction.NONE;
     private ControlAction upDownRequest = ControlAction.NONE;
@@ -46,7 +55,10 @@ public class ControlTrait extends Trait implements AnimationCallback {
         super.initialize();
         physical = self.getTrait(PhysicalTrait.class);
         animator = self.getTrait(AnimatorTrait.class);
+        imob = self.getTrait(ImmobilizedTrait.class);
         animator.registerAnimationCallback(this);
+        rightFacing = ((Player)self).rightFacing;
+
         if (!(physical.body instanceof BoxBody)){
             throw new RuntimeException("InputHandlerTrait requires PhysicalTrait, but it also requires a BoxBody for the physicalTrait.body");
         }
@@ -82,7 +94,7 @@ public class ControlTrait extends Trait implements AnimationCallback {
     public void update() {
         Vector2 movement = new Vector2(0, 0);
         // character can either attack or move. not both.
-        if (landing) {
+        if (landing || imob.imob) {
             // can't do shit when you recovering from them dank hops.
         } else if (attackRequest) {
             if (jumping && !attacking) {
@@ -93,10 +105,12 @@ public class ControlTrait extends Trait implements AnimationCallback {
             } else {
                 attacking = true;
                 animator.setState("punch", false);
+                SoundLibrary.GetSound("Punch_Miss").play();
             }
         } else if (!attacking || jumping) {
             if (jumpRequest && !jumping) {
                 jumping = true;
+                SoundLibrary.GetSound("Jump_Player").play();
             }
             if (upDownRequest.equals(ControlAction.UP)) {
                 movement.y += Conf.instance.playerWalkSpeed();
@@ -105,8 +119,10 @@ public class ControlTrait extends Trait implements AnimationCallback {
             }
 
             if (leftRightRequest.equals(ControlAction.LEFT)) {
+                rightFacing = false;
                 movement.x -= Conf.instance.playerWalkSpeed();
             } else if (leftRightRequest.equals(ControlAction.RIGHT)) {
+                rightFacing = true;
                 movement.x += Conf.instance.playerWalkSpeed();
             }
         }
@@ -124,12 +140,21 @@ public class ControlTrait extends Trait implements AnimationCallback {
 
         Vector2 vel = physical.body.getLinearVelocity();
         if (jumping) {
-            if (!landing && !attacking){
+            if (!landing && !attacking) {
                 animator.changeStateIfUnique("jump", false);
             }
         } else if (vel.len() > PLAYER_ANIMATION_VEL_CHANGE){
             animator.changeStateIfUnique("walk", true);
-        } else if (!attacking) {
+        } else if(imob.imob && rightFacing && ((Player)self).hitFromRight){
+            animator.changeStateIfUnique("pain", false);
+        } else if(imob.imob && rightFacing && !((Player)self).hitFromRight){
+            animator.changeStateIfUnique("backpain", false);
+        } else if(imob.imob && !rightFacing && ((Player)self).hitFromRight){
+            animator.changeStateIfUnique("backpain", false);
+        } else if(imob.imob && !rightFacing && !((Player)self).hitFromRight){
+            animator.changeStateIfUnique("pain", false);
+        }
+        else if (!attacking) {
             animator.changeStateIfUnique("stand", true);
         }
 
@@ -168,7 +193,10 @@ public class ControlTrait extends Trait implements AnimationCallback {
             landing = false;
             jumping = false;
             attacking = false;
-        } else {
+        } else if(name.equals("pain") || name.equals("backpain")){
+            imob.imob = false;
+        }
+        else {
             attacking = false;
         }
     }

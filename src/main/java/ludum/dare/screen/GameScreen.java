@@ -33,7 +33,6 @@ import ludum.dare.utils.Sprite;
 import ludum.dare.world.AIHiveMind;
 import ludum.dare.world.BlankObject;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +56,7 @@ public class GameScreen implements Screen {
     private SpriteBatch batch;
     private ShapeRenderer shaper;
 
-    private Music introMusic;
+    private Music music;
 
     List<Tups.Tup2<GameObject, GameObject>> listCollisions;
 
@@ -70,11 +69,9 @@ public class GameScreen implements Screen {
 
     public GameScreen(final Game game, Level level){
 
-        if (level.name().equals("TestLevel3")){
-            introMusic = Gdx.audio.newMusic(Gdx.files.internal("music/Main_song.ogg"));
-            introMusic.setVolume(1);
-            introMusic.play();
-        }
+        music = Gdx.audio.newMusic(Gdx.files.internal("music/Main_song.ogg"));
+        music.setVolume(1);
+        music.play();
 
         this.game = game;
         //
@@ -258,6 +255,9 @@ public class GameScreen implements Screen {
         //batch.dispose();
         //program.dispose();
         stage.dispose();
+
+        music.stop();
+        music.dispose();
     }
 
     private void removeMarkedGameObjects(){
