@@ -34,11 +34,11 @@ public class ControlTrait extends Trait implements AnimationCallback {
     private BoxBody player;
     private boolean rightFacing;
 
-    private boolean attacking = false;
-    private boolean queuedAttack = false;
+    public boolean attacking = false;
+    public boolean queuedAttack = false;
 
-    private boolean jumping = false;
-    private boolean landing = false;
+    public boolean jumping = false;
+    public boolean landing = false;
 
     private ControlAction leftRightRequest = ControlAction.NONE;
     private ControlAction upDownRequest = ControlAction.NONE;
