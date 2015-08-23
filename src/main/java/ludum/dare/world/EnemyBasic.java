@@ -1,5 +1,6 @@
 package ludum.dare.world;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Circle;
 import ludum.dare.collision.CollisionGroup;
 import ludum.dare.collision.CollisionSequence;
@@ -29,6 +30,7 @@ public class EnemyBasic extends GameObject{
     public EnemyBasic(float x, float y, float z, float width, float height){
         traits.add(new PositionTrait(this, x, y, z));
         traits.add(new DrawableTrait(this));
+        traits.add(new LightTrait(this, Color.BLUE));
 
         AnimationBundle bundle = new AnimationBundle();
 
