@@ -27,7 +27,7 @@ public class InteractableGenerator {
         Array<TextureRegion> textures = new Array<>();
         textures.add(tex);
 
-        animationBundle.addNamedAnimation(new NamedAnimation("NOANIMATION", 1, textures));
+        animationBundle.addNamedAnimation(new NamedAnimation("NOANIMATION", 1, textures,textures));
 
         CollisionSequence collisionSequence = new CollisionSequence();
         collisionSequence.name = "NOANIMATION";
@@ -64,7 +64,7 @@ public class InteractableGenerator {
         Array<TextureRegion> textures = new Array<>();
         textures.add(tex);
 
-        animationBundle.addNamedAnimation(new NamedAnimation("NOANIMATION", 1, textures));
+        animationBundle.addNamedAnimation(new NamedAnimation("NOANIMATION", 1, textures,textures));
 
         CollisionSequence collisionSequence = new CollisionSequence();
         collisionSequence.name = "NOANIMATION";
