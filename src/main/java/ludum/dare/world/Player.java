@@ -35,6 +35,11 @@ public class Player extends GameObject {
     private CollisionCallback collisionFunc = new CollisionCallback() {
             @Override
         public void collide(GameObject obj) {
+                HealthTrait health = obj.getTrait(HealthTrait.class);
+                if (health != null) {
+                    health.damage(10, Player.this);
+                    System.out.println("I doth remain standing.");
+                }
             System.out.println("Those are my cans");
             SoundLibrary.GetSound("Hit_Robot").play();
         }
@@ -61,7 +66,7 @@ public class Player extends GameObject {
         traits.add(new CollidableTrait(this, collisionFunc));
         traits.add(new ImmobilizedTrait(this));
 
-        traits.add(new HealthTrait(this, 100, healthCallback));
+        traits.add(new HealthTrait(this, 1, healthCallback));
 
         ID = "Player";
 
@@ -277,6 +282,10 @@ public class Player extends GameObject {
 
         landSequence.frames = new CollisionGroup[] {landSeq1, landSeq2, landSeq3};
         bundle.addHurtboxSequence(landSequence);
+
+        bundle.addNamedAnimation(new NamedAnimation("death", .1f,
+                AtlasManager.instance.getAtlas("bum").findRegions("death/bumDeath"), AtlasManager.instance.getAtlas("bum").findRegions("death/bumDeath"),
+                new Vector2(5f, 0), new Vector2(width * 1.25f, height)));
 
 
         animator = new AnimatorTrait(this, bundle.getAnimations());

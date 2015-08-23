@@ -75,7 +75,6 @@ public class GameScreen implements Screen {
 
         this.game = game;
         //
-        //camera = new FollowOrthoCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera = new FollowOrthoCamera(48, 27);
         camera.minZoom = 1f;
         camera.maxZoom = 1f;
