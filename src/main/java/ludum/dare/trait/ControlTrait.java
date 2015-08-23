@@ -1,10 +1,15 @@
 package ludum.dare.trait;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
 import com.winger.physics.body.BoxBody;
 import ludum.dare.Conf;
 import ludum.dare.utils.AnimationCallback;
 import ludum.dare.world.Player;
+
+import java.util.HashMap;
 
 /**
  * Created by Admin on 8/22/2015.
@@ -40,6 +45,8 @@ public class ControlTrait extends Trait implements AnimationCallback {
     private boolean attackRequest = false;
     private boolean jumpRequest = false;
 
+    private HashMap<String, Sound> soundPunchMiss;
+
     public ControlTrait(GameObject obj) {
         super(obj);
     }
@@ -56,6 +63,11 @@ public class ControlTrait extends Trait implements AnimationCallback {
         if (!(physical.body instanceof BoxBody)){
             throw new RuntimeException("InputHandlerTrait requires PhysicalTrait, but it also requires a BoxBody for the physicalTrait.body");
         }
+
+        soundPunchMiss = new HashMap<>();
+
+        soundPunchMiss.put("Punch_Miss", Gdx.audio.newSound(Gdx.files.internal("sfx/Punch_Miss.ogg")));
+        soundPunchMiss.put("Jump_Player", Gdx.audio.newSound(Gdx.files.internal("sfx/Jump_Player.ogg")));
 
         player = (BoxBody)physical.body;
     }
@@ -99,10 +111,12 @@ public class ControlTrait extends Trait implements AnimationCallback {
             } else {
                 attacking = true;
                 animator.setState("punch", false);
+                soundPunchMiss.get("Punch_Miss").play();
             }
         } else if (!attacking || jumping) {
             if (jumpRequest && !jumping) {
                 jumping = true;
+                soundPunchMiss.get("Jump_Player").play();
             }
             if (upDownRequest.equals(ControlAction.UP)) {
                 movement.y += Conf.instance.playerWalkSpeed();
@@ -132,7 +146,7 @@ public class ControlTrait extends Trait implements AnimationCallback {
 
         Vector2 vel = physical.body.getLinearVelocity();
         if (jumping) {
-            if (!landing && !attacking){
+            if (!landing && !attacking) {
                 animator.changeStateIfUnique("jump", false);
             }
         } else if (vel.len() > PLAYER_ANIMATION_VEL_CHANGE){
