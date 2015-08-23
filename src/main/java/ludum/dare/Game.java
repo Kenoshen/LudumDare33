@@ -52,7 +52,7 @@ public class Game extends com.badlogic.gdx.Game {
         //
 //        setScreen(new CutsceneScreen(this));
         //setScreen(new MainMenuScreen(this));
-        setScreen(new GameScreen(this, new TestLevel3()));
+        setScreen(new GameScreen(this, new TestLevel2()));
     }
 
 

@@ -48,6 +48,12 @@ public class AIHiveMind {
         if(e.getTrait(AIMovementAggressiveTrait.class) != null) {
             e.getTrait(AIMovementAggressiveTrait.class).updateMovement(new Vector2(p.getTrait(PositionTrait.class).x, p.getTrait(PositionTrait.class).y));
         }
+        if(e.getTrait(AIMovementRangedTrait.class) != null){
+            e.getTrait(AIMovementRangedTrait.class).updateMovement(new Vector2(p.getTrait(PositionTrait.class).x, p.getTrait(PositionTrait.class).y));
+        }
+        if(e.getTrait(AIMovementRetreatTrait.class) != null){
+            e.getTrait(AIMovementRetreatTrait.class).updateMovement(new Vector2(p.getTrait(PositionTrait.class).x, p.getTrait(PositionTrait.class).y));
+        }
     }
 
     private static void enemyThrowerBehaviorLogic(GameObject e, GameObject p) {
