@@ -62,7 +62,7 @@ public class Game extends com.badlogic.gdx.Game {
         AtlasManager.instance.loadAtlas("packed/spark.atlas");
         //
 //        setScreen(new CutsceneScreen(this));
-        setScreen(new GameScreen(this, new TestLevel()));
+        setScreen(new GameScreen(this, new TestLevel3()));
 //        setScreen(new MainMenuScreen(this));
 //        setScreen(new GameScreen(this, new ludum.dare.level.TestLamp()));
     }
