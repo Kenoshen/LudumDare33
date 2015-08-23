@@ -1,23 +1,23 @@
 package ludum.dare;
 
 import com.badlogic.gdx.ApplicationListener;
-       import com.badlogic.gdx.Gdx;
-       import com.badlogic.gdx.Input.Keys;
-        import com.badlogic.gdx.InputAdapter;
-        import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-        import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-        import com.badlogic.gdx.graphics.*;
-        import com.badlogic.gdx.graphics.Pixmap.Format;
-        import com.badlogic.gdx.graphics.g2d.BitmapFont;
-        import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-        import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-        import com.badlogic.gdx.math.Matrix4;
-        import com.badlogic.gdx.math.Vector2;
-        import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
-        import java.text.DecimalFormat;
-        import java.text.MessageFormat;
-        import java.util.Random;
+import java.text.DecimalFormat;
+import java.text.MessageFormat;
+import java.util.Random;
 
 /**
  * Simple illumination model with shaders in LibGDX.
@@ -26,7 +26,7 @@ import com.badlogic.gdx.ApplicationListener;
  */
 public class TestLamp implements ApplicationListener {
 
-//    Texture texture, texture_n;
+    Texture texture, texture_n;
 
     boolean flipY;
     Texture normalBase;
@@ -67,37 +67,39 @@ public class TestLamp implements ApplicationListener {
     // whether to use lambert shading (with our normal map)
     boolean useNormals = true;
 
-//    DecimalFormat DEC_FMT = new DecimalFormat("0.00000");
+    DecimalFormat DEC_FMT = new DecimalFormat("0.00000");
 
     ShaderProgram program;
 
-//    BitmapFont font;
+    BitmapFont font;
 
     private int texWidth, texHeight;
-//
-//    final String TEXT = "Use number keys to adjust parameters:\n" +
-//            "1: Randomize Ambient Color\n" +
-//            "2: Randomize Ambient Intensity {0}\n" +
-//            "3: Randomize Light Color\n" +
-//            "4/5: Increase/decrease constant attenuation: {1}\n" +
-//            "6/7: Increase/decrease linear attenuation: {2}\n" +
-//            "8/9: Increase/decrease quadratic attenuation: {3}\n" +
-//            "0: Reset parameters\n" +
-//            "RIGHT/LEFT: Increase/decrease normal map intensity: {4}\n" +
-//            "UP/DOWN: Increase/decrease lightDir.z: {5}\n\n" +
-//            "S toggles attenuation, N toggles normal shading\n" +
-//            "T to toggle textures";
+
+    final String TEXT = "Use number keys to adjust parameters:\n" +
+            "1: Randomize Ambient Color\n" +
+            "2: Randomize Ambient Intensity {0}\n" +
+            "3: Randomize Light Color\n" +
+            "4/5: Increase/decrease constant attenuation: {1}\n" +
+            "6/7: Increase/decrease linear attenuation: {2}\n" +
+            "8/9: Increase/decrease quadratic attenuation: {3}\n" +
+            "0: Reset parameters\n" +
+            "RIGHT/LEFT: Increase/decrease normal map intensity: {4}\n" +
+            "UP/DOWN: Increase/decrease lightDir.z: {5}\n\n" +
+            "S toggles attenuation, N toggles normal shading\n" +
+            "T to toggle textures";
 
     private Texture rock, rock_n, teapot, teapot_n;
 
     public void create() {
         // load our textures
-        rock = new Texture(Gdx.files.internal("imgs/game/bum/cross/bumCross_0.png"));
-        rock_n = new Texture(Gdx.files.internal("imgs/game/bum_n/cross/bumCross_n_0.png"));
-        teapot = new Texture(Gdx.files.internal("imgs/game/bum/walk/bumWalk_4.png"));
-        teapot_n = new Texture(Gdx.files.internal("imgs/game/bum/walk/bumWalk_4.png"));
+        rock = new Texture(Gdx.files.internal("imgs/game/environment/testEnvironment.png"));
+        rock_n = new Texture(Gdx.files.internal("imgs/game/environment_n/testEnvironment_n.png"));
+        teapot = new Texture(Gdx.files.internal("imgs/game/environment/testEnvironment.png"));
+        teapot_n = new Texture(Gdx.files.internal("imgs/game/environment_n/testEnvironment_n.png"));
 
-//        flipY = texture==rock;
+        texture = teapot;
+        texture_n = teapot_n;
+        flipY = texture==rock;
 
         //we only use this to show what the strength-adjusted normal map looks like on screen
         Pixmap pix = new Pixmap(1, 1, Format.RGB565);
@@ -105,8 +107,8 @@ public class TestLamp implements ApplicationListener {
         pix.fill();
         normalBase = new Texture(pix);
 
-        texWidth = 400;
-        texHeight = 400;
+        texWidth = texture.getWidth() / 100;
+        texHeight = texture.getHeight() / 100;
 
         // a simple 2D orthographic camera
         cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -124,66 +126,66 @@ public class TestLamp implements ApplicationListener {
 
         // usually we would just use a single batch for our application,
         // but for demonstration let's also show the un-affected image
-//        batch = new SpriteBatch(100);
-//        batch.setProjectionMatrix(cam.combined);
-//        batch.setTransformMatrix(transform);
+        batch = new SpriteBatch(100);
+        batch.setProjectionMatrix(cam.combined);
+        batch.setTransformMatrix(transform);
 
         // quick little input for debugging -- press S to toggle shadows, N to
         // toggle normals
-//        Gdx.input.setInputProcessor(new InputAdapter() {
-//            public boolean keyDown(int key) {
-//                if (key == Keys.S) {
-//                    useShadow = !useShadow;
-//                    return true;
-//                } else if (key == Keys.N) {
-//                    useNormals = !useNormals;
-//                    return true;
-//                } else if (key == Keys.NUM_1) {
-//                    program.begin();
-//                    program.setUniformf("ambientColor", rndColor());
-//                    program.end();
-//                    return true;
-//                } else if (key == Keys.NUM_2) {
-//                    ambientIntensity = rnd.nextFloat();
-//                    return true;
-//                } else if (key == Keys.NUM_3) {
-//                    program.begin();
-//                    program.setUniformf("lightColor", rndColor());
-//                    program.end();
-//                    return true;
-//                } else if (key == Keys.NUM_0) {
-//                    attenuation.set(DEFAULT_ATTENUATION);
-//                    ambientIntensity = DEFAULT_AMBIENT_INTENSITY;
-//                    lightPos.set(DEFAULT_LIGHT_POS);
-//                    strength = DEFAULT_STRENGTH;
-//                    program.begin();
-//                    program.setUniformf("lightColor", DEFAULT_LIGHT_COLOR);
-//                    program.setUniformf("ambientColor", DEFAULT_AMBIENT_COLOR);
-//                    program.setUniformf("ambientIntensity", ambientIntensity);
-//                    program.setUniformf("attenuation", attenuation);
-//                    program.setUniformf("lightPos", lightPos);
-//                    program.setUniformf("strength", strength);
-//                    program.end();
-//                } else if (key == Keys.T) {
-//                    texture = texture==teapot ? rock : teapot;
-//                    texture_n = texture_n==teapot_n ? rock_n : teapot_n;
-//                    flipY = texture==rock;
-//                    texWidth = texture.getWidth();
-//                    texHeight = texture.getHeight();
-//                    program.begin();
-//                    program.setUniformi("yInvert", flipY ? 1 : 0);
-//                    program.end();
-//                }
-//                return false;
-//            }
-//        });
+        Gdx.input.setInputProcessor(new InputAdapter() {
+            public boolean keyDown(int key) {
+                if (key == Keys.S) {
+                    useShadow = !useShadow;
+                    return true;
+                } else if (key == Keys.N) {
+                    useNormals = !useNormals;
+                    return true;
+                } else if (key == Keys.NUM_1) {
+                    program.begin();
+                    program.setUniformf("ambientColor", rndColor());
+                    program.end();
+                    return true;
+                } else if (key == Keys.NUM_2) {
+                    ambientIntensity = rnd.nextFloat();
+                    return true;
+                } else if (key == Keys.NUM_3) {
+                    program.begin();
+                    program.setUniformf("lightColor", rndColor());
+                    program.end();
+                    return true;
+                } else if (key == Keys.NUM_0) {
+                    attenuation.set(DEFAULT_ATTENUATION);
+                    ambientIntensity = DEFAULT_AMBIENT_INTENSITY;
+                    lightPos.set(DEFAULT_LIGHT_POS);
+                    strength = DEFAULT_STRENGTH;
+                    program.begin();
+                    program.setUniformf("lightColor", DEFAULT_LIGHT_COLOR);
+                    program.setUniformf("ambientColor", DEFAULT_AMBIENT_COLOR);
+                    program.setUniformf("ambientIntensity", ambientIntensity);
+                    program.setUniformf("attenuation", attenuation);
+                    program.setUniformf("lightPos", lightPos);
+                    program.setUniformf("strength", strength);
+                    program.end();
+                } else if (key == Keys.T) {
+                    texture = texture==teapot ? rock : teapot;
+                    texture_n = texture_n==teapot_n ? rock_n : teapot_n;
+                    flipY = texture==rock;
+                    texWidth = texture.getWidth();
+                    texHeight = texture.getHeight();
+                    program.begin();
+                    program.setUniformi("yInvert", flipY ? 1 : 0);
+                    program.end();
+                }
+                return false;
+            }
+        });
 
-//        font = new BitmapFont();
+        font = new BitmapFont();
     }
 
-//    private Vector3 rndColor() {
-//        return new Vector3(rnd.nextFloat(), rnd.nextFloat(), rnd.nextFloat());
-//    }
+    private Vector3 rndColor() {
+        return new Vector3(rnd.nextFloat(), rnd.nextFloat(), rnd.nextFloat());
+    }
 
     private ShaderProgram createShader() {
         // see the code here: http://pastebin.com/7fkh1ax8
@@ -284,36 +286,38 @@ public class TestLamp implements ApplicationListener {
     public void dispose() {
         fxBatch.dispose();
         batch.dispose();
+        texture.dispose();
+        texture_n.dispose();
     }
 
     public void render() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//
-//        // draw our sprites without any effects
-//        batch.begin();
-//
+
+        // draw our sprites without any effects
+        batch.begin();
+
         final int IMG_Y = texHeight/2;
-//
-//        //let's first simulate our resulting normal map by blending a blue square atop it
-//        //we also could have achieved this with glTexEnv in the fixed function pipeline
-//        NORMAL_VCOLOR.a = 1.0f - strength;
-//        batch.draw(texture_n, texWidth + 10, IMG_Y);
-//        batch.setColor(NORMAL_VCOLOR);
-//        batch.draw(normalBase, texWidth + 10, IMG_Y, texWidth, texHeight);
-//        batch.setColor(Color.WHITE);
-//        batch.draw(texture, 0, IMG_Y);
-//        //now let's simulate how our normal map will be sampled using strength
-//        //we can do this simply by blending a blue fill overtop
-//
-//        String str = MessageFormat.format(TEXT, ambientIntensity,
-//                attenuation.x, attenuation.y, DEC_FMT.format(attenuation.z),
-//                strength, lightPos.z);
-//        font.draw(batch, str, 10, Gdx.graphics.getHeight()-10);
-//
-//        font.draw(batch, "Diffuse Color", 10, IMG_Y+texHeight + 30);
-//        font.draw(batch, "Normal Map", texWidth+20, IMG_Y+texHeight + 30);
-//        font.draw(batch, "Final Color", texWidth*2+30, IMG_Y+texHeight + 30);
-//        batch.end();
+
+        //let's first simulate our resulting normal map by blending a blue square atop it
+        //we also could have achieved this with glTexEnv in the fixed function pipeline
+        NORMAL_VCOLOR.a = 1.0f - strength;
+        batch.draw(texture_n, texWidth + 10, IMG_Y);
+        batch.setColor(NORMAL_VCOLOR);
+        batch.draw(normalBase, texWidth + 10, IMG_Y, texWidth, texHeight);
+        batch.setColor(Color.WHITE);
+        batch.draw(texture, 0, IMG_Y);
+        //now let's simulate how our normal map will be sampled using strength
+        //we can do this simply by blending a blue fill overtop
+
+        String str = MessageFormat.format(TEXT, ambientIntensity,
+                attenuation.x, attenuation.y, DEC_FMT.format(attenuation.z),
+                strength, lightPos.z);
+        font.draw(batch, str, 10, Gdx.graphics.getHeight()-10);
+
+        font.draw(batch, "Diffuse Color", 10, IMG_Y+texHeight + 30);
+        font.draw(batch, "Normal Map", texWidth+20, IMG_Y+texHeight + 30);
+        font.draw(batch, "Final Color", texWidth*2+30, IMG_Y+texHeight + 30);
+        batch.end();
 
         // start our FX batch, which will bind our shader program
         fxBatch.begin();
@@ -322,66 +326,63 @@ public class TestLamp implements ApplicationListener {
         lightPos.x = Gdx.input.getX();
         lightPos.y = Gdx.graphics.getHeight() - Gdx.input.getY();
 
-//        // handle attenuation input
-//        if (Gdx.input.isKeyPressed(Keys.NUM_4)) {
-//            attenuation.x += 0.025f;
-//        } else if (Gdx.input.isKeyPressed(Keys.NUM_5)) {
-//            attenuation.x -= 0.025f;
-//            if (attenuation.x < 0)
-//                attenuation.x = 0;
-//        } else if (Gdx.input.isKeyPressed(Keys.NUM_6)) {
-//            attenuation.y += 0.25f;
-//        } else if (Gdx.input.isKeyPressed(Keys.NUM_7)) {
-//            attenuation.y -= 0.25f;
-//            if (attenuation.y < 0)
-//                attenuation.y = 0;
-//        } else if (Gdx.input.isKeyPressed(Keys.NUM_8)) {
-//            attenuation.z += 0.25f;
-//        } else if (Gdx.input.isKeyPressed(Keys.NUM_9)) {
-//            attenuation.z -= 0.25f;
-//            if (attenuation.z < 0)
-//                attenuation.z = 0;
-//        } else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
-//            strength += 0.025f;
-//            if (strength > 1f)
-//                strength = 1f;
-//        } else if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-//            strength -= 0.025f;
-//            if (strength < 0)
-//                strength = 0;
-//        } else if (Gdx.input.isKeyPressed(Keys.UP)) {
-//            lightPos.z += 0.0025f;
-//        } else if (Gdx.input.isKeyPressed(Keys.DOWN)) {
-//            lightPos.z -= 0.0025f;
-//        }
+        // handle attenuation input
+        if (Gdx.input.isKeyPressed(Keys.NUM_4)) {
+            attenuation.x += 0.025f;
+        } else if (Gdx.input.isKeyPressed(Keys.NUM_5)) {
+            attenuation.x -= 0.025f;
+            if (attenuation.x < 0)
+                attenuation.x = 0;
+        } else if (Gdx.input.isKeyPressed(Keys.NUM_6)) {
+            attenuation.y += 0.25f;
+        } else if (Gdx.input.isKeyPressed(Keys.NUM_7)) {
+            attenuation.y -= 0.25f;
+            if (attenuation.y < 0)
+                attenuation.y = 0;
+        } else if (Gdx.input.isKeyPressed(Keys.NUM_8)) {
+            attenuation.z += 0.25f;
+        } else if (Gdx.input.isKeyPressed(Keys.NUM_9)) {
+            attenuation.z -= 0.25f;
+            if (attenuation.z < 0)
+                attenuation.z = 0;
+        } else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
+            strength += 0.025f;
+            if (strength > 1f)
+                strength = 1f;
+        } else if (Gdx.input.isKeyPressed(Keys.LEFT)) {
+            strength -= 0.025f;
+            if (strength < 0)
+                strength = 0;
+        } else if (Gdx.input.isKeyPressed(Keys.UP)) {
+            lightPos.z += 0.0025f;
+        } else if (Gdx.input.isKeyPressed(Keys.DOWN)) {
+            lightPos.z -= 0.0025f;
+        }
 
         // update our uniforms
-//        program.setUniformf("ambientIntensity", ambientIntensity);
-//        program.setUniformf("attenuation", attenuation);
+        program.setUniformf("ambientIntensity", ambientIntensity);
+        program.setUniformf("attenuation", attenuation);
         program.setUniformf("light", lightPos);
-//        program.setUniformi("useNormals", useNormals ? 1 : 0);
-//        program.setUniformi("useShadow", useShadow ? 1 : 0);
-//        program.setUniformf("strength", strength);
+        program.setUniformi("useNormals", useNormals ? 1 : 0);
+        program.setUniformi("useShadow", useShadow ? 1 : 0);
+        program.setUniformf("strength", strength);
 
+        // bind the normal first at texture1
+        texture_n.bind(1);
 
+        // bind the actual texture at texture0
+        texture.bind(0);
 
-        teapot_n.bind(1);
-        teapot.bind(0);
-        fxBatch.draw(teapot, texWidth, IMG_Y);
-
-        fxBatch.flush();
-        rock_n.bind(1);
-        rock.bind(0);
-        fxBatch.draw(rock, texWidth*2 + 20, IMG_Y);
-
-
+        // we bind texture0 second since draw(texture) will end up binding it at
+        // texture0...
+        fxBatch.draw(texture, texWidth*2 + 20, IMG_Y);
         fxBatch.end();
     }
 
     public void resize(int width, int height) {
-//        cam.setToOrtho(false, width, height);
-//        resolution.set(width, height);
-//        program.setUniformf("resolution", resolution);
+        cam.setToOrtho(false, width, height);
+        resolution.set(width, height);
+        program.setUniformf("resolution", resolution);
     }
 
     public void pause() {
@@ -393,8 +394,8 @@ public class TestLamp implements ApplicationListener {
     public static void main(String[] args) {
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
         cfg.title = "Lighting Test";
-        cfg.width = 1600;
-        cfg.height = 900;
+        cfg.width = 1024;
+        cfg.height = 768;
         cfg.resizable = false;
 
         new LwjglApplication(new TestLamp(), cfg);

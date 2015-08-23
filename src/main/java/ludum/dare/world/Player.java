@@ -29,7 +29,10 @@ public class Player extends GameObject {
     private AnimatorTrait animator;
     private TimedCollisionTrait hitboxes;
 
-    public Player(float x, float y, float z, float width, float height, CMouse mouse, CKeyboard keyboard, CGamePad gamepad){
+    public Player(float x, float y, float z, CMouse mouse, CKeyboard keyboard, CGamePad gamepad){
+        float width = 12;
+        float height = 12;
+
         traits.add(new PositionTrait(this, x, y, z));
         traits.add(new DrawableTrait(this));
 

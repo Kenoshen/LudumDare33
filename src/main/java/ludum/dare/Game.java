@@ -8,11 +8,10 @@ import com.winger.input.raw.state.KeyboardKey;
 import com.winger.log.HTMLLogger;
 import com.winger.log.LogGroup;
 import com.winger.log.LogLevel;
+import ludum.dare.level.*;
+import ludum.dare.level.TestLamp;
 import ludum.dare.level.TestLevel;
 import ludum.dare.level.TestLevel2;
-import ludum.dare.level.TestLevel;
-import ludum.dare.level.TestLevel2;
-import ludum.dare.level.TestLevel3;
 import ludum.dare.screen.CutsceneScreen;
 import ludum.dare.screen.GameScreen;
 import ludum.dare.screen.GameScreen;
@@ -60,12 +59,13 @@ public class Game extends com.badlogic.gdx.Game {
         AtlasManager.instance.loadAtlas("packed/bot.atlas");
         AtlasManager.instance.loadAtlas("packed/bot_n.atlas");
         AtlasManager.instance.loadAtlas("packed/spark.atlas");
+        AtlasManager.instance.loadAtlas("packed/environment.atlas");
+        AtlasManager.instance.loadAtlas("packed/environment_n.atlas");
         //
         //setScreen(new CutsceneScreen(this));
-//        setScreen(new CutsceneScreen(this));
         //setScreen(new GameScreen(this, new TestLevel3()));
-//        setScreen(new MainMenuScreen(this));
-        setScreen(new GameScreen(this, new TestLevel()));
+        //setScreen(new MainMenuScreen(this));
+        setScreen(new GameScreen(this, new TestLamp()));
     }
 
 

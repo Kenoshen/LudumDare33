@@ -10,21 +10,50 @@ import com.badlogic.gdx.math.Vector3;
  * Created by mwingfield on 8/2/15.
  */
 public class LightTrait extends Trait {
+    private static final Color DEFAULT_AMBIENT_COLOR = new Color(0.3f, 0.3f, 1f, 1f);
+    private static final Color DEFAULT_COLOR = new Color(0.3f, 0.3f, 1f, 1f);
+    private static final Vector3 DEFAULT_ATTENUATION = new Vector3(0.3f, 0.3f, 1f);
+    private static final float DEFAULT_INTENSITY = 0.3f;
+    private static final float DEFAULT_Z = 0.05f;
+
     private static Class[] REQUIRES = new Class[]{ PositionTrait.class };
 
     public PositionTrait pos;
-    public Color ambientColor = new Color(0.3f, 0.3f, 1f, 1f);
-    public Color color = new Color(1f, 0.7f, 0.6f, 1f);
-    public Vector3 attenuation = new Vector3(0.4f, 3f, 20f);
-    public float intensity = 0.3f;
+    public Color ambientColor;
+    public Color color;
+    public Vector3 attenuation;
+    public float intensity;
+    public float z;
 
-    public LightTrait(GameObject obj){
+
+    public LightTrait(GameObject obj, Color color, Color ambientColor, float intensity, Vector3 attenuation){
         super(obj);
+        this.color = color.cpy();
+        this.ambientColor = ambientColor;
+        this.intensity = intensity;
+        this.attenuation = attenuation;
+        this.z = DEFAULT_Z;
+    }
+
+    public LightTrait(GameObject obj, Color color, Color ambientColor, float intensity){
+        this(obj, color, ambientColor, intensity, DEFAULT_ATTENUATION);
+    }
+
+    public LightTrait(GameObject obj, Color color, Color ambientColor){
+        this(obj, color, ambientColor, DEFAULT_INTENSITY);
     }
 
     public LightTrait(GameObject obj, Color color){
-        this(obj);
-        this.color = color.cpy();
+        this(obj, color, DEFAULT_AMBIENT_COLOR);
+    }
+
+    public LightTrait(GameObject obj){
+        this(obj, DEFAULT_COLOR);
+    }
+
+    public LightTrait setZ(float z){
+        this.z = z;
+        return this;
     }
 
     @Override
@@ -42,9 +71,11 @@ public class LightTrait extends Trait {
         //log.info("Light" + lightIndex + " " + new Vector3(pos.x, pos.y, pos.z + 0.05f));
         Vector3 p = new Vector3(pos.x, pos.y, pos.z);
         Vector3 pScreen = cam.project(p);
-        pScreen.z += 0.05f;
+        pScreen.z += z;
         program.setUniformf("light" + lightIndex, pScreen);
         program.setUniformf("lightColor" + lightIndex, new Vector3(color.r, color.g, color.b));
+        program.setUniformf("ambientColor" + lightIndex, new Vector3(ambientColor.r, ambientColor.g, ambientColor.b));
+        program.setUniformf("intensity" + lightIndex, intensity);
         return this;
     }
 
