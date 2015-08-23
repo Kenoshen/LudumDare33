@@ -33,15 +33,15 @@ public class Player extends GameObject {
     public Player(float x, float y, float z, float width, float height, CMouse mouse, CKeyboard keyboard, CGamePad gamepad){
         traits.add(new PositionTrait(this, x, y, z));
         traits.add(new SizeTrait(this, width, height));
-        final Sprite sprite = new Sprite();
-        traits.add(new DrawableTrait(this, sprite));
+        traits.add(new DrawableTrait(this));
 
 
         AnimationBundle bundle = new AnimationBundle();
 
-        final NamedAnimation animation = new NamedAnimation("stand", 0.2f, AtlasManager.instance.getAtlas("game").findRegions("bumStand"));
+        final NamedAnimation animation = new NamedAnimation("stand", 0.1f, AtlasManager.instance.getAtlas("bum").findRegions("stand/bumStand"), AtlasManager.instance.getAtlas("bum_n").findRegions("stand/bumStand_n"), new Vector2(0,0), new Vector2(6,6));
         bundle.addNamedAnimation(animation);
-        bundle.addNamedAnimation(new NamedAnimation("walk", 0.2f, AtlasManager.instance.getAtlas("game").findRegions("bumWalk")));
+        bundle.addNamedAnimation(new NamedAnimation("walk", 0.1f, AtlasManager.instance.getAtlas("bum").findRegions("walk/bumWalk"), AtlasManager.instance.getAtlas("bum_n").findRegions("walk/bumWalk_n"), new Vector2(0,0), new Vector2(6,6)));
+        bundle.addNamedAnimation(new NamedAnimation("punch", 0.1f, AtlasManager.instance.getAtlas("bum").findRegions("jab/bumJab"), AtlasManager.instance.getAtlas("bum_n").findRegions("jab/bumJab_n"), new Vector2(0,0), new Vector2(7,6)));
 
         CollisionSequence sequence = new CollisionSequence();
         sequence.name = "walk";
@@ -79,6 +79,7 @@ public class Player extends GameObject {
         bD.type = BodyDef.BodyType.DynamicBody;
         bD.position.x = x;
         bD.position.y = y;
+        bD.fixedRotation = true;
         CBody body = new BoxBody(width, height).init(fD, bD);
         physical = new PhysicalTrait(this, body);
         traits.add(physical);

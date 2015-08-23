@@ -1,6 +1,8 @@
 package ludum.dare.trait;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.winger.struct.Tups;
 import ludum.dare.utils.NamedAnimation;
 
 import java.util.HashMap;
@@ -23,6 +25,11 @@ public class AnimatorTrait extends Trait {
     public AnimatorTrait(GameObject obj, Map<String, NamedAnimation> states){
         super(obj);
         this.states.putAll(states);
+        for(Map.Entry<String, NamedAnimation> entry : states.entrySet()){
+            if (entry.getValue() == null || entry.getValue().getNumberOfFrames() == 0){
+                throw new RuntimeException("Named Animation(" + entry.getKey() + ") cannot be null or have 0 frames in an AnimatorTrait");
+            }
+        }
         // This will probably leave. But for now just default to the first animation given
         Set<String> givenKeys = states.keySet();
         if (givenKeys.size() > 0) {
@@ -81,7 +88,9 @@ public class AnimatorTrait extends Trait {
         NamedAnimation a = getCurrentAnimation();
         if (a != null){
             curTimer += delta;
-            drawer.sprite.setRegion(a.getKeyFrame(curTimer, loop));
+            Tups.Tup2<TextureRegion, TextureRegion> texs = a.getKeyFrame(curTimer, loop);
+            drawer.sprite.setRegion(texs.i1());
+            drawer.sprite.setNormalRegion(texs.i2());
             drawer.sprite.flip(flipped, false);
         }
     }

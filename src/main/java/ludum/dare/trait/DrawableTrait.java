@@ -1,7 +1,8 @@
 package ludum.dare.trait;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import ludum.dare.utils.Sprite;
 
 /**
  * Created by mwingfield on 8/2/15.
