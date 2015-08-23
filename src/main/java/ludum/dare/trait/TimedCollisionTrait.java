@@ -72,7 +72,7 @@ public class TimedCollisionTrait extends Trait {
                     if (frame.boxes[i] != null) {
                         Rectangle copy = new Rectangle(frame.boxes[i]);
                         copy.x *= -1;
-                        copy.width *= -1;
+                        copy.x = copy.x - copy.width;
                         flippedGroup.boxes[i] = copy;
                     }
                 }
