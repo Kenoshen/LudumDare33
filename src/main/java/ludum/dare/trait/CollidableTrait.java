@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.winger.physics.CBody;
 import com.winger.struct.Tups;
 import ludum.dare.collision.CollisionGroup;
 import ludum.dare.utils.CollisionCallback;
@@ -18,6 +19,7 @@ public class CollidableTrait extends Trait {
     private CollisionCallback callback;
     private TimedCollisionTrait collisions;
     private PositionTrait position;
+    private PhysicalTrait physics;
     private long gracePeriod;
 
     public CollidableTrait(GameObject obj, CollisionCallback callback) {
@@ -28,7 +30,7 @@ public class CollidableTrait extends Trait {
 
     @Override
     public Class[] requires() {
-        return new Class[]{TimedCollisionTrait.class, PositionTrait.class};
+        return new Class[]{TimedCollisionTrait.class, PositionTrait.class, PhysicalTrait.class};
     }
 
     @Override
@@ -36,14 +38,26 @@ public class CollidableTrait extends Trait {
         super.initialize();
         collisions = self.getTrait(TimedCollisionTrait.class);
         position = self.getTrait(PositionTrait.class);
+        physics = self.getTrait(PhysicalTrait.class);
     }
 
     public void checkCollisions(List<GameObject> listGameObjects, List<Tups.Tup2<GameObject, GameObject>> listCollisions) {
         CollisionGroup myHitBoxes = collisions.getCurrentHitboxes();
         for (GameObject obj : listGameObjects) {
+            PhysicalTrait theirPhysics = obj.getTrait(PhysicalTrait.class);
+            if (theirPhysics != null) {
+                Vector2 myPos = physics.body.getPosition();
+                Vector2 theyPos = theirPhysics.body.getPosition();
+                // This assumes we are hard coding ALL physics body heights to 1.
+                if (myPos.y > theyPos.y + 1 || myPos.y + 1 < theyPos.y) {
+                    // body y's don't overlap, so we can't collide
+                    continue;
+                }
+            }
             TimedCollisionTrait theirCollisions = obj.getTrait(TimedCollisionTrait.class);
             PositionTrait theirPos = obj.getTrait(PositionTrait.class);
-            if (theirCollisions != null && theirPos != null) {
+            if (theirCollisions != null && theirPos != null && theirPhysics != null) {
+                // compare physics to make sure plane is valid
                 if (tryCollide(myHitBoxes, new Vector2(position.x, position.y), theirCollisions.getCurrentHurtboxes(), new Vector2(theirPos.x, theirPos.y))) {
                     if(System.currentTimeMillis() - gracePeriod > 100){
                         gracePeriod = System.currentTimeMillis();

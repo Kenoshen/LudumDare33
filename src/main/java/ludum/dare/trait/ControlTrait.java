@@ -17,7 +17,7 @@ import java.util.HashMap;
  */
 public class ControlTrait extends Trait implements AnimationCallback {
     private static final float PLAYER_ANIMATION_VEL_CHANGE = 0.1f;
-    private static Class[] REQUIRES = new Class[]{PhysicalTrait.class, AnimatorTrait.class};
+    private static Class[] REQUIRES = new Class[]{PhysicalTrait.class, AnimatorTrait.class, HealthTrait.class};
 
     public enum ControlAction {
         UP,
@@ -32,6 +32,7 @@ public class ControlTrait extends Trait implements AnimationCallback {
     private PhysicalTrait physical;
     private AnimatorTrait animator;
     private ImmobilizedTrait imob;
+    private HealthTrait health;
     private BoxBody player;
     private boolean rightFacing;
 
@@ -40,6 +41,8 @@ public class ControlTrait extends Trait implements AnimationCallback {
 
     public boolean jumping = false;
     public boolean landing = false;
+
+    public boolean dead = false;
 
     private ControlAction leftRightRequest = ControlAction.NONE;
     private ControlAction upDownRequest = ControlAction.NONE;
@@ -55,8 +58,9 @@ public class ControlTrait extends Trait implements AnimationCallback {
         super.initialize();
         physical = self.getTrait(PhysicalTrait.class);
         animator = self.getTrait(AnimatorTrait.class);
-        imob = self.getTrait(ImmobilizedTrait.class);
         animator.registerAnimationCallback(this);
+        imob = self.getTrait(ImmobilizedTrait.class);
+        health = self.getTrait(HealthTrait.class);
         rightFacing = ((Player)self).rightFacing;
 
         if (!(physical.body instanceof BoxBody)){
@@ -92,6 +96,15 @@ public class ControlTrait extends Trait implements AnimationCallback {
     }
 
     public void update() {
+        if (dead) {
+            // wipe yo'self off. You dead.
+            return;
+        }
+        if (health.health <= 0) {
+            System.out.println("I'M FUCKING DEAD");
+            animator.changeStateIfUnique("backpain", false);
+            dead = true;
+        }
         Vector2 movement = new Vector2(0, 0);
         // character can either attack or move. not both.
         if (landing || imob.imob) {

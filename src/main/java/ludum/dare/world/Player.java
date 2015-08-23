@@ -35,6 +35,11 @@ public class Player extends GameObject {
     private CollisionCallback collisionFunc = new CollisionCallback() {
             @Override
         public void collide(GameObject obj) {
+                HealthTrait health = obj.getTrait(HealthTrait.class);
+                if (health != null) {
+                    health.damage(10, Player.this);
+                    System.out.println("I doth remain standing.");
+                }
             System.out.println("Those are my cans");
             SoundLibrary.GetSound("Hit_Robot").play();
         }
@@ -43,7 +48,7 @@ public class Player extends GameObject {
     private HealthCallback healthCallback = new HealthCallback() {
         @Override
         public void damageReceived(int amount, GameObject from) {
-            collidedWith(from);
+
         }
 
         @Override
