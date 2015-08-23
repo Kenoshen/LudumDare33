@@ -42,10 +42,16 @@ public class CollidableTrait extends Trait {
     }
 
     public void checkCollisions(List<GameObject> listGameObjects, List<Tups.Tup2<GameObject, GameObject>> listCollisions) {
+        if (!physics.isActive()) {
+            return;
+        }
         CollisionGroup myHitBoxes = collisions.getCurrentHitboxes();
         for (GameObject obj : listGameObjects) {
             PhysicalTrait theirPhysics = obj.getTrait(PhysicalTrait.class);
             if (theirPhysics != null) {
+                if (!theirPhysics.isActive()) {
+                    continue;
+                }
                 Vector2 myPos = physics.body.getPosition();
                 Vector2 theyPos = theirPhysics.body.getPosition();
                 // This assumes we are hard coding ALL physics body heights to 1.

@@ -98,12 +98,15 @@ public class ControlTrait extends Trait implements AnimationCallback {
     public void update() {
         if (dead) {
             // wipe yo'self off. You dead.
+            zeroOutVelocity();
             return;
         }
         if (health.health <= 0) {
             System.out.println("I'M FUCKING DEAD");
-            animator.changeStateIfUnique("backpain", false);
+            animator.changeStateIfUnique("death", false);
             dead = true;
+            physical.setActive(false);
+            return;
         }
         Vector2 movement = new Vector2(0, 0);
         // character can either attack or move. not both.
@@ -143,10 +146,7 @@ public class ControlTrait extends Trait implements AnimationCallback {
         movement = movement.nor().scl(Conf.instance.playerWalkSpeed());
 
         if (movement.len() < 1){
-            Vector2 vel = physical.body.body.getLinearVelocity();
-            vel.x *= -1;
-            vel.y *= -1;
-            physical.body.body.applyLinearImpulse(vel, new Vector2(0, 0), true);
+            zeroOutVelocity();
         } else {
             physical.body.body.setLinearVelocity(movement);
         }
@@ -181,6 +181,13 @@ public class ControlTrait extends Trait implements AnimationCallback {
         upDownRequest = ControlAction.NONE;
         attackRequest = false;
         jumpRequest = false;
+    }
+
+    private void zeroOutVelocity() {
+        Vector2 vel = physical.body.body.getLinearVelocity();
+        vel.x *= -1;
+        vel.y *= -1;
+        physical.body.body.applyLinearImpulse(vel, new Vector2(0, 0), true);
     }
 
     @Override
