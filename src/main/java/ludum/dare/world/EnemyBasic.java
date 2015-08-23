@@ -48,7 +48,9 @@ public class EnemyBasic extends GameObject{
 
         hitSequence.frames = new CollisionGroup[5];
         hitSequence.frames[3] = group1;
-        bundle.addHitboxSequence(hitSequence);
+//        changed to hurtbox to test collisions, Collidedtrait doesnt deal with hit-to-hurt boxes yet
+//        bundle.addHitboxSequence(hitSequence);
+        bundle.addHurtboxSequence(hitSequence);
 
 
 

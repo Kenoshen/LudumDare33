@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.winger.struct.Tups;
 import ludum.dare.collision.CollisionGroup;
+import ludum.dare.world.Player;
 
 import javax.swing.text.Position;
 import java.util.ArrayList;
@@ -67,6 +68,7 @@ public class CollidableTrait extends Trait {
                                         if(!collisionFound){
                                             System.out.println(System.currentTimeMillis() + " - Colision between " + obj.ID + " and " + self.ID);
                                             listCollisions.add(collision);
+                                            performCollision(obj);
                                         }
 
                                     }
@@ -98,6 +100,7 @@ public class CollidableTrait extends Trait {
                                             if (!collisionFound) {
                                                 System.out.println(System.currentTimeMillis() + " - Colision between " + obj.ID + " and " + self.ID);
                                                 listCollisions.add(collision);
+                                                performCollision(obj);
                                             }
                                         }
                                     }
@@ -128,6 +131,7 @@ public class CollidableTrait extends Trait {
                                         if(!collisionFound){
                                             System.out.println(System.currentTimeMillis() + " - Colision between " + obj.ID + " and " + self.ID);
                                             listCollisions.add(collision);
+                                            performCollision(obj);
                                         }
                                     }
                                 }
@@ -158,6 +162,7 @@ public class CollidableTrait extends Trait {
                                             if (!collisionFound) {
                                                 System.out.println(System.currentTimeMillis() + " - Colision between " + obj.ID + " and " + self.ID);
                                                 listCollisions.add(collision);
+                                                performCollision(obj);
                                             }
 
                                         }
@@ -176,5 +181,9 @@ public class CollidableTrait extends Trait {
     @Override
     public Class[] requires(){
         return new Class[0];
+    }
+
+    public void performCollision(GameObject o){
+        ((Player) self).collidedWith(o);
     }
 }
