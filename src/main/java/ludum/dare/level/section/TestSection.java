@@ -1,12 +1,10 @@
-package ludum.dare.level;
+package ludum.dare.level.section;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.winger.input.raw.CKeyboard;
 import com.winger.input.raw.CMouse;
+import ludum.dare.level.Level;
 import ludum.dare.trait.GameObject;
 import ludum.dare.trait.LightTrait;
 import ludum.dare.trait.PathFollowerTrait;
@@ -23,8 +21,7 @@ import java.util.List;
 /**
  * Created by mwingfield on 8/6/15.
  */
-public class TestLevel extends Level{
-
+public class TestSection extends Level{
     @Override
     public String name(){
         return this.getClass().getSimpleName();
@@ -33,7 +30,6 @@ public class TestLevel extends Level{
     @Override
     public List<GameObject> loadLevel(){
         List<GameObject> objs = new ArrayList<>();
-
 
         objs.add(new Boundary(new Vector2(-20, 1), new Vector2(20, 1)));
         objs.add(new EnemyBasic(9, 5, 0, 12, 12));
