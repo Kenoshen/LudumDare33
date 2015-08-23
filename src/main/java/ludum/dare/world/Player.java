@@ -292,28 +292,45 @@ public class Player extends GameObject {
 
     public void collidedWith(GameObject o) {
         Vector2 v = new Vector2(0,0);
+        ControlTrait myControl = getTrait(ControlTrait.class);
         if(o instanceof EnemyBasic){
             if (getTrait(PositionTrait.class).x < o.getTrait(PositionTrait.class).x
                     && getTrait(PositionTrait.class).y < o.getTrait(PositionTrait.class).y){
                 getTrait(ImmobilizedTrait.class).imob = true;
+                myControl.queuedAttack = false;
+                myControl.attacking = false;
+                myControl.jumping = false;
+                myControl.landing = false;
                 v.x -= 5000;
                 v.y -= 5000;
             }
             if (getTrait(PositionTrait.class).x >= o.getTrait(PositionTrait.class).x
                     && getTrait(PositionTrait.class).y < o.getTrait(PositionTrait.class).y){
                 getTrait(ImmobilizedTrait.class).imob = true;
+                myControl.queuedAttack = false;
+                myControl.attacking = false;
+                myControl.jumping = false;
+                myControl.landing = false;
                 v.x += 5000;
                 v.y -= 5000;
             }
             if (getTrait(PositionTrait.class).x >= o.getTrait(PositionTrait.class).x
                     && getTrait(PositionTrait.class).y >= o.getTrait(PositionTrait.class).y){
                 getTrait(ImmobilizedTrait.class).imob = true;
+                myControl.queuedAttack = false;
+                myControl.attacking = false;
+                myControl.jumping = false;
+                myControl.landing = false;
                 v.x += 5000;
                 v.y += 5000;
             }
             if (getTrait(PositionTrait.class).x < o.getTrait(PositionTrait.class).x
                     && getTrait(PositionTrait.class).y >= o.getTrait(PositionTrait.class).y){
                 getTrait(ImmobilizedTrait.class).imob = true;
+                myControl.queuedAttack = false;
+                myControl.attacking = false;
+                myControl.jumping = false;
+                myControl.landing = false;
                 v.x -= 5000;
                 v.y += 5000;
             }
