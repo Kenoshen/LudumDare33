@@ -104,6 +104,7 @@ public class ControlTrait extends Trait implements AnimationCallback {
         if (health.health <= 0) {
             System.out.println("I'M FUCKING DEAD");
             animator.changeStateIfUnique("death", false);
+            SoundLibrary.GetSound("Player_Death").play();
             dead = true;
             physical.setActive(false);
             return;

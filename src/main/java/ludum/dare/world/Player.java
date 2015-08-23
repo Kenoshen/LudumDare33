@@ -61,6 +61,8 @@ public class Player extends GameObject {
         float width = 12;
         float height = 12;
 
+        SoundLibrary.GetSound("Player_Death");
+
         traits.add(new PositionTrait(this, x, y, z));
         traits.add(new DrawableTrait(this));
         traits.add(new CollidableTrait(this, collisionFunc));
@@ -325,7 +327,12 @@ public class Player extends GameObject {
         ControlTrait myControl = getTrait(ControlTrait.class);
         if(o instanceof EnemyBasic){
 
-            SoundLibrary.GetSound("Get_Hit").play();
+            HealthTrait healthTrait = getTrait(HealthTrait.class);
+            if(healthTrait != null) {
+                if (healthTrait.health > 0) {
+                    SoundLibrary.GetSound("Get_Hit").play();
+                }
+            }
 
             if (getTrait(PositionTrait.class).x < o.getTrait(PositionTrait.class).x
                     && getTrait(PositionTrait.class).y < o.getTrait(PositionTrait.class).y){
