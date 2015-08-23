@@ -65,7 +65,7 @@ public class GameScreen implements Screen {
     public GameScreen(final Game game, Level level){
 
         music = SoundLibrary.GetMusic("Main_Song");
-        music.setVolume(1);
+        music.setVolume(.5f);
         music.play();
 
         this.game = game;
