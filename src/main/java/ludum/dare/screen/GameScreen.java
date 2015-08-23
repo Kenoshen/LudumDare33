@@ -2,6 +2,7 @@ package ludum.dare.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -47,6 +48,8 @@ public class GameScreen implements Screen {
     private SpriteBatch batch;
     private ShapeRenderer shaper;
 
+    private Music introMusic;
+
     List<Tups.Tup2<GameObject, GameObject>> listCollisions;
 
     public List<GameObject> gameObjects = new ArrayList<>();
@@ -57,6 +60,13 @@ public class GameScreen implements Screen {
     ShaderProgram program;
 
     public GameScreen(final Game game, Level level){
+
+        if (level.name().equals("TestLevel3")){
+            introMusic = Gdx.audio.newMusic(Gdx.files.internal("music/Main_song.ogg"));
+            introMusic.setVolume(1);
+            introMusic.play();
+        }
+
         this.game = game;
         //
         camera = new FollowOrthoCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
