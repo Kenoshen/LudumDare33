@@ -62,10 +62,16 @@ public class AnimatorTrait extends Trait {
     }
 
     public boolean setState(String state, boolean loop){
+        return setState(state, loop, false);
+    }
+
+    public boolean setState(String state, boolean loop, boolean keepTime) {
         if (state != null && states.containsKey(state)){
             this.state = state;
             this.loop = loop;
-            curTimer = 0;
+            if (!keepTime) {
+                curTimer = 0;
+            }
             return true;
         } else {
             // return false; // TODO: maybe use the true/false thing instead of an exception?
