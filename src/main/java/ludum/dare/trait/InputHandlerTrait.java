@@ -71,6 +71,9 @@ public class InputHandlerTrait extends Trait implements CMouseEventHandler, CKey
                 control.requestMove(ControlAction.ATTACK);
             } else {
                 // currently run has been removed. Only walk. Standby.
+                if (keyboard.isKeyJustPressed(KeyboardKey.SPACE)) {
+                    control.requestMove(ControlAction.JUMP);
+                }
                 if (keyboard.isKeyBeingPressed(KeyboardKey.LEFT) || keyboard.isKeyBeingPressed(KeyboardKey.A)) {
                     if (keyboard.isKeyBeingPressed(KeyboardKey.LEFT_SHIFT) || keyboard.isKeyBeingPressed(KeyboardKey.RIGHT_SHIFT)) {
                         control.requestMove(ControlAction.LEFT);

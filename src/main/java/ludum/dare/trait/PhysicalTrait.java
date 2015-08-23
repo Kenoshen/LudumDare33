@@ -12,10 +12,12 @@ public class PhysicalTrait extends Trait {
 
     public CBody<?> body;
     private PositionTrait pos;
+    private Vector2 offset;
 
     public PhysicalTrait(GameObject obj, CBody<?> body) {
         super(obj);
         this.body = body;
+        offset = new Vector2(0,0);
     }
 
     @Override
@@ -34,8 +36,8 @@ public class PhysicalTrait extends Trait {
     public void step(){
         if (pos != null) {
             Vector2 p = body.getPosition();
-            pos.x = p.x;
-            pos.y = p.y;
+            pos.x = p.x + offset.x;
+            pos.y = p.y + offset.y;
             pos.rotation = (float)Math.toDegrees(body.getAngle());
         }
     }
@@ -44,4 +46,8 @@ public class PhysicalTrait extends Trait {
         body.removeFromWorld();
     }
 
+    public void setOffset(int x, float y) {
+        offset.x = x;
+        offset.y = y;
+    }
 }
