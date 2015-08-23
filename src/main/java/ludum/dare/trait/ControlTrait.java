@@ -132,6 +132,9 @@ public class ControlTrait extends Trait implements AnimationCallback {
             } else {
                 attacking = false;
             }
+        } else if (name.equals("punch2")) {
+            queuedAttack = false;
+            attacking = false;
         } else {
             attacking = false;
         }

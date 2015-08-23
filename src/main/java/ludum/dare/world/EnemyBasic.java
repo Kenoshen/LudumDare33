@@ -25,15 +25,14 @@ public class EnemyBasic extends GameObject{
 
     public EnemyBasic(float x, float y, float z, float width, float height){
         traits.add(new PositionTrait(this, x, y, z));
-//        traits.add(new SizeTrait(this, width, height));
         traits.add(new DrawableTrait(this));
 
         AnimationBundle bundle = new AnimationBundle();
 
-        final NamedAnimation animation = new NamedAnimation("stand", .1f,AtlasManager.instance.getAtlas("bot").findRegions("stand/botStand"), AtlasManager.instance.getAtlas("bot").findRegions("stand/botStand"), new Vector2(0, -.7f), new Vector2(6, 6));
+        final NamedAnimation animation = new NamedAnimation("stand", .1f,AtlasManager.instance.getAtlas("bot").findRegions("stand/botStand"), AtlasManager.instance.getAtlas("bot").findRegions("stand/botStand"), new Vector2(0, -.7f), new Vector2(width, height));
         bundle.addNamedAnimation(animation);
-        bundle.addNamedAnimation(new NamedAnimation("walk", .1f,AtlasManager.instance.getAtlas("bot").findRegions("walk/botWalk"), AtlasManager.instance.getAtlas("bot").findRegions("walk/botWalk"), new Vector2(0, -.7f), new Vector2(6, 6)));
-        bundle.addNamedAnimation(new NamedAnimation("hit", .1f,AtlasManager.instance.getAtlas("bot").findRegions("hit/botHit"), AtlasManager.instance.getAtlas("bot").findRegions("hit/botHit"), new Vector2(0, -.7f), new Vector2(9, 6)));
+        bundle.addNamedAnimation(new NamedAnimation("walk", .1f,AtlasManager.instance.getAtlas("bot").findRegions("walk/botWalk"), AtlasManager.instance.getAtlas("bot").findRegions("walk/botWalk"), new Vector2(0, -.7f), new Vector2(width, height)));
+        bundle.addNamedAnimation(new NamedAnimation("hit", .1f,AtlasManager.instance.getAtlas("bot").findRegions("hit/botHit"), AtlasManager.instance.getAtlas("bot").findRegions("hit/botHit"), new Vector2(0, -.7f), new Vector2(width * 1.5f, height)));
 
         animator = new AnimatorTrait(this, bundle.getAnimations());
         traits.add(animator);
@@ -49,7 +48,7 @@ public class EnemyBasic extends GameObject{
         bd.position.x = x;
         bd.position.y = y;
         bd.fixedRotation = true;
-        CBody body = new BoxBody(width, height).init(fd, bd);
+        CBody body = new BoxBody((width/2)/3, (height/2)).init(fd, bd);
         physical = new PhysicalTrait(this, body);
         traits.add(physical);
 
