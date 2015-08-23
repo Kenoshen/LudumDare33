@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
+import com.winger.log.HTMLLogger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +13,8 @@ import java.util.Map;
  * Created by mwingfield on 8/10/15.
  */
 public class AtlasManager {
+
+    private static final HTMLLogger log = HTMLLogger.getLogger(HTMLLogger.class);
 
     public static final AtlasManager instance = new AtlasManager();
 
@@ -39,6 +42,7 @@ public class AtlasManager {
             throw new RuntimeException("Atlas cannot have a null or empty name");
         }
         atlases.put(name, atlas);
+        log.info("Load Atlas: " + name);
     }
 
     public TextureAtlas.AtlasRegion findRegion(String name){
