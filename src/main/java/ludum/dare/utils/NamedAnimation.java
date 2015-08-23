@@ -10,7 +10,7 @@ import com.winger.struct.Tups;
 /**
  * Created by Admin on 8/21/2015.
  */
-public class NamedAnimation extends Animation{
+public class NamedAnimation {
     private Animation animation;
     private Animation normalAnimation;
     private String name;
@@ -74,5 +74,9 @@ public class NamedAnimation extends Animation{
 
     public Vector2 getSize() {
         return size;
+    }
+
+    public boolean isAnimationFinished(float stateTime){
+        return animation.isAnimationFinished(stateTime);
     }
 }

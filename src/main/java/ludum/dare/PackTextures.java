@@ -18,6 +18,7 @@ public class PackTextures
         TexturePacker.process(settings, "src/main/resources/imgs/game/bum", "src/main/resources/packed", "bum");
         TexturePacker.process(settings, "src/main/resources/imgs/game/bum_n", "src/main/resources/packed", "bum_n");
         TexturePacker.process(settings, "src/main/resources/imgs/game/bot", "src/main/resources/packed", "bot");
+        TexturePacker.process(settings, "src/main/resources/imgs/game/bot_n", "src/main/resources/packed", "bot_n");
         TexturePacker.process(settings, "src/main/resources/imgs/game/misc", "src/main/resources/packed", "misc");
         System.out.println("Finished packing textures");
     }
