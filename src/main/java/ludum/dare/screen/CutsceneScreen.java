@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Align;
 import com.winger.input.raw.CKeyboard;
 import com.winger.input.raw.state.KeyboardKey;
 import ludum.dare.Game;
+import ludum.dare.utils.AtlasManager;
 import ludum.dare.utils.SkinManager;
 import ludum.dare.world.SoundLibrary;
 
@@ -69,6 +70,8 @@ public class CutsceneScreen implements Screen {
 
     @Override
     public void show() {
+        AtlasManager.instance.loadAtlasAsynch("packed/game.atlas");
+        AtlasManager.instance.loadAtlasAsynch("packed/game_n.atlas");
         for (Label l : listStoryText) {
             l.addAction(Actions.alpha(0));
         }
@@ -119,13 +122,20 @@ public class CutsceneScreen implements Screen {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        AtlasManager.instance.update();
+//        private float updateTimer = 0;
+//        updateTimer -= delta;
+//        if (updateTimer < 0) {
+//            updateTimer = .05f;
+//            AtlasManager.instance.update();
+//        }
+
         stage.act();
         stage.draw();
 
         keyboard.update();
 
         if (keyboard.isKeyJustPressed(KeyboardKey.S)) {
-            introMusic.stop();
             game.setScreen(new SplashScreen(game));
         }
 
