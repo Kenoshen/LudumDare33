@@ -117,7 +117,10 @@ public class ControlTraitEnemy extends Trait implements AnimationCallback {
         }
         if(vel.x == 0 && vel.y == 0) {
             if (System.currentTimeMillis() - lastAttacked >= attackTime) {
-                SoundLibrary.GetSound("Ground_Pound").play();
+                if (self instanceof EnemyBasic) {
+                } else if (self instanceof EnemyHeavy) {
+                    SoundLibrary.GetSound("Ground_Pound").play();
+                }
                 animator.setState("hit", false);
                 attacking = true;
                 lastAttacked = System.currentTimeMillis();

@@ -39,6 +39,7 @@ public class EnemyBasic extends GameObject{
             if (health != null) {
                 health.damage(10, EnemyBasic.this);
             }
+            SoundLibrary.GetSound("Punch_Hit").play();
         }
     };
     private HealthCallback healthCallback = new HealthCallback() {
@@ -63,7 +64,7 @@ public class EnemyBasic extends GameObject{
         traits.add(new ControlTraitEnemy(this, 7, 9, 1.5f));
         traits.add(new ImmobilizedTrait(this));
 
-        traits.add(new HealthTrait(this, 80, healthCallback));
+        traits.add(new HealthTrait(this, 50, healthCallback));
 
         AnimationBundle bundle = new AnimationBundle();
 
@@ -88,10 +89,6 @@ public class EnemyBasic extends GameObject{
 
         walkSequence.frames = new CollisionGroup[] {walkGroup, walkGroup, walkGroup, walkGroup};
         bundle.addHurtboxSequence(walkSequence);
-
-        bundle.addNamedAnimation(new NamedAnimation("lightPain", .1f, AtlasManager.instance.findRegions("bot/pain/botPain"),
-                AtlasManager.instance.findRegions("bot/pain/botPain_n"), new Vector2(0, 0), new Vector2(width, height)));
-
 
         bundle.addNamedAnimation(new NamedAnimation("hit", .1f, AtlasManager.instance.findRegions("bot/hit/botHit"),
                 AtlasManager.instance.findRegions("bot/hit/botHit_n"), new Vector2(0, -.7f), new Vector2(width * 1.5f, height)));

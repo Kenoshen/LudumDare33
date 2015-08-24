@@ -49,7 +49,6 @@ public class InteractableGenerator {
         o.addAndInitializeTrait(new CollectableTrait(o, new Runnable() {
             @Override
             public void run() {
-                System.out.println("Collision!");
             }
         }));
 
@@ -86,7 +85,6 @@ public class InteractableGenerator {
         o.addAndInitializeTrait(new CollectableTrait(o, new Runnable() {
             @Override
             public void run() {
-                System.out.println("Collision!");
             }
         }));
 
