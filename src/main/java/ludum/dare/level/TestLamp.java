@@ -1,18 +1,13 @@
 package ludum.dare.level;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.winger.input.raw.CKeyboard;
 import com.winger.input.raw.CMouse;
-import com.winger.utils.RandomUtils;
-import javafx.scene.effect.Light;
-import ludum.dare.collision.AnimationBundle;
 import ludum.dare.trait.*;
 import ludum.dare.utils.AtlasManager;
-import ludum.dare.utils.NamedAnimation;
 import ludum.dare.utils.Sprite;
-import ludum.dare.world.*;
+import ludum.dare.world.BlankObject;
+import ludum.dare.world.Player;
 
 import java.util.ArrayList;
 import java.util.List;
