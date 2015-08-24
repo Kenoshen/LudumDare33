@@ -57,6 +57,11 @@ public class Player extends GameObject {
         public void healthRegained(int amount, GameObject from) {
 
         }
+
+        @Override
+        public void died() {
+
+        }
     };
 
     public Player(float x, float y, float z, CMouse mouse, CKeyboard keyboard, CGamePad gamepad) {
