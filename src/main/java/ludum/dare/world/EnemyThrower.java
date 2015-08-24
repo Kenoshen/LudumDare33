@@ -97,7 +97,5 @@ public class EnemyThrower extends GameObject{
         traits.add(physical);
 
         traits.add(new DebugTrait(this));
-
-        initializeTraits();
     }
 }

@@ -23,6 +23,8 @@ public class TestSubLevels extends Level{
     private float halfScreenWidth = 24;
     private float halfScreenHeight = 13.5f;
 
+    List<GameObject> objs;
+
     private Player player;
 
     @Override
@@ -50,102 +52,181 @@ public class TestSubLevels extends Level{
 
 
     private List<GameObject> section0(){
-        List<GameObject> objs = new ArrayList<>();
+        objs = new ArrayList<>();
 
-        final CameraTarget target = new CameraTarget(0, 0);
-        objs.add(target);
-
-        objs.add(newBottomBoundary(0));
-        objs.add(path(-halfScreenWidth, -halfScreenHeight, -halfScreenWidth, -3, halfScreenWidth, -1));
-
-        objs.add(new Background(0, 0.01f, "environment/background"));
-        objs.add(new Background(0, "environment/background_one"));
-
+        sectionSetup(0, "background_one");
         player = new Player(0, -5, 0, CMouse.instance, CKeyboard.instance, null);
         objs.add(player);
+        path(0, new Vector2(0, -3), new Vector2(screenWidth, -1));
+        light(new Color(0.5f, 0.5f, 1.0f, 1), 10, 1000, new Vector2(-7, 13), new Vector2(20, 13));
 
-        final Boundary rightSideBoundary = path(halfScreenWidth, -1, halfScreenWidth, -halfScreenHeight);
-        objs.add(rightSideBoundary);
+        float numOfSections = 8;
+        light(Color.RED.cpy(), 15, 1500 * numOfSections, new Vector2(-48, -13), new Vector2(48 * numOfSections, -13));
 
-        BlankObject lightPather = new BlankObject();
-        lightPather.traits.add(new PositionTrait(lightPather, 0, 13, 0));
-        LightTrait lt = new LightTrait(lightPather);
-        lt.z = 0.1f;
-        lightPather.traits.add(lt);
-        lightPather.traits.add(new PathFollowerTrait(lightPather, PathFollowerTrait.PathFollowStyle.LOOP, 0,
-                new Vector2(0, 13),
-                new Vector2(20, 13)));
-        lightPather.initializeTraits();
-        objs.add(lightPather);
-
-        BlankObject lightPather2 = new BlankObject();
-        lightPather2.traits.add(new PositionTrait(lightPather2, -50, -15, 0));
-        LightTrait lt2 = new LightTrait(lightPather2, Color.RED);
-        lt2.z = 0.01f;
-        lightPather2.traits.add(lt2);
-        PathFollowerTrait pft = new PathFollowerTrait(lightPather2, PathFollowerTrait.PathFollowStyle.LOOP, 0,
-                new Vector2(-50, -13),
-                new Vector2(96, -13));
-        pft.travelTimeInMilliseconds = 2000;
-        lightPather2.traits.add(pft);
-        lightPather2.initializeTraits();
-        objs.add(lightPather2);
-
-
-        final BlankObject trigger = new BlankObject();
-        trigger.addAndInitializeTrait(new UpdatableTrait(trigger, new Runnable() {
-            @Override
-            public void run() {
-                if (player.getTrait(PositionTrait.class).x > 13){
-                    trigger.markForDeletion();
-                    target.markForDeletion();
-                    rightSideBoundary.markForDeletion();
-                    GameScreen.addObjects(nextSection());
-                }
-            }
-        }));
-        objs.add(trigger);
 
         return objs;
     }
 
     private List<GameObject> section1(){
-        List<GameObject> objs = new ArrayList<>();
+        objs = new ArrayList<>();
 
-        final CameraTarget target = new CameraTarget(screenWidth, 0);
-        objs.add(target);
+        sectionSetup(1, "background_two");
 
-        objs.add(newBottomBoundary(1));
-        objs.add(path(-halfScreenWidth + screenWidth, -1, halfScreenWidth + screenWidth, -1));
+        path(1, new Vector2(0, -1), new Vector2(screenWidth, -1));
 
-        objs.add(new Background(1, "environment/background_two"));
+        light(Color.BLUE.cpy(), 20, 0, new Vector2(xOffset(1) + 13, 5));
 
-        Light light = new Light(screenWidth - 11, 5);
-        light.light.color = Color.BLUE;
-        light.light.attenuation.z = 20;
-        light.light.z = 0.1f;
-        objs.add(light);
-
-        final Boundary rightSideBoundary = path(halfScreenWidth + screenWidth, -1, halfScreenWidth + screenWidth, -halfScreenHeight);
-        objs.add(rightSideBoundary);
+        final Boundary rightSideBoundary = newRightSideBoundary(1);
+        enemyWaves(1, 2, EnemyWaveType.EASY, rightSideBoundary);
 
         return objs;
     }
 
-    private Boundary newBottomBoundary(int section){
-        float left = -halfScreenWidth + (section * screenWidth);
-        float right = left + screenWidth;
-        return new Boundary(new Vector2(left, -halfScreenHeight), new Vector2(right, -halfScreenHeight));
+    // //////////////////////////////////////////
+    // HELPER METHODS FOR CREATING LEVELS
+    // //////////////////////////////////////////
+    private enum EnemyWaveType{
+        EASY,
+        MEDIUM,
+        HARD
     }
 
-    private Boundary path(float... f){
-        if (f.length % 2 != 0){
-            throw new RuntimeException("Cannot have a vector2 path with an odd number of floats");
+
+    private void enemyWaves(int section, int number, EnemyWaveType type, final Boundary rightBoundary){
+        if (number <= 0){
+            throw new RuntimeException("Enemy waves has to be greater than 0");
         }
-        Vector2[] vs = new Vector2[f.length / 2];
-        for (int i = 0; i < f.length; i += 2){
-            vs[i / 2] = new Vector2(f[i], f[i+1]);
+        List<List<GameObject>> enemyWaves = new ArrayList<>();
+        for (int i = 0; i < number; i++){
+            List<GameObject> enemies = new ArrayList<>();
+            enemies.add(new EnemyThrower(xOffset(section) + halfScreenWidth, -5, 0));
+            enemyWaves.add(enemies);
         }
-        return new Boundary(vs);
+        for (int i = 0; i < number; i++){
+            final BlankObject trigger = new BlankObject();
+            objs.add(trigger);
+            final List<GameObject> curEnemyWave = enemyWaves.get(i);
+            if (i + 1 < number){
+                final List<GameObject> nextEnemyWave = enemyWaves.get(i + 1);
+                // call next wave
+                trigger.addAndInitializeTrait(new UpdatableTrait(trigger, new Runnable() {
+                    @Override
+                    public void run() {
+                        boolean allDead = true;
+                        for(GameObject obj : curEnemyWave){
+                            if (! obj.shouldBeDeleted()){
+                                allDead = false;
+                                break;
+                            }
+                        }
+                        if (allDead){
+                            for(GameObject obj : nextEnemyWave){
+                                obj.initializeTraits();
+                            }
+                            GameScreen.addObjects(nextEnemyWave);
+                            trigger.markForDeletion();
+                        }
+                    }
+                }));
+            }else {
+                // delete boundary when they all die instead of call next wave
+                trigger.addAndInitializeTrait(new UpdatableTrait(trigger, new Runnable() {
+                    @Override
+                    public void run() {
+                        boolean allDead = true;
+                        for(GameObject obj : curEnemyWave){
+                            if (! obj.shouldBeDeleted()){
+                                allDead = false;
+                                break;
+                            }
+                        }
+                        if (allDead){
+                            rightBoundary.markForDeletion();
+                            trigger.markForDeletion();
+                        }
+                    }
+                }));
+            }
+        }
+        for(GameObject obj : enemyWaves.get(0)){
+            obj.initializeTraits();
+        }
+        GameScreen.addObjects(enemyWaves.get(0));
+    }
+
+
+    private void sectionSetup(final int section, String background){
+        objs.add(new Background(section, 0.01f, "environment/background"));
+        objs.add(new Background(section, "environment/" + background));
+        newBottomBoundary(section);
+
+
+        final CameraTarget target = new CameraTarget(xOffset(section) + halfScreenWidth, 0);
+        objs.add(target);
+
+        final BlankObject trigger = new BlankObject();
+        trigger.addAndInitializeTrait(new UpdatableTrait(trigger, new Runnable() {
+            @Override
+            public void run() {
+                if (player.getTrait(PositionTrait.class).x > (xOffset(section + 1) + 3)) {
+                    trigger.markForDeletion();
+                    target.markForDeletion();
+                    GameScreen.addObjects(nextSection());
+                }
+            }
+        }));
+        objs.add(trigger);
+    }
+
+    private Boundary newBottomBoundary(int section){
+        float left = xOffset(section);
+        float right = left + screenWidth;
+        Boundary b = new Boundary(new Vector2(left - 5, halfScreenHeight), new Vector2(left - 5, -halfScreenHeight), new Vector2(right, -halfScreenHeight));
+        objs.add(b);
+        return b;
+    }
+
+    private Boundary newRightSideBoundary(int section){
+        float left = xOffset(section);
+        float right = left + screenWidth;
+        Boundary b = new Boundary(new Vector2(right, halfScreenHeight), new Vector2(right, -halfScreenHeight));
+        objs.add(b);
+        return b;
+    }
+
+    private Boundary path(int section, Vector2... path){
+        float xOffset = xOffset(section);
+        Vector2[] vs = new Vector2[path.length];
+        for (int i = 0; i < path.length; i++){
+            vs[i] = new Vector2(path[i].x + xOffset, path[i].y);
+        }
+        Boundary b = new Boundary(vs);
+        objs.add(b);
+        return b;
+    }
+
+    private void light(Color color, int weakness, float travelTime, Vector2... path){
+        if (path.length == 1){
+            Vector2 tmp = new Vector2(path[0].x, path[0].y);
+            path = new Vector2[2];
+            path[0] = tmp.cpy();
+            path[1] = tmp.cpy();
+        }
+
+        BlankObject lp = new BlankObject();
+        lp.traits.add(new PositionTrait(lp, path[0].x, path[0].y, 0));
+        LightTrait lt = new LightTrait(lp, color);
+        lt.z = 0.01f;
+        lt.attenuation.z = weakness;
+        lp.traits.add(lt);
+        PathFollowerTrait pft = new PathFollowerTrait(lp, PathFollowerTrait.PathFollowStyle.LOOP, 0, path);
+        pft.travelTimeInMilliseconds = travelTime;
+        lp.traits.add(pft);
+        lp.initializeTraits();
+        objs.add(lp);
+    }
+
+    private float xOffset(int section){
+        return (section * screenWidth) - halfScreenWidth;
     }
 }
