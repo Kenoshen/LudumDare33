@@ -2,9 +2,7 @@ package ludum.dare.trait;
 
 import com.badlogic.gdx.math.MathUtils;
 import ludum.dare.screen.GameScreen;
-import ludum.dare.world.Boss;
-import ludum.dare.world.EnemyBasic;
-import ludum.dare.world.SoundLibrary;
+import ludum.dare.world.*;
 
 /**
  * Created by Admin on 8/24/2015.
@@ -21,6 +19,9 @@ public class BossTrait extends Trait {
     private float shotSpeed = .75f;
     private boolean soundPlayed = false;
 
+    private int explosions = 0;
+    private float boomSpeed = .4f;
+
     private float spawnRate = 1f;
     private int spawnedEnemies = 0;
 
@@ -29,7 +30,7 @@ public class BossTrait extends Trait {
         CAN_2_ATTACK,
         SPAWN,
         RESET,
-        WAIT
+        DEFEAT, WAIT
     }
 
     public BossTrait(Boss boss) {
@@ -51,6 +52,24 @@ public class BossTrait extends Trait {
                 state = State.RESET;
             } else {
                 return;
+            }
+        }
+
+        if (!state.equals(State.DEFEAT) && boss.can1.getTrait(HealthTrait.class).health <= 0 && boss.can2.getTrait(HealthTrait.class).health <= 0) {
+            state = State.DEFEAT;
+            elapsedTime = 0;
+        }
+
+        if (state.equals(State.DEFEAT)) {
+            if (explosions < 5) {
+                if (elapsedTime > explosions * boomSpeed + MathUtils.random(-.3f, .3f)) {
+                    explosions++;
+                    GameScreen.addObject(new Explosion(20, 1.5f, 30 + MathUtils.random(-5, 5)));
+                    SoundLibrary.GetSound("Robot_Death").play();
+                    if (explosions == 3) {
+                        GameScreen.addObject(new HollInTheWall(20, 2, 8));
+                    }
+                }
             }
         }
 

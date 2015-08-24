@@ -125,7 +125,7 @@ public class EnemyBasic extends GameObject{
         bundle.addNamedAnimation(new NamedAnimation("heavyPain", .1f, AtlasManager.instance.findRegions("bot/heavyPain/botPain"),
                 AtlasManager.instance.findRegions("bot/heavyPain/botPain_n"), new Vector2(0, 0), new Vector2(width, height)));
         bundle.addNamedAnimation(new NamedAnimation("die", .1f, AtlasManager.instance.findRegions("bot/die/botDie"),
-                AtlasManager.instance.findRegions("bot/die/botDie_n"), new Vector2(0, 0), new Vector2(width, height)));
+                AtlasManager.instance.findRegions("bot/die/botDie_n"), new Vector2(0, 0), new Vector2(width*1.5f, height)));
 
 
         animator = new AnimatorTrait(this, bundle.getAnimations());
