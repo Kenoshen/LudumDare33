@@ -1,7 +1,9 @@
 package ludum.dare.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -32,35 +34,41 @@ public class ComicCutsceneScreen implements Screen {
     private int currentAnimation = 0;
     private float stateTime = 0;
     private float totalTime = 0;
-    private List<Animation> animations = new ArrayList<>();
+    private List<Tups.Tup2<Animation, Float>> animations = new ArrayList<>();
     private Sprite sprite;
     private List<Tups.Tup2<Float, Sound>> sounds = new ArrayList<>();
+    private Music music;
 
-
+    private boolean fade = false;
 
     public ComicCutsceneScreen(Game game){
+        music = SoundLibrary.GetMusic("rain");
 
-        AtlasManager.instance.loadAtlas("packed/game.atlas");
         this.game = game;
         stage = new Stage();
 
         sprite = new Sprite();
 
-        animations.add(new Animation(0.1f, AtlasManager.instance.findRegions("bum/stand/bumStand"), Animation.PlayMode.NORMAL));
-        animations.add(new Animation(0.1f, AtlasManager.instance.findRegions("bum/jump/bumJump"), Animation.PlayMode.NORMAL));
-        animations.add(new Animation(0.1f, AtlasManager.instance.findRegions("bum/walk/bumWalk"), Animation.PlayMode.NORMAL));
+        animations.add(Tups.tup2(new Animation(0.1f, AtlasManager.instance.findRegions("1firstPanel"), Animation.PlayMode.LOOP), 3.0f));
+        animations.add(Tups.tup2(new Animation(0.1f, AtlasManager.instance.findRegions("2fourthPanel"), Animation.PlayMode.LOOP), 3.0f));
+        animations.add(Tups.tup2(new Animation(0.1f, AtlasManager.instance.findRegions("3secondPanel"), Animation.PlayMode.NORMAL), 0.0f));
+        animations.add(Tups.tup2(new Animation(0.1f, AtlasManager.instance.findRegions("4thirdPanel"), Animation.PlayMode.LOOP), 3.0f));
+        animations.add(Tups.tup2(new Animation(0.1f, AtlasManager.instance.findRegions("5fourthPanel"), Animation.PlayMode.NORMAL), 0.0f));
+        animations.add(Tups.tup2(new Animation(0.1f, AtlasManager.instance.findRegions("6fifthPanel"), Animation.PlayMode.NORMAL), 0.0f));
+        animations.add(Tups.tup2(new Animation(0.1f, AtlasManager.instance.findRegions("7sixthPanel"), Animation.PlayMode.LOOP), 100.0f));
 
         Image tmpImage = new Image(new SpriteDrawable(sprite));
         tmpImage.setFillParent(true);
         stage.addActor(tmpImage);
 
-
-
-        sounds.add(Tups.tup2(1.0f, SoundLibrary.GetSound("Pop")));
+        sounds.add(Tups.tup2(6.5f, SoundLibrary.GetSound("Hit_Robot")));
+        sounds.add(Tups.tup2(12.0f, SoundLibrary.GetSound("lightningStrike")));
+        sounds.add(Tups.tup2(13.0f, SoundLibrary.GetSound("lightningStrike")));
     }
 
     @Override
     public void show() {
+        music.play();
     }
 
     @Override
@@ -72,12 +80,17 @@ public class ComicCutsceneScreen implements Screen {
         stateTime += delta;
 
         if (currentAnimation < animations.size()) {
-            sprite.setRegion(animations.get(currentAnimation).getKeyFrame(stateTime));
-            if (animations.get(currentAnimation).isAnimationFinished(stateTime)) {
-                if (animations.get(currentAnimation).getPlayMode() == Animation.PlayMode.NORMAL) {
+            sprite.setRegion(animations.get(currentAnimation).i1().getKeyFrame(stateTime));
+            if (animations.get(currentAnimation).i1().isAnimationFinished(stateTime)) {
+                if (animations.get(currentAnimation).i1().getPlayMode() == Animation.PlayMode.NORMAL || stateTime > animations.get(currentAnimation).i2()) {
                     currentAnimation++;
                     stateTime = 0;
                 }
+            }
+        }
+        if(!fade){
+            if (totalTime > 17) {
+                fade = true;
             }
         }
 
@@ -85,6 +98,15 @@ public class ComicCutsceneScreen implements Screen {
             if (sounds.get(0).i1() < totalTime){
                 sounds.get(0).i2().play();
                 sounds.remove(0);
+            }
+        }
+
+        log.debug(music.getVolume());
+        if (fade) {
+            music.setVolume(music.getVolume() - .008f);
+            if (music.getVolume() <= .1) {
+                music.stop();
+                game.setScreen(new CutsceneScreen(game));
             }
         }
 
