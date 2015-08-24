@@ -72,8 +72,6 @@ public class Player extends GameObject {
 
         ID = "Player";
 
-        traits.add(new LightTrait(this));
-
 
         AnimationBundle bundle = new AnimationBundle();
         bundle.addNamedAnimation(new NamedAnimation("stand", 0.1f,

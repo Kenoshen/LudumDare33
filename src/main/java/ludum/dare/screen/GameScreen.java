@@ -116,7 +116,7 @@ public class GameScreen implements Screen {
         //
         batch = new SpriteBatch();
         program = createShader();
-        //batch.setShader(program);
+        batch.setShader(program);
         shaper = new ShapeRenderer();
         //
         final GameScreen self = this;

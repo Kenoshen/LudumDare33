@@ -13,6 +13,7 @@ public class Background extends GameObject {
     public Background(float x, String backgroundName){
         traits.add(new PositionTrait(this, x * 48, 0, 0));
         Sprite s = new Sprite(AtlasManager.instance.findRegion(backgroundName));
+        s.setNormalRegion(AtlasManager.instance.findRegion(backgroundName));
         s.setSize(48, 27);
         traits.add(new DrawableTrait(this, s));
 

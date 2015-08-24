@@ -67,11 +67,16 @@ public class TestSubLevels extends Level{
         final Boundary rightSideBoundary = path(halfScreenWidth, -1, halfScreenWidth, -halfScreenHeight);
         objs.add(rightSideBoundary);
 
+
+        Light light = new Light(0, 0);
+        objs.add(light);
+
+
         final BlankObject trigger = new BlankObject();
         trigger.addAndInitializeTrait(new UpdatableTrait(trigger, new Runnable() {
             @Override
             public void run() {
-                if (player.getTrait(PositionTrait.class).x > 5){
+                if (player.getTrait(PositionTrait.class).x > 8){
                     trigger.markForDeletion();
                     target.markForDeletion();
                     rightSideBoundary.markForDeletion();
