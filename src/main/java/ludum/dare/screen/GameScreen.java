@@ -32,6 +32,8 @@ import ludum.dare.utils.AtlasManager;
 import ludum.dare.utils.SkinManager;
 import ludum.dare.utils.Sprite;
 import ludum.dare.world.AIHiveMind;
+import ludum.dare.world.Light;
+import ludum.dare.world.Player;
 import ludum.dare.world.SoundLibrary;
 
 import java.util.ArrayList;
@@ -45,7 +47,9 @@ import java.util.List;
 public class GameScreen implements Screen {
     private static final HTMLLogger log = HTMLLogger.getLogger(GameScreen.class, LogGroup.System);
 
+    private static final boolean DEBUG_DRAW = false;
     private static final int MAX_LIGHTS = 10;
+    private static final float DIST_FROM_CAM_BEFORE_DEATH = 96;
 
     private Game game;
     private Stage stage = new Stage();
@@ -60,6 +64,8 @@ public class GameScreen implements Screen {
     private ShapeRenderer shaper;
 
     private Music music;
+
+    Light blackLight;
 
     List<Tups.Tup2<GameObject, GameObject>> listCollisions;
 
@@ -141,6 +147,13 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
         //
         loadLevel(level);
+
+        blackLight = new Light(-1000000, -1000000);
+        blackLight.light.color = new Color(0, 0, 0, 0);
+        blackLight.light.ambientColor = new Color(0, 0, 0, 0);
+        blackLight.light.intensity = 0;
+        blackLight.light.z = 0.1f;
+        blackLight.light.attenuation = new Vector3(0, 0, 0);
     }
 
     private void loadLevel(Level level){
@@ -177,10 +190,13 @@ public class GameScreen implements Screen {
 
         stage.act();
 
+        Vector2 camPos = new Vector2(camera.position.x, camera.position.y);
+
         world.update(Conf.instance.worldStepTime());
         AIHiveMind.update();
         for (GameObject obj : gameObjects){
-            List<Trait> traits = obj.getTraits(InputHandlerTrait.class, ControlTrait.class, PhysicalTrait.class, DebugTrait.class, UpdatableTrait.class, PathFollowerTrait.class, MoveDirectionTrait.class, ControlTraitEnemy.class);
+            List<Trait> traits = obj.getTraits(InputHandlerTrait.class, ControlTrait.class, PhysicalTrait.class, DebugTrait.class, UpdatableTrait.class, PathFollowerTrait.class, MoveDirectionTrait.class, ControlTraitEnemy.class, PositionTrait.class);
+
             if (traits.get(0) != null) {
                 ((InputHandlerTrait) traits.get(0)).update();
             }
@@ -227,15 +243,22 @@ public class GameScreen implements Screen {
 
         int currentNumberOfLights = 0;
         for (GameObject obj : gameObjects){
-            List<Trait> traits = obj.getTraits(AnimatorTrait.class, DrawableTrait.class, TimedCollisionTrait.class, CameraFollowTrait.class, CollidableTrait.class, LightTrait.class);
+            List<Trait> traits = obj.getTraits(AnimatorTrait.class, DrawableTrait.class, TimedCollisionTrait.class, CameraFollowTrait.class, CollidableTrait.class, LightTrait.class, PositionTrait.class);
+            PositionTrait tmpPos = (PositionTrait)traits.get(6);
+            if (tmpPos != null){
+                Vector2 thingPos = new Vector2(tmpPos.x, tmpPos.y);
+                if (thingPos.sub(camPos).len() > DIST_FROM_CAM_BEFORE_DEATH){
+                    continue;
+                }
+            }
             if (traits.get(0) != null){
                 ((AnimatorTrait) traits.get(0)).update(delta);
             }
             if (traits.get(1) != null){
                 ((DrawableTrait) traits.get(1)).draw(batch);
             }
-            if (traits.get(2) != null){
-                ((TimedCollisionTrait) traits.get(2)).draw(shaper); // TODO: uncomment for debugging
+            if (traits.get(2) != null && DEBUG_DRAW){
+                ((TimedCollisionTrait) traits.get(2)).draw(shaper);
             }
             if (traits.get(3) != null){
                 ((CameraFollowTrait) traits.get(3)).updateCamera(camera);
@@ -245,7 +268,11 @@ public class GameScreen implements Screen {
             }
             if (traits.get(5) != null){
                 if (currentNumberOfLights < MAX_LIGHTS) {
-                    ((LightTrait) traits.get(5)).updateShaderProgram(program, currentNumberOfLights, camera).debug(shaper); // TODO: uncomment for debugging
+                    LightTrait lt = ((LightTrait) traits.get(5));
+                    lt.updateShaderProgram(program, currentNumberOfLights, camera);
+                    if (DEBUG_DRAW){
+                        lt.debug(shaper);
+                    }
                     currentNumberOfLights++;
                 } else {
                     log.debug("currentNumberOfLights("+ (currentNumberOfLights + 1) + ") cannot exceed MAX_LIGHTS("+ MAX_LIGHTS + ")");
@@ -253,12 +280,17 @@ public class GameScreen implements Screen {
             }
         }
 
+        for (int i = currentNumberOfLights; i < MAX_LIGHTS; i++){
+            blackLight.light.updateShaderProgram(program, currentNumberOfLights, camera);
+            currentNumberOfLights++;
+        }
+
         listCollisions.clear();
         batch.end();
         shaper.end();
 
-        if (world.debug()){
-            world.draw(); //TODO: uncomment for debugging
+        if (world.debug() && DEBUG_DRAW){
+            world.draw();
         }
 
         stage.draw();

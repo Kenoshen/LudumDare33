@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector3;
  * Created by mwingfield on 8/2/15.
  */
 public class LightTrait extends Trait {
-    private static final Color DEFAULT_AMBIENT_COLOR = new Color(0.03f, 0.03f, 0.03f, 1f);
+    private static final Color DEFAULT_AMBIENT_COLOR = new Color(0.1f, 0.1f, 0.1f, 1f);
     private static final Color DEFAULT_COLOR = new Color(1f, 1f, 1f, 1f);
     private static final Vector3 DEFAULT_ATTENUATION = new Vector3(0.5f, 0.5f, 15);
     private static final float DEFAULT_INTENSITY = 1f;
@@ -29,14 +29,14 @@ public class LightTrait extends Trait {
     public LightTrait(GameObject obj, Color color, Color ambientColor, float intensity, Vector3 attenuation){
         super(obj);
         this.color = color.cpy();
-        this.ambientColor = ambientColor;
+        this.ambientColor = ambientColor.cpy();
         this.intensity = intensity;
-        this.attenuation = attenuation;
+        this.attenuation = attenuation.cpy();
         this.z = DEFAULT_Z;
     }
 
     public LightTrait(GameObject obj, Color color, Color ambientColor, float intensity){
-        this(obj, color, ambientColor, intensity, DEFAULT_ATTENUATION);
+        this(obj, color, ambientColor, intensity, DEFAULT_ATTENUATION.cpy());
     }
 
     public LightTrait(GameObject obj, Color color, Color ambientColor){
@@ -44,11 +44,11 @@ public class LightTrait extends Trait {
     }
 
     public LightTrait(GameObject obj, Color color){
-        this(obj, color, DEFAULT_AMBIENT_COLOR);
+        this(obj, color, DEFAULT_AMBIENT_COLOR.cpy());
     }
 
     public LightTrait(GameObject obj){
-        this(obj, DEFAULT_COLOR);
+        this(obj, DEFAULT_COLOR.cpy());
     }
 
     public LightTrait setZ(float z){
@@ -74,7 +74,12 @@ public class LightTrait extends Trait {
         pScreen.z += z;
         program.setUniformf("light" + lightIndex, pScreen);
         program.setUniformf("lightColor" + lightIndex, new Vector3(color.r, color.g, color.b));
-        program.setUniformf("ambientColor" + lightIndex, new Vector3(ambientColor.r, ambientColor.g, ambientColor.b));
+        if (lightIndex == 0) {
+//            program.setUniformf("ambientColor" + lightIndex, new Vector3(ambientColor.r, ambientColor.g, ambientColor.b));
+            program.setUniformf("ambientColor" + lightIndex, new Vector3(DEFAULT_AMBIENT_COLOR.r, DEFAULT_AMBIENT_COLOR.g, DEFAULT_AMBIENT_COLOR.b));
+        } else {
+            program.setUniformf("ambientColor" + lightIndex, new Vector3(0, 0, 0));
+        }
         program.setUniformf("intensity" + lightIndex, intensity);
         program.setUniformf("attenuation" + lightIndex, attenuation);
         return this;

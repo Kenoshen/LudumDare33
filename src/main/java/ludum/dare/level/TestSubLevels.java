@@ -57,10 +57,11 @@ public class TestSubLevels extends Level{
         sectionSetup(0, "background_one");
         player = new Player(0, -5, 0, CMouse.instance, CKeyboard.instance, null);
         objs.add(player);
-
         path(0, new Vector2(0, -3), new Vector2(screenWidth, -1));
         light(new Color(0.5f, 0.5f, 1.0f, 1), 10, 1000, new Vector2(-7, 13), new Vector2(20, 13));
-        light(Color.RED.cpy(), 15, 2000, new Vector2(-50, -13), new Vector2(96, -13));
+
+        float numOfSections = 8;
+        light(Color.RED.cpy(), 15, 1500 * numOfSections, new Vector2(-48, -13), new Vector2(48 * numOfSections, -13));
 
 
         return objs;
