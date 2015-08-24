@@ -371,6 +371,12 @@ public class GameScreen implements Screen {
     }
 
     private void addObjectsToAdd(){
+        for(GameObject g : objsToAdd){
+            List things = g.getTraits(InputHandlerTrait.class, AITrait.class);
+            if (things.get(1)!= null){
+                AIHiveMind.addEnemy(g);
+            }
+        }
         gameObjects.addAll(objsToAdd);
         objsToAdd.clear();
     }

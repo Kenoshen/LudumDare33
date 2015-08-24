@@ -139,9 +139,6 @@ public class EnemyBasic extends GameObject{
         traits.add(physical);
 
         traits.add(new DebugTrait(this));
-
-
-        initializeTraits();
     }
     public void collidedWith(GameObject p){
         Vector2 v = new Vector2(0, 0);

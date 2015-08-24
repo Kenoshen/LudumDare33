@@ -77,7 +77,7 @@ public class TestSubLevels extends Level{
         light(Color.BLUE.cpy(), 20, 0, new Vector2(xOffset(1) + 13, 5));
 
         final Boundary rightSideBoundary = newRightSideBoundary(1);
-        enemyWaves(1, 1, EnemyWaveType.EASY, rightSideBoundary);
+        enemyWaves(1, 2, EnemyWaveType.EASY, rightSideBoundary);
 
         return objs;
     }
@@ -120,7 +120,11 @@ public class TestSubLevels extends Level{
                             }
                         }
                         if (allDead){
+                            for(GameObject obj : nextEnemyWave){
+                                obj.initializeTraits();
+                            }
                             GameScreen.addObjects(nextEnemyWave);
+                            trigger.markForDeletion();
                         }
                     }
                 }));
@@ -138,12 +142,15 @@ public class TestSubLevels extends Level{
                         }
                         if (allDead){
                             rightBoundary.markForDeletion();
+                            trigger.markForDeletion();
                         }
                     }
                 }));
             }
         }
-
+        for(GameObject obj : enemyWaves.get(0)){
+            obj.initializeTraits();
+        }
         GameScreen.addObjects(enemyWaves.get(0));
     }
 

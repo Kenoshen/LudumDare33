@@ -143,7 +143,5 @@ public class EnemyHeavy extends GameObject{
         traits.add(physical);
 
         traits.add(new DebugTrait(this));
-
-        initializeTraits();
     }
 }
