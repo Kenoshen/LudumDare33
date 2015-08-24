@@ -224,7 +224,7 @@ public class GameScreen implements Screen {
                 ((DrawableTrait) traits.get(1)).draw(batch);
             }
             if (traits.get(2) != null){
-                ((TimedCollisionTrait) traits.get(2)).draw(shaper);
+                //((TimedCollisionTrait) traits.get(2)).draw(shaper); // TODO: uncomment for debugging
             }
             if (traits.get(3) != null){
                 ((CameraFollowTrait) traits.get(3)).updateCamera(camera);
@@ -234,7 +234,7 @@ public class GameScreen implements Screen {
             }
             if (traits.get(5) != null){
                 if (currentNumberOfLights < MAX_LIGHTS) {
-                    ((LightTrait) traits.get(5)).updateShaderProgram(program, currentNumberOfLights, camera).debug(shaper);
+                    ((LightTrait) traits.get(5)).updateShaderProgram(program, currentNumberOfLights, camera);//.debug(shaper); // TODO: uncomment for debugging
                     currentNumberOfLights++;
                 } else {
                     log.debug("currentNumberOfLights("+ (currentNumberOfLights + 1) + ") cannot exceed MAX_LIGHTS("+ MAX_LIGHTS + ")");
@@ -247,7 +247,7 @@ public class GameScreen implements Screen {
         shaper.end();
 
         if (world.debug()){
-            world.draw();
+            //world.draw(); //TODO: uncomment for debugging
         }
 
         stage.draw();

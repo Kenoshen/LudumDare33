@@ -17,11 +17,13 @@ public class PackTextures
         TexturePacker.process(settings, "src/main/resources/imgs/ui/menu", "src/main/resources/packed", "ui");
         TexturePacker.process(settings, "src/main/resources/imgs/ui/background", "src/main/resources/packed", "ui-background");
         TexturePacker.process(settings, "src/main/resources/imgs/game/collectables", "src/main/resources/packed", "collectables");
+        TexturePacker.process(settings, "src/main/resources/imgs/game/collectables_n", "src/main/resources/packed", "collectables_n");
         TexturePacker.process(settings, "src/main/resources/imgs/game/bum", "src/main/resources/packed", "bum");
         TexturePacker.process(settings, "src/main/resources/imgs/game/bum_n", "src/main/resources/packed", "bum_n");
         TexturePacker.process(settings, "src/main/resources/imgs/game/bot", "src/main/resources/packed", "bot");
         TexturePacker.process(settings, "src/main/resources/imgs/game/bot_n", "src/main/resources/packed", "bot_n");
         TexturePacker.process(settings, "src/main/resources/imgs/game/spark", "src/main/resources/packed", "spark");
+        TexturePacker.process(settings, "src/main/resources/imgs/game/spark_n", "src/main/resources/packed", "spark_n");
         TexturePacker.process(settings, "src/main/resources/imgs/game/environment", "src/main/resources/packed", "environment");
         TexturePacker.process(settings, "src/main/resources/imgs/game/environment_n", "src/main/resources/packed", "environment_n");
 

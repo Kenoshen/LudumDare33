@@ -45,10 +45,19 @@ uniform vec3 ambientColor6;
 uniform vec3 ambientColor7;
 uniform vec3 ambientColor8;
 uniform vec3 ambientColor9;
+uniform vec3 attenuation0;
+uniform vec3 attenuation1;
+uniform vec3 attenuation2;
+uniform vec3 attenuation3;
+uniform vec3 attenuation4;
+uniform vec3 attenuation5;
+uniform vec3 attenuation6;
+uniform vec3 attenuation7;
+uniform vec3 attenuation8;
+uniform vec3 attenuation9;
 uniform vec2 resolution;
 uniform bool useNormals;
 uniform bool useShadow;
-uniform vec3 attenuation;
 uniform float strength;
 uniform bool yInvert;
 
@@ -74,7 +83,7 @@ void main() {
     float lambert = useNormals ? clamp(dot(normal, lightDir), 0.0, 1.0) : 1.0;
 
     float d = sqrt(dot(deltaPos, deltaPos));
-    float att = useShadow ? 1.0 / ( attenuation.x + (attenuation.y*d) + (attenuation.z*d*d) ) : 1.0;
+    float att = useShadow ? 1.0 / ( attenuation0.x + (attenuation0.y*d) + (attenuation0.z*d*d) ) : 1.0;
 
     vec3 result = (ambientColor0 * intensity0) + (lightColor0.rgb * lambert) * att;
     result *= color.rgb;
@@ -86,7 +95,7 @@ void main() {
     lambert = useNormals ? clamp(dot(normal, lightDir), 0.0, 1.0) : 1.0;
 
     d = sqrt(dot(deltaPos, deltaPos));
-    att = useShadow ? 1.0 / ( attenuation.x + (attenuation.y*d) + (attenuation.z*d*d) ) : 1.0;
+    att = useShadow ? 1.0 / ( attenuation1.x + (attenuation1.y*d) + (attenuation1.z*d*d) ) : 1.0;
 
     result = (ambientColor1 * intensity1) + (lightColor1.rgb * lambert) * att;
     result *= color.rgb;
@@ -98,7 +107,7 @@ void main() {
     lambert = useNormals ? clamp(dot(normal, lightDir), 0.0, 1.0) : 1.0;
 
     d = sqrt(dot(deltaPos, deltaPos));
-    att = useShadow ? 1.0 / ( attenuation.x + (attenuation.y*d) + (attenuation.z*d*d) ) : 1.0;
+    att = useShadow ? 1.0 / ( attenuation2.x + (attenuation2.y*d) + (attenuation2.z*d*d) ) : 1.0;
 
     result = (ambientColor2 * intensity2) + (lightColor2.rgb * lambert) * att;
     result *= color.rgb;
@@ -110,7 +119,7 @@ void main() {
     lambert = useNormals ? clamp(dot(normal, lightDir), 0.0, 1.0) : 1.0;
 
     d = sqrt(dot(deltaPos, deltaPos));
-    att = useShadow ? 1.0 / ( attenuation.x + (attenuation.y*d) + (attenuation.z*d*d) ) : 1.0;
+    att = useShadow ? 1.0 / ( attenuation3.x + (attenuation3.y*d) + (attenuation3.z*d*d) ) : 1.0;
 
     result = (ambientColor3 * intensity3) + (lightColor3.rgb * lambert) * att;
     result *= color.rgb;
@@ -122,7 +131,7 @@ void main() {
     lambert = useNormals ? clamp(dot(normal, lightDir), 0.0, 1.0) : 1.0;
 
     d = sqrt(dot(deltaPos, deltaPos));
-    att = useShadow ? 1.0 / ( attenuation.x + (attenuation.y*d) + (attenuation.z*d*d) ) : 1.0;
+    att = useShadow ? 1.0 / ( attenuation4.x + (attenuation4.y*d) + (attenuation4.z*d*d) ) : 1.0;
 
     result = (ambientColor4 * intensity4) + (lightColor4.rgb * lambert) * att;
     result *= color.rgb;
@@ -134,7 +143,7 @@ void main() {
     lambert = useNormals ? clamp(dot(normal, lightDir), 0.0, 1.0) : 1.0;
 
     d = sqrt(dot(deltaPos, deltaPos));
-    att = useShadow ? 1.0 / ( attenuation.x + (attenuation.y*d) + (attenuation.z*d*d) ) : 1.0;
+    att = useShadow ? 1.0 / ( attenuation5.x + (attenuation5.y*d) + (attenuation5.z*d*d) ) : 1.0;
 
     result = (ambientColor5 * intensity5) + (lightColor5.rgb * lambert) * att;
     result *= color.rgb;
@@ -146,7 +155,7 @@ void main() {
     lambert = useNormals ? clamp(dot(normal, lightDir), 0.0, 1.0) : 1.0;
 
     d = sqrt(dot(deltaPos, deltaPos));
-    att = useShadow ? 1.0 / ( attenuation.x + (attenuation.y*d) + (attenuation.z*d*d) ) : 1.0;
+    att = useShadow ? 1.0 / ( attenuation6.x + (attenuation6.y*d) + (attenuation6.z*d*d) ) : 1.0;
 
     result = (ambientColor6 * intensity6) + (lightColor6.rgb * lambert) * att;
     result *= color.rgb;
@@ -158,7 +167,7 @@ void main() {
     lambert = useNormals ? clamp(dot(normal, lightDir), 0.0, 1.0) : 1.0;
 
     d = sqrt(dot(deltaPos, deltaPos));
-    att = useShadow ? 1.0 / ( attenuation.x + (attenuation.y*d) + (attenuation.z*d*d) ) : 1.0;
+    att = useShadow ? 1.0 / ( attenuation7.x + (attenuation7.y*d) + (attenuation7.z*d*d) ) : 1.0;
 
     result = (ambientColor7 * intensity7) + (lightColor7.rgb * lambert) * att;
     result *= color.rgb;
@@ -170,7 +179,7 @@ void main() {
     lambert = useNormals ? clamp(dot(normal, lightDir), 0.0, 1.0) : 1.0;
 
     d = sqrt(dot(deltaPos, deltaPos));
-    att = useShadow ? 1.0 / ( attenuation.x + (attenuation.y*d) + (attenuation.z*d*d) ) : 1.0;
+    att = useShadow ? 1.0 / ( attenuation8.x + (attenuation8.y*d) + (attenuation8.z*d*d) ) : 1.0;
 
     result = (ambientColor8 * intensity8) + (lightColor8.rgb * lambert) * att;
     result *= color.rgb;
@@ -182,7 +191,7 @@ void main() {
     lambert = useNormals ? clamp(dot(normal, lightDir), 0.0, 1.0) : 1.0;
 
     d = sqrt(dot(deltaPos, deltaPos));
-    att = useShadow ? 1.0 / ( attenuation.x + (attenuation.y*d) + (attenuation.z*d*d) ) : 1.0;
+    att = useShadow ? 1.0 / ( attenuation9.x + (attenuation9.y*d) + (attenuation9.z*d*d) ) : 1.0;
 
     result = (ambientColor9 * intensity9) + (lightColor9.rgb * lambert) * att;
     result *= color.rgb;

@@ -54,12 +54,14 @@ public class Game extends com.badlogic.gdx.Game {
         //
         AtlasManager.instance.loadAtlas("packed/misc.atlas");
         AtlasManager.instance.loadAtlas("packed/collectables.atlas");
+        AtlasManager.instance.loadAtlas("packed/collectables_n.atlas");
 
         AtlasManager.instance.loadAtlas("packed/bum.atlas");
         AtlasManager.instance.loadAtlas("packed/bum_n.atlas");
         AtlasManager.instance.loadAtlas("packed/bot.atlas");
         AtlasManager.instance.loadAtlas("packed/bot_n.atlas");
         AtlasManager.instance.loadAtlas("packed/spark.atlas");
+        AtlasManager.instance.loadAtlas("packed/spark_n.atlas");
         AtlasManager.instance.loadAtlas("packed/environment.atlas");
         AtlasManager.instance.loadAtlas("packed/environment_n.atlas");
         //
@@ -68,7 +70,6 @@ public class Game extends com.badlogic.gdx.Game {
         //setScreen(new MainMenuScreen(this));
         setScreen(new GameScreen(this, new TestSubLevels()));
     }
-
 
     @Override
     public void render() {
