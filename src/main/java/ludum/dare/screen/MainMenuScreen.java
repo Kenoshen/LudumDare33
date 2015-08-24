@@ -53,7 +53,6 @@ public class MainMenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 TestSubLevels level = new TestSubLevels();
                 GameScreen screen = new GameScreen(game, level);
-                level.gameScreen = screen;
                 game.setScreen(screen);
             }
         });
