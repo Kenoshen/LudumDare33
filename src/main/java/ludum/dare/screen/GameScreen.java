@@ -89,7 +89,11 @@ public class GameScreen implements Screen {
                 y2 = ((PositionTrait) o2Traits.get(1)).y;
             }
 
-            return y1 >= y2 ? -1 : 1;
+            if (y1 == y2) {
+                return Integer.compare(o1.hashCode(), o2.hashCode());
+            } else {
+                return y1 > y2 ? -1 : 1;
+            }
         }
     };
 

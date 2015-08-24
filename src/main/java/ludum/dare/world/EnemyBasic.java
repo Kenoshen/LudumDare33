@@ -55,7 +55,7 @@ public class EnemyBasic extends GameObject{
         traits.add(new PositionTrait(this, x, y, z));
         traits.add(new DrawableTrait(this));
         traits.add(new CollidableTrait(this, collisionFunc));
-        traits.add(new ControlTraitEnemy(this));
+        traits.add(new ControlTraitEnemy(this, 7, 9));
         traits.add(new ImmobilizedTrait(this));
 
         traits.add(new HealthTrait(this, 80, healthCallback));

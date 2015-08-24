@@ -5,6 +5,7 @@ import com.winger.physics.body.BoxBody;
 import ludum.dare.Conf;
 import ludum.dare.utils.AnimationCallback;
 import ludum.dare.world.EnemyBasic;
+import ludum.dare.world.EnemyHeavy;
 import ludum.dare.world.Player;
 import ludum.dare.world.SoundLibrary;
 
@@ -28,8 +29,10 @@ public class ControlTraitEnemy extends Trait implements AnimationCallback {
 
     public boolean dead = false;
 
-    public ControlTraitEnemy(GameObject obj) {
+    public ControlTraitEnemy(GameObject obj, float speed, float minDist) {
         super(obj);
+        this.speed = speed;
+        this.minDist = minDist;
     }
 
     @Override
@@ -40,7 +43,11 @@ public class ControlTraitEnemy extends Trait implements AnimationCallback {
         animator.registerAnimationCallback(this);
         health = self.getTrait(HealthTrait.class);
         imob = self.getTrait(ImmobilizedTrait.class);
-        rightFacing = ((EnemyBasic)self).rightFacing;
+        if (self instanceof EnemyBasic) {
+            rightFacing = ((EnemyBasic) self).rightFacing;
+        } else if (self instanceof EnemyHeavy) {
+            rightFacing = ((EnemyHeavy)self).rightFacing;
+        }
 
         if (!(physical.body instanceof BoxBody)){
             throw new RuntimeException("InputHandlerTrait requires PhysicalTrait, but it also requires a BoxBody for the physicalTrait.body");
@@ -54,7 +61,12 @@ public class ControlTraitEnemy extends Trait implements AnimationCallback {
     }
 
     public void update() {
-        Vector2 target = ((EnemyBasic) self).target;
+        Vector2 target = new Vector2();
+        if (self instanceof EnemyBasic) {
+            target = ((EnemyBasic) self).target;
+        } else if (self instanceof EnemyHeavy) {
+            target = ((EnemyHeavy) self).target;
+        }
         Vector2 myPos = new Vector2(self.getTrait(PositionTrait.class).x, self.getTrait(PositionTrait.class).y) ;
         if(dead) {
             // wipe yo'self off. You dead.
