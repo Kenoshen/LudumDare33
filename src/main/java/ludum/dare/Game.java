@@ -53,23 +53,14 @@ public class Game extends com.badlogic.gdx.Game {
         SkinManager.instance.loadSkin("skins/menu-skin.json", "ui");
         //
         AtlasManager.instance.loadAtlas("packed/misc.atlas");
-        AtlasManager.instance.loadAtlas("packed/collectables.atlas");
-        AtlasManager.instance.loadAtlas("packed/collectables_n.atlas");
-
-        AtlasManager.instance.loadAtlas("packed/bum.atlas");
-        AtlasManager.instance.loadAtlas("packed/bum_n.atlas");
-        AtlasManager.instance.loadAtlas("packed/bot.atlas");
-        AtlasManager.instance.loadAtlas("packed/bot_n.atlas");
-        AtlasManager.instance.loadAtlas("packed/heavybot.atlas");
-        AtlasManager.instance.loadAtlas("packed/spark.atlas");
-        AtlasManager.instance.loadAtlas("packed/spark_n.atlas");
-        AtlasManager.instance.loadAtlas("packed/environment.atlas");
-        AtlasManager.instance.loadAtlas("packed/environment_n.atlas");
+        //
+        AtlasManager.instance.loadAtlas("packed/game.atlas");
+        AtlasManager.instance.loadAtlas("packed/game_n.atlas");
         //
         //setScreen(new CutsceneScreen(this));
-        //setScreen(new GameScreen(this, new TestLevel3()));
+        setScreen(new GameScreen(this, new DebugSprites()));
         //setScreen(new MainMenuScreen(this));
-        setScreen(new GameScreen(this, new TestSubLevels()));
+        //setScreen(new GameScreen(this, new TestSubLevels()));
     }
 
     @Override

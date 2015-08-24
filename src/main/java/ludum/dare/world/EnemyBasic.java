@@ -35,7 +35,6 @@ public class EnemyBasic extends GameObject{
             HealthTrait health = obj.getTrait(HealthTrait.class);
             if (health != null) {
                 health.damage(10, EnemyBasic.this);
-                System.out.println("doing deeps. Beep boop.");
             }
         }
     };
@@ -65,8 +64,8 @@ public class EnemyBasic extends GameObject{
 
         AnimationBundle bundle = new AnimationBundle();
 
-        bundle.addNamedAnimation(new NamedAnimation("stand", .1f, AtlasManager.instance.getAtlas("bot").findRegions("stand/botStand"),
-                AtlasManager.instance.getAtlas("bot").findRegions("stand/botStand"), new Vector2(0, -.7f), new Vector2(width, height)));
+        bundle.addNamedAnimation(new NamedAnimation("stand", .1f, AtlasManager.instance.findRegions("bot/stand/botStand"),
+                AtlasManager.instance.findRegions("bot/stand/botStand_n"), new Vector2(0, -.7f), new Vector2(width, height)));
         CollisionSequence standSequence = new CollisionSequence();
         standSequence.name = "stand";
 
@@ -76,8 +75,8 @@ public class EnemyBasic extends GameObject{
         standSequence.frames = new CollisionGroup[] {standGroup};
         bundle.addHurtboxSequence(standSequence);
 
-        bundle.addNamedAnimation(new NamedAnimation("walk", .1f, AtlasManager.instance.getAtlas("bot").findRegions("walk/botWalk"),
-                AtlasManager.instance.getAtlas("bot").findRegions("walk/botWalk"), new Vector2(0, -.7f), new Vector2(width, height)));
+        bundle.addNamedAnimation(new NamedAnimation("walk", .1f, AtlasManager.instance.findRegions("bot/walk/botWalk"),
+                AtlasManager.instance.findRegions("bot/walk/botWalk_n"), new Vector2(0, -.7f), new Vector2(width, height)));
         CollisionSequence walkSequence = new CollisionSequence();
         walkSequence.name = "walk";
 
@@ -87,12 +86,12 @@ public class EnemyBasic extends GameObject{
         walkSequence.frames = new CollisionGroup[] {walkGroup, walkGroup, walkGroup, walkGroup};
         bundle.addHurtboxSequence(walkSequence);
 
-        bundle.addNamedAnimation(new NamedAnimation("lightPain", .1f, AtlasManager.instance.getAtlas("bot").findRegions("pain/botPain"),
-                AtlasManager.instance.getAtlas("bot").findRegions("pain/botPain"), new Vector2(0, 0), new Vector2(width, height)));
+        bundle.addNamedAnimation(new NamedAnimation("lightPain", .1f, AtlasManager.instance.findRegions("bot/pain/botPain"),
+                AtlasManager.instance.findRegions("bot/pain/botPain_n"), new Vector2(0, 0), new Vector2(width, height)));
 
 
-        bundle.addNamedAnimation(new NamedAnimation("hit", .1f, AtlasManager.instance.getAtlas("bot").findRegions("hit/botHit"),
-                AtlasManager.instance.getAtlas("bot").findRegions("hit/botHit"), new Vector2(0, -.7f), new Vector2(width * 1.5f, height)));
+        bundle.addNamedAnimation(new NamedAnimation("hit", .1f, AtlasManager.instance.findRegions("bot/hit/botHit"),
+                AtlasManager.instance.findRegions("bot/hit/botHit_n"), new Vector2(0, -.7f), new Vector2(width * 1.5f, height)));
         CollisionSequence hitSequence = new CollisionSequence();
         hitSequence.name = "hit";
 
@@ -112,12 +111,12 @@ public class EnemyBasic extends GameObject{
         hurtSequence.frames = new CollisionGroup[] {hurtGroup, hurtGroup, hurtGroup, hurtGroup, hurtGroup, hurtGroup, hurtGroup, hurtGroup, hurtGroup};
         bundle.addHurtboxSequence(hurtSequence);
 
-        bundle.addNamedAnimation(new NamedAnimation("lightPain", .1f, AtlasManager.instance.getAtlas("bot").findRegions("lightPain/botPain"),
-                AtlasManager.instance.getAtlas("bot").findRegions("lightPain/botPain"), new Vector2(0, 0), new Vector2(width, height)));
-        bundle.addNamedAnimation(new NamedAnimation("heavyPain", .1f, AtlasManager.instance.getAtlas("bot").findRegions("heavyPain/botPain"),
-                AtlasManager.instance.getAtlas("bot").findRegions("heavyPain/botPain"), new Vector2(0, 0), new Vector2(width, height)));
-        bundle.addNamedAnimation(new NamedAnimation("die", .1f, AtlasManager.instance.getAtlas("bot").findRegions("die/botDie"),
-                AtlasManager.instance.getAtlas("bot").findRegions("die/botDie"), new Vector2(0, 0), new Vector2(width, height)));
+        bundle.addNamedAnimation(new NamedAnimation("lightPain", .1f, AtlasManager.instance.findRegions("bot/lightPain/botPain"),
+                AtlasManager.instance.findRegions("bot/lightPain/botPain_n"), new Vector2(0, 0), new Vector2(width, height)));
+        bundle.addNamedAnimation(new NamedAnimation("heavyPain", .1f, AtlasManager.instance.findRegions("bot/heavyPain/botPain"),
+                AtlasManager.instance.findRegions("bot/heavyPain/botPain_n"), new Vector2(0, 0), new Vector2(width, height)));
+        bundle.addNamedAnimation(new NamedAnimation("die", .1f, AtlasManager.instance.findRegions("bot/die/botDie"),
+                AtlasManager.instance.findRegions("bot/die/botDie_n"), new Vector2(0, 0), new Vector2(width, height)));
 
 
         animator = new AnimatorTrait(this, bundle.getAnimations());
@@ -152,7 +151,6 @@ public class EnemyBasic extends GameObject{
         String pAnimName = p.getTrait(AnimatorTrait.class).getCurrentAnimation().getName();
 
         if(pAnimName == "punch"){
-            System.out.println("I got punched");
             if(ePos.x < pPos.x && ePos.y < pPos.y){
                 hitFromRight = true;
                 v.x -= 3;

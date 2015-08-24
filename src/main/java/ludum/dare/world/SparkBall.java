@@ -44,7 +44,8 @@ public class SparkBall extends GameObject {
 
         AnimationBundle bundle = new AnimationBundle();
 
-        final NamedAnimation animation = new NamedAnimation("spark", .1f, AtlasManager.instance.getAtlas("spark").findRegions("spark/spark"), AtlasManager.instance.getAtlas("spark").findRegions("spark/spark"), new Vector2(0,0), new Vector2(size, size));
+        final NamedAnimation animation = new NamedAnimation("spark", .1f, AtlasManager.instance.findRegions("spark/spark/spark"),
+                AtlasManager.instance.findRegions("spark/spark/spark_n"), new Vector2(0,0), new Vector2(size, size));
         bundle.addNamedAnimation(animation);
 
         CollisionSequence hitSequence = new CollisionSequence();

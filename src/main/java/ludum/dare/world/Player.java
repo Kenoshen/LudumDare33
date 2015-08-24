@@ -75,13 +75,13 @@ public class Player extends GameObject {
 
         AnimationBundle bundle = new AnimationBundle();
         bundle.addNamedAnimation(new NamedAnimation("stand", 0.1f,
-                AtlasManager.instance.getAtlas("bum").findRegions("stand/bumStand"), AtlasManager.instance.getAtlas("bum_n").findRegions("stand/bumStand_n"),
+                AtlasManager.instance.findRegions("bum/stand/bumStand"), AtlasManager.instance.findRegions("bum/stand/bumStand_n"),
                 new Vector2(0, 0), new Vector2(width, height)));
         bundle.addNamedAnimation(new NamedAnimation("pain", .15f,
-                AtlasManager.instance.getAtlas("bum").findRegions("pain/bumPain"), AtlasManager.instance.getAtlas("bum").findRegions("pain/bumPain"),
+                AtlasManager.instance.findRegions("bum/pain/bumPain"), AtlasManager.instance.findRegions("bum/pain/bumPain_n"),
                 new Vector2(0, 0f), new Vector2(width, height)));
         bundle.addNamedAnimation(new NamedAnimation("backpain", .15f,
-                AtlasManager.instance.getAtlas("bum").findRegions("backpain/bumBackPain"), AtlasManager.instance.getAtlas("bum").findRegions("backpain/bumBackPain"),
+                AtlasManager.instance.findRegions("bum/backpain/bumBackPain"), AtlasManager.instance.findRegions("bum/backpain/bumBackPain_n"),
                 new Vector2(0, 0f), new Vector2(width, height)));
         CollisionSequence standSequence = new CollisionSequence();
         standSequence.name = "stand";
@@ -97,7 +97,7 @@ public class Player extends GameObject {
         bundle.addHurtboxSequence(standSequence);
 
         bundle.addNamedAnimation(new NamedAnimation("walk", 0.1f,
-                AtlasManager.instance.getAtlas("bum").findRegions("walk/bumWalk"), AtlasManager.instance.getAtlas("bum_n").findRegions("walk/bumWalk_n"),
+                AtlasManager.instance.findRegions("bum/walk/bumWalk"), AtlasManager.instance.findRegions("bum/walk/bumWalk_n"),
                 new Vector2(0, 0), new Vector2(width, height)));
         CollisionSequence walkSequence = new CollisionSequence();
         walkSequence.name = "walk";
@@ -113,7 +113,7 @@ public class Player extends GameObject {
         bundle.addHurtboxSequence(walkSequence);
 
         bundle.addNamedAnimation(new NamedAnimation("punch", 0.1f,
-                AtlasManager.instance.getAtlas("bum").findRegions("jab/bumJab"), AtlasManager.instance.getAtlas("bum_n").findRegions("jab/bumJab_n"),
+                AtlasManager.instance.findRegions("bum/jab/bumJab"), AtlasManager.instance.findRegions("bum/jab/bumJab_n"),
                 new Vector2(1.7f, 0), new Vector2(width * 1.25f, height)));
         CollisionSequence punchHurtSequence = new CollisionSequence();
         punchHurtSequence.name = "punch";
@@ -145,7 +145,7 @@ public class Player extends GameObject {
 
 
         bundle.addNamedAnimation(new NamedAnimation("punch2", 0.1f,
-                AtlasManager.instance.getAtlas("bum").findRegions("cross/bumCross"), AtlasManager.instance.getAtlas("bum_n").findRegions("cross/bumCross_n"),
+                AtlasManager.instance.findRegions("bum/cross/bumCross"), AtlasManager.instance.findRegions("bum/cross/bumCross_n"),
                 new Vector2(1.7f, 0), new Vector2(width * 1.25f, height)));
         CollisionSequence crossHurtSequence = new CollisionSequence();
         crossHurtSequence.name = "punch2";
@@ -180,7 +180,7 @@ public class Player extends GameObject {
         bundle.addHitboxSequence(crossSequence);
 
         bundle.addNamedAnimation(new NamedAnimation("jump", .1f,
-                AtlasManager.instance.getAtlas("bum").findRegions("jump/bumJump"), AtlasManager.instance.getAtlas("bum_n").findRegions("cross/bumCross_n"),
+                AtlasManager.instance.findRegions("bum/jump/bumJump"), AtlasManager.instance.findRegions("bum/cross/bumCross_n"),
                 new Vector2(0, 1.75f), new Vector2(width, height * 1.25f)));
         CollisionSequence jumpSequence = new CollisionSequence();
         jumpSequence.name = "jump";
@@ -209,7 +209,7 @@ public class Player extends GameObject {
         bundle.addHurtboxSequence(jumpSequence);
 
         bundle.addNamedAnimation(new NamedAnimation("jumpKick", .1f,
-                AtlasManager.instance.getAtlas("bum").findRegions("kick/bumKick"), AtlasManager.instance.getAtlas("bum_n").findRegions("cross/bumCross_n"),
+                AtlasManager.instance.findRegions("bum/kick/bumKick"), AtlasManager.instance.findRegions("bum/cross/bumCross_n"),
                 new Vector2(0, 1.75f), new Vector2(width, height * 1.25f)));
         CollisionSequence jumpkickSequence = new CollisionSequence();
         jumpkickSequence.name = "jumpKick";
@@ -264,7 +264,7 @@ public class Player extends GameObject {
 
 
         bundle.addNamedAnimation(new NamedAnimation("land", .1f,
-                AtlasManager.instance.getAtlas("bum").findRegions("land/bumLand"), AtlasManager.instance.getAtlas("bum_n").findRegions("cross/bumCross_n"),
+                AtlasManager.instance.findRegions("bum/land/bumLand"), AtlasManager.instance.findRegions("bum/cross/bumCross_n"),
                 new Vector2(0, 1.75f), new Vector2(width, height * 1.25f)));
         CollisionSequence landSequence = new CollisionSequence();
         landSequence.name = "land";
@@ -285,7 +285,7 @@ public class Player extends GameObject {
         bundle.addHurtboxSequence(landSequence);
 
         bundle.addNamedAnimation(new NamedAnimation("death", .1f,
-                AtlasManager.instance.getAtlas("bum").findRegions("death/bumDeath"), AtlasManager.instance.getAtlas("bum").findRegions("death/bumDeath"),
+                AtlasManager.instance.findRegions("bum/death/bumDeath"), AtlasManager.instance.findRegions("bum/death/bumDeath_n"),
                 new Vector2(5f, 0), new Vector2(width * 1.25f, height)));
 
 

@@ -354,7 +354,7 @@ public class GameScreen implements Screen {
     public void endGame(){
         Image fader = new Image(AtlasManager.instance.findRegion("white"));
         fader.setColor(Color.BLACK);
-        fader.setBounds(-100, -100, Gdx.graphics.getWidth() + 200, Gdx.graphics.getHeight() + 200);
+        fader.setBounds(-800, -800, Gdx.graphics.getWidth() + 1600, Gdx.graphics.getHeight() + 1600);
         fader.addAction(Actions.sequence(Actions.alpha(0),
                 Actions.fadeIn(2.5f),
                 Actions.delay(1.5f),

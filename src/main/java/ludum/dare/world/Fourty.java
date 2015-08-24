@@ -39,8 +39,8 @@ public class Fourty extends GameObject{
 
         AnimationBundle bundle = new AnimationBundle();
 
-        bundle.addNamedAnimation(new NamedAnimation("NOANIMATION", .1f, AtlasManager.instance.getAtlas("collectables").findRegions("40brown"),
-                AtlasManager.instance.getAtlas("collectables").findRegions("40brown"), new Vector2(0, 0), new Vector2(size, size*2)));
+        bundle.addNamedAnimation(new NamedAnimation("NOANIMATION", .1f, AtlasManager.instance.findRegions("collectables/40brown"),
+                AtlasManager.instance.findRegions("collectables/40brown_n"), new Vector2(0, 0), new Vector2(size, size*2)));
 
         CollisionSequence hitSequence = new CollisionSequence();
         hitSequence.name = "NOANIMATION";

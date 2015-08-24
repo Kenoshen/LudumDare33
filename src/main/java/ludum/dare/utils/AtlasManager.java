@@ -56,12 +56,12 @@ public class AtlasManager {
         return null;
     }
 
-    public TextureAtlas.AtlasRegion[] findRegions(String name){
+    public Array<TextureAtlas.AtlasRegion> findRegions(String name){
         for (String atlasName : atlases.keySet()){
             TextureAtlas atlas = atlases.get(atlasName);
             Array<TextureAtlas.AtlasRegion> regions = atlas.findRegions(name);
             if (regions != null && regions.size > 0){
-                return regions.toArray();
+                return regions;
             }
         }
         return null;
