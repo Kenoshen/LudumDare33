@@ -67,6 +67,16 @@ public class GameScreen implements Screen {
     private AIHiveMind AIHM = new AIHiveMind();
 
     ShaderProgram program;
+    private Comparator<? super GameObject> compare = new Comparator<GameObject>() {
+        @Override
+        public int compare(GameObject o1, GameObject o2) {
+            if (o1.getTrait(PhysicalTrait.class) != null && o2.getTrait(PhysicalTrait.class) != null) {
+                return o1.getTrait(PhysicalTrait.class).body.getPosition().y >= o2.getTrait(PhysicalTrait.class).body.getPosition().y ? -1 : 1;
+            } else {
+                return o1.getTrait(PositionTrait.class).y >= o2.getTrait(PositionTrait.class).y ? -1 : 1;
+            }
+        }
+    };
 
     public GameScreen(final Game game, Level level){
 
@@ -183,16 +193,7 @@ public class GameScreen implements Screen {
         batch.begin();
         shaper.begin(ShapeRenderer.ShapeType.Line);
 
-        Collections.sort(gameObjects, new Comparator<GameObject>() {
-            @Override
-            public int compare(GameObject o1, GameObject o2) {
-                if (o1.getTrait(PhysicalTrait.class) != null && o2.getTrait(PhysicalTrait.class) != null) {
-                    return o1.getTrait(PhysicalTrait.class).body.getPosition().y >= o2.getTrait(PhysicalTrait.class).body.getPosition().y ? -1 : 1;
-                } else {
-                    return o1.getTrait(PositionTrait.class).y >= o2.getTrait(PositionTrait.class).y ? -1 : 1;
-                }
-            }
-        });
+        Collections.sort(gameObjects, compare);
 
         int currentNumberOfLights = 0;
         for (GameObject obj : gameObjects){
