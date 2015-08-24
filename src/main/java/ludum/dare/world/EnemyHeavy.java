@@ -34,6 +34,9 @@ public class EnemyHeavy extends GameObject{
 
         traits.add(new HealthTrait(this, 50, null));
 
+        //This is to cache the sound
+        SoundLibrary.GetSound("Ground_Pound");
+
         AnimationBundle bundle = new AnimationBundle();
 
         final NamedAnimation animation = new NamedAnimation("stand", .1f,AtlasManager.instance.getAtlas("heavybot").findRegions("stand/heavyStand"), AtlasManager.instance.getAtlas("heavybot").findRegions("stand/heavyStand"), new Vector2(0, 0), new Vector2(width*1.5f, height));
