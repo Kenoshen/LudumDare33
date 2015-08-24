@@ -14,8 +14,6 @@ import ludum.dare.trait.*;
 import ludum.dare.utils.AtlasManager;
 import ludum.dare.utils.NamedAnimation;
 
-import javax.swing.text.Position;
-
 /**
  * Created by jake on 8/22/2015.
  */
@@ -23,6 +21,8 @@ public class ShockCan extends GameObject{
     private PhysicalTrait physical;
     public Vector2 target;
     private AnimatorTrait animator;
+
+    private boolean isRed = true;
 
 
     public ShockCan(float x, float y, float z){
@@ -35,7 +35,7 @@ public class ShockCan extends GameObject{
 
         AnimationBundle bundle = new AnimationBundle();
 
-        NamedAnimation red = new NamedAnimation("red", .1f,AtlasManager.instance.findRegions("box/boxRed"), AtlasManager.instance.findRegions("box/boxRed"), new Vector2(0, 0), new Vector2(size, size));
+        NamedAnimation red = new NamedAnimation("red", .1f,AtlasManager.instance.findRegions("box/boxRed"), AtlasManager.instance.findRegions("box/boxRed"), new Vector2(0, 0), new Vector2(size, size*2));
         bundle.addNamedAnimation(red);
         NamedAnimation redDent = new NamedAnimation("redDent", .1f,AtlasManager.instance.findRegions("box/boxRedDent"), AtlasManager.instance.findRegions("box/boxRedDent"), new Vector2(0, 0), new Vector2(size, size*2));
         bundle.addNamedAnimation(redDent);
@@ -50,7 +50,7 @@ public class ShockCan extends GameObject{
 
 
         CollisionGroup hurtGroup = new CollisionGroup();
-        hurtGroup.boxes = new Rectangle[] {new Rectangle(-6, -6, 12, 12) };
+        hurtGroup.boxes = new Rectangle[] {new Rectangle(-3, -8, 6, 12) };
 
         CollisionSequence redSeq = new CollisionSequence();
         redSeq.name = "red";
@@ -78,6 +78,7 @@ public class ShockCan extends GameObject{
         bundle.addHurtboxSequence(brokenSeq);
 
         animator = new AnimatorTrait(this, bundle.getAnimations());
+        animator.setState("red");
         traits.add(animator);
         traits.add(new TimedCollisionTrait(this, bundle));
 
@@ -89,7 +90,7 @@ public class ShockCan extends GameObject{
         bd.fixedRotation = true;
         CBody body = new BoxBody(size/2, 1).init(fd, bd);
         physical = new PhysicalTrait(this, body);
-        physical.setOffset(0, size/2 - .5f);
+        physical.setOffset(0, size - 1f);
         traits.add(physical);
 
         traits.add(new DebugTrait(this));
@@ -100,6 +101,40 @@ public class ShockCan extends GameObject{
     public void shoot() {
         PositionTrait position = getTrait(PositionTrait.class);
         Vector2 aim = target.cpy().sub(position.x, position.y).sub(0, 5);
-        GameScreen.addObject(new SparkBall(position.x, position.y-1, 0, aim.cpy().nor(), 10));
+        GameScreen.addObject(new SparkBall(position.x, position.y - 1, 0, aim.cpy().nor(), 10));
+    }
+
+    public void goGreen() {
+        isRed = false;
+        if (getTrait(HealthTrait.class).health > 60) {
+            getTrait(AnimatorTrait.class).setState("green");
+        } else if (getTrait(HealthTrait.class).health > 20) {
+            getTrait(AnimatorTrait.class).setState("greenDent");
+        } else if (getTrait(HealthTrait.class).health > 0){
+            getTrait(AnimatorTrait.class).setState("broken");
+        } else {
+            getTrait(AnimatorTrait.class).setState("dead");
+        }
+    }
+
+    public void goRed() {
+        isRed = true;
+        if (getTrait(HealthTrait.class).health > 60) {
+            getTrait(AnimatorTrait.class).setState("red");
+        } else if (getTrait(HealthTrait.class).health > 20) {
+            getTrait(AnimatorTrait.class).setState("redDent");
+        } else if (getTrait(HealthTrait.class).health > 0){
+            getTrait(AnimatorTrait.class).setState("broken");
+        } else {
+            getTrait(AnimatorTrait.class).setState("dead");
+        }
+    }
+
+    public void updateAnimation() {
+        if(isRed) {
+            goRed();
+        } else {
+            goGreen();
+        }
     }
 }
