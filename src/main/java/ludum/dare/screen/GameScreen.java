@@ -72,7 +72,7 @@ public class GameScreen implements Screen {
 
     List<Tups.Tup2<GameObject, GameObject>> listCollisions;
 
-    public  List<GameObject> gameObjects = new ArrayList<>();
+    public  static List<GameObject> gameObjects = new ArrayList<>();
     private List<GameObject> objsToDelete = new ArrayList<>();
     private static List<GameObject> objsToAdd = new ArrayList<>();
 

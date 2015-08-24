@@ -1,7 +1,9 @@
 package ludum.dare.trait;
 
 import com.badlogic.gdx.math.MathUtils;
+import ludum.dare.screen.GameScreen;
 import ludum.dare.world.Boss;
+import ludum.dare.world.EnemyBasic;
 import ludum.dare.world.SoundLibrary;
 
 /**
@@ -18,7 +20,9 @@ public class BossTrait extends Trait {
     private int shotsFired = 0;
     private float shotSpeed = .75f;
     private boolean soundPlayed = false;
-    private boolean enemySpawned = false;
+
+    private float spawnRate = 1f;
+    private int spawnedEnemies = 0;
 
     private enum State {
         CAN_1_ATTACK,
@@ -54,7 +58,7 @@ public class BossTrait extends Trait {
             // RESET and prep next phase
             elapsedTime = 0;
             shotsFired = 0;
-            enemySpawned = false;
+            spawnedEnemies = 0;
             state = State.WAIT;
         }
 
@@ -114,11 +118,26 @@ public class BossTrait extends Trait {
                 state = State.RESET;
             }
         } else if (state.equals(State.SPAWN)) {
-            boss.door.getTrait(AnimatorTrait.class).changeStateIfUnique("open", false);
-            if (elapsedTime >= 1f && !enemySpawned) {
-                enemySpawned = true;
-                boss.door.spawnSomething();
-            } else if (elapsedTime >= 2) {
+            int basicCount = 0;
+            for (GameObject obj : GameScreen.gameObjects) {
+                if (obj instanceof EnemyBasic) {
+                    basicCount++;
+                }
+            }
+            if (spawnedEnemies < 2) {
+                boss.door.getTrait(AnimatorTrait.class).changeStateIfUnique("open", false);
+                if (elapsedTime >= (1f + spawnedEnemies * spawnRate)) {
+                    // only spawn up to a max of 2 basic enemies on the screen
+                    if (basicCount < 2) {
+                        spawnedEnemies++;
+                        basicCount++;
+                        boss.door.spawnSomething();
+                    } else {
+                        boss.door.getTrait(AnimatorTrait.class).changeStateIfUnique("close", false);
+                        state = State.RESET;
+                    }
+                }
+            } else {
                 boss.door.getTrait(AnimatorTrait.class).changeStateIfUnique("close", false);
                 state = State.RESET;
             }

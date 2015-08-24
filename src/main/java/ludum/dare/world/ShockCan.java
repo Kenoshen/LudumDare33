@@ -91,6 +91,7 @@ public class ShockCan extends GameObject{
         CBody body = new BoxBody(size/2, 1).init(fd, bd);
         physical = new PhysicalTrait(this, body);
         physical.setOffset(0, size - 1f);
+        physical.setSensor(true);
         traits.add(physical);
 
         traits.add(new DebugTrait(this));
