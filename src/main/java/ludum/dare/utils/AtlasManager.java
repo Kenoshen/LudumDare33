@@ -1,12 +1,15 @@
 package ludum.dare.utils;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.winger.log.HTMLLogger;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,8 +20,13 @@ public class AtlasManager {
     private static final HTMLLogger log = HTMLLogger.getLogger(HTMLLogger.class);
 
     public static final AtlasManager instance = new AtlasManager();
+    public static List<String> loadedAtlases = new ArrayList<>();
+
+    public static final AssetManager manager = new AssetManager();
 
     public Map<String, TextureAtlas> atlases = new HashMap<>();
+
+    private boolean doneLoading = false;
 
     private AtlasManager(){}
 
@@ -27,6 +35,28 @@ public class AtlasManager {
             return atlases.get(name);
         }
         throw new RuntimeException("Atlas by name:" + name + " does not exist, check game.java to load atlas.");
+    }
+
+    public void loadAtlasAsynch(String atlastLocation) {
+        doneLoading = false;
+        loadedAtlases.add(atlastLocation);
+        manager.load(atlastLocation, TextureAtlas.class);
+    }
+
+    public void update() {
+        if (manager.update() && !doneLoading) {
+            doneLoading = true;
+            log.info("done loading assets");
+        }
+    }
+
+    public void finishLoading() {
+        long timer = System.currentTimeMillis();
+        manager.finishLoading();
+        timer = System.currentTimeMillis();
+        for (String load : loadedAtlases) {
+            loadAtlas(manager.get(load, TextureAtlas.class), load);
+        }
     }
 
     public void loadAtlas(String atlasLocation){
