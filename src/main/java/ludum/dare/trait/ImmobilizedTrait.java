@@ -5,8 +5,14 @@ package ludum.dare.trait;
  */
 public class ImmobilizedTrait extends Trait {
     public boolean imob = false;
+    public Type type;
     public ImmobilizedTrait(GameObject obj) {
         super(obj);
+    }
+
+    public enum Type {
+        HIT,
+        ZAP
     }
 
     @Override

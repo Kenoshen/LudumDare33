@@ -68,7 +68,7 @@ public class Player extends GameObject {
         traits.add(new CollidableTrait(this, collisionFunc));
         traits.add(new ImmobilizedTrait(this));
 
-        traits.add(new HealthTrait(this, 1, healthCallback));
+        traits.add(new HealthTrait(this, 100, healthCallback));
 
         ID = "Player";
 
@@ -286,6 +286,10 @@ public class Player extends GameObject {
         landSequence.frames = new CollisionGroup[] {landSeq1, landSeq2, landSeq3};
         bundle.addHurtboxSequence(landSequence);
 
+        bundle.addNamedAnimation(new NamedAnimation("zap", .1f,
+                AtlasManager.instance.getAtlas("bum").findRegions("zap/bumShock"), AtlasManager.instance.getAtlas("bum").findRegions("zap/bumShock"),
+                new Vector2(0,0), new Vector2(width, height)));
+
         bundle.addNamedAnimation(new NamedAnimation("death", .1f,
                 AtlasManager.instance.getAtlas("bum").findRegions("death/bumDeath"), AtlasManager.instance.getAtlas("bum").findRegions("death/bumDeath"),
                 new Vector2(5f, 0), new Vector2(width * 1.25f, height)));
@@ -325,9 +329,15 @@ public class Player extends GameObject {
     public void collidedWith(GameObject o) {
         Vector2 v = new Vector2(0,0);
         ControlTrait myControl = getTrait(ControlTrait.class);
+        HealthTrait healthTrait = getTrait(HealthTrait.class);
         if(o instanceof EnemyBasic){
+            getTrait(ImmobilizedTrait.class).imob = true;
+            getTrait(ImmobilizedTrait.class).type = ImmobilizedTrait.Type.HIT;
+            myControl.queuedAttack = false;
+            myControl.attacking = false;
+            myControl.jumping = false;
+            myControl.landing = false;
 
-            HealthTrait healthTrait = getTrait(HealthTrait.class);
             if(healthTrait != null) {
                 if (healthTrait.health > 0) {
                     SoundLibrary.GetSound("Get_Hit").play();
@@ -336,49 +346,43 @@ public class Player extends GameObject {
 
             if (getTrait(PositionTrait.class).x < o.getTrait(PositionTrait.class).x
                     && getTrait(PositionTrait.class).y < o.getTrait(PositionTrait.class).y){
-                getTrait(ImmobilizedTrait.class).imob = true;
                 hitFromRight = true;
-                myControl.queuedAttack = false;
-                myControl.attacking = false;
-                myControl.jumping = false;
-                myControl.landing = false;
                 v.x -= 10000;
                 v.y -= 50;
             }
             if (getTrait(PositionTrait.class).x >= o.getTrait(PositionTrait.class).x
                     && getTrait(PositionTrait.class).y < o.getTrait(PositionTrait.class).y){
-                getTrait(ImmobilizedTrait.class).imob = true;
                 hitFromRight = false;
-                myControl.queuedAttack = false;
-                myControl.attacking = false;
-                myControl.jumping = false;
-                myControl.landing = false;
                 v.x += 10000;
                 v.y -= 50;
             }
             if (getTrait(PositionTrait.class).x >= o.getTrait(PositionTrait.class).x
                     && getTrait(PositionTrait.class).y >= o.getTrait(PositionTrait.class).y){
-                getTrait(ImmobilizedTrait.class).imob = true;
                 hitFromRight = false;
-                myControl.queuedAttack = false;
-                myControl.attacking = false;
-                myControl.jumping = false;
-                myControl.landing = false;
                 v.x += 10000;
                 v.y += 50;
             }
             if (getTrait(PositionTrait.class).x < o.getTrait(PositionTrait.class).x
                     && getTrait(PositionTrait.class).y >= o.getTrait(PositionTrait.class).y){
-                getTrait(ImmobilizedTrait.class).imob = true;
                 hitFromRight = true;
-                myControl.queuedAttack = false;
-                myControl.attacking = false;
-                myControl.jumping = false;
-                myControl.landing = false;
                 v.x -= 10000;
                 v.y += 50;
             }
             getTrait(PhysicalTrait.class).body.body.setLinearVelocity(v);
+        } else if (o instanceof SparkBall) {
+            if(healthTrait != null) {
+                if (healthTrait.health > 0) {
+                    SoundLibrary.GetSound("zap").play();
+                    getTrait(AnimatorTrait.class).setState("zap", false);
+                }
+            }
+            getTrait(ImmobilizedTrait.class).imob = true;
+            getTrait(ImmobilizedTrait.class).type = ImmobilizedTrait.Type.ZAP;
+            myControl.queuedAttack = false;
+            myControl.attacking = false;
+            myControl.jumping = false;
+            myControl.landing = false;
+
         }
     }
 }
