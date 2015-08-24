@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -107,6 +108,9 @@ public class GameScreen implements Screen {
     };
 
     public GameScreen(final Game game, Level level){
+        // TODO: remove these lines
+        AtlasManager.instance.loadAtlas("packed/game.atlas");
+        AtlasManager.instance.loadAtlas("packed/game_n.atlas");
 
         music = SoundLibrary.GetMusic("Main_Song");
         music.setVolume(.5f);
@@ -251,6 +255,12 @@ public class GameScreen implements Screen {
         int currentNumberOfLights = 0;
         for (GameObject obj : gameObjects){
             List<Trait> traits = obj.getTraits(AnimatorTrait.class, DrawableTrait.class, TimedCollisionTrait.class, CameraFollowTrait.class, CollidableTrait.class, LightTrait.class, PositionTrait.class, HealthBarTrait.class);
+
+
+            if (traits.get(3) != null){
+                ((CameraFollowTrait) traits.get(3)).updateCamera(camera);
+            }
+
             PositionTrait tmpPos = (PositionTrait)traits.get(6);
             if (tmpPos != null){
                 Vector2 thingPos = new Vector2(tmpPos.x, tmpPos.y);
@@ -266,9 +276,6 @@ public class GameScreen implements Screen {
             }
             if (traits.get(2) != null && DEBUG_DRAW){
                 ((TimedCollisionTrait) traits.get(2)).draw(shaper);
-            }
-            if (traits.get(3) != null){
-                ((CameraFollowTrait) traits.get(3)).updateCamera(camera);
             }
             if (traits.get(4) != null){
                 ((CollidableTrait) traits.get(4)).checkCollisions(gameObjects, listCollisions);

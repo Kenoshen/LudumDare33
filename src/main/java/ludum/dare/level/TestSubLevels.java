@@ -25,14 +25,14 @@ public class TestSubLevels extends Level{
 
     List<GameObject> objs;
 
-    private Player player;
+    private Player player = null;
 
     @Override
     public String name(){
         return this.getClass().getSimpleName();
     }
 
-    private int index = -1;
+    private int index = 5;
 
     @Override
     public List<GameObject> loadLevel(){
@@ -42,22 +42,31 @@ public class TestSubLevels extends Level{
     public List<GameObject> nextSection(){
         index ++;
         if (index == 0){
-            return section0();
+            return section0(index);
         } else if (index == 1){
-            return section1();
-        }else {
+            return section1(index);
+        } else if (index == 2){
+            return section2(index);
+        } else if (index == 3){
+            return section3(index);
+        } else if (index == 4){
+            return section4(index);
+        } else if (index == 5){
+            return section5(index);
+        } else if (index == 6){
+            return section6(index);
+        } else {
             throw new RuntimeException("No more sections in this level");
         }
     }
 
 
-    private List<GameObject> section0(){
+    private List<GameObject> section0(int section){
         objs = new ArrayList<>();
 
-        sectionSetup(0);
-        player = new Player(0, -5, 0, CMouse.instance, CKeyboard.instance, null);
-        objs.add(player);
-        path(0, new Vector2(0, -3), new Vector2(screenWidth, -1));
+        sectionSetup(section);
+
+        path(section, new Vector2(0, -3), new Vector2(screenWidth, -1));
         light(new Color(0.5f, 0.5f, 1.0f, 1), 10, 1000, new Vector2(-7, 13), new Vector2(20, 13));
 
         float numOfSections = 8;
@@ -67,17 +76,102 @@ public class TestSubLevels extends Level{
         return objs;
     }
 
-    private List<GameObject> section1(){
+    private List<GameObject> section1(int section){
         objs = new ArrayList<>();
 
-        sectionSetup(1);
+        sectionSetup(section);
 
-        path(1, new Vector2(0, -1), new Vector2(screenWidth, -1));
+        path(section, new Vector2(0, -1), new Vector2(screenWidth, -1));
 
-        light(Color.BLUE.cpy(), 20, 0, new Vector2(xOffset(1) + 13, 5));
+        light(Color.BLUE.cpy(), 20, 0, new Vector2(xOffset(section) + 13, 5));
 
-        final Boundary rightSideBoundary = newRightSideBoundary(1);
-        enemyWaves(1, 2, EnemyWaveType.EASY, rightSideBoundary);
+        final Boundary rightSideBoundary = newRightSideBoundary(section);
+        enemyWaves(section, 2, EnemyWaveType.EASY, rightSideBoundary);
+
+        return objs;
+    }
+
+    private List<GameObject> section2(int section){
+        objs = new ArrayList<>();
+
+        sectionSetup(section);
+
+        path(section, new Vector2(0, -1), new Vector2(screenWidth - 5, -1), new Vector2(screenWidth, -8));
+
+        float left = xOffset(section);
+        light(new Color(0.5f, 0.5f, 1.0f, 1), 10, 1000, new Vector2(left + 3, 13), new Vector2(left + halfScreenWidth + 3, 13));
+
+        final Boundary rightSideBoundary = newRightSideBoundary(section);
+        enemyWaves(section, 2, EnemyWaveType.EASY, rightSideBoundary);
+
+        return objs;
+    }
+
+    private List<GameObject> section3(int section){
+        objs = new ArrayList<>();
+
+        sectionSetup(section);
+
+        path(section, new Vector2(0, -8), new Vector2(screenWidth, -8));
+
+        float left = xOffset(section);
+        light(Color.YELLOW, 25, 1000, new Vector2(left + 11.8f, 6));
+        light(Color.YELLOW, 25, 1000, new Vector2(left + halfScreenWidth + 9.5f, 6));
+
+        final Boundary rightSideBoundary = newRightSideBoundary(section);
+        enemyWaves(section, 2, EnemyWaveType.EASY, rightSideBoundary);
+
+        return objs;
+    }
+
+    private List<GameObject> section4(int section){
+        objs = new ArrayList<>();
+
+        sectionSetup(section);
+
+        path(section, new Vector2(0, -1), new Vector2(screenWidth, -1));
+
+        light(Color.BLUE.cpy(), 20, 0, new Vector2(xOffset(section) + halfScreenWidth + 8, 6));
+
+        final Boundary rightSideBoundary = newRightSideBoundary(section);
+        enemyWaves(section, 2, EnemyWaveType.EASY, rightSideBoundary);
+
+        return objs;
+    }
+
+    private List<GameObject> section5(int section){
+        objs = new ArrayList<>();
+
+        sectionSetup(section);
+
+        path(section, new Vector2(0, -1), new Vector2(screenWidth, -1));
+
+        light(Color.YELLOW.cpy(), 40, 0, new Vector2(xOffset(section) + 15.3f, 11));
+
+        final Boundary rightSideBoundary = newRightSideBoundary(section);
+        enemyWaves(section, 2, EnemyWaveType.EASY, rightSideBoundary);
+
+        return objs;
+    }
+
+
+    private List<GameObject> section6(int section){
+        objs = new ArrayList<>();
+
+        sectionSetup(section);
+
+        path(section,
+                new Vector2(0, -1),
+                new Vector2(screenWidth - 18, -1),
+                new Vector2(screenWidth - 0, -4),
+                new Vector2(screenWidth - 10, -13));
+
+        light(Color.BLUE.cpy(), 20, 0, new Vector2(xOffset(section) + 13, 5));
+
+        final Boundary rightSideBoundary = path(section,
+                new Vector2(screenWidth - 8, halfScreenHeight),
+                new Vector2(screenWidth - 8, -halfScreenHeight));
+        enemyWaves(section, 2, EnemyWaveType.EASY, rightSideBoundary);
 
         return objs;
     }
@@ -99,7 +193,7 @@ public class TestSubLevels extends Level{
         List<List<GameObject>> enemyWaves = new ArrayList<>();
         for (int i = 0; i < number; i++){
             List<GameObject> enemies = new ArrayList<>();
-            enemies.add(new EnemyThrower(xOffset(section) + halfScreenWidth, -5, 0));
+            enemies.add(new EnemyThrower(xOffset(section) + screenWidth, -(halfScreenHeight - 3), 0));
             enemyWaves.add(enemies);
         }
         for (int i = 0; i < number; i++){
@@ -157,7 +251,7 @@ public class TestSubLevels extends Level{
 
     private void sectionSetup(final int section){
         objs.add(new Background(section, 0.01f, "environment/background"));
-        objs.add(new Background(section, "environment/" + section +"frame"));
+        objs.add(new Background(section, "environment/" + section + "frame"));
         newBottomBoundary(section);
 
 
@@ -176,6 +270,11 @@ public class TestSubLevels extends Level{
             }
         }));
         objs.add(trigger);
+
+        if (player == null){
+            player = new Player(xOffset(section), -(halfScreenHeight - 1), 0, CMouse.instance, CKeyboard.instance, null);
+            objs.add(player);
+        }
     }
 
     private Boundary newBottomBoundary(int section){
