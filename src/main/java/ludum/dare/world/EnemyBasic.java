@@ -112,6 +112,13 @@ public class EnemyBasic extends GameObject{
         hurtSequence.frames = new CollisionGroup[] {hurtGroup, hurtGroup, hurtGroup, hurtGroup, hurtGroup, hurtGroup, hurtGroup, hurtGroup, hurtGroup};
         bundle.addHurtboxSequence(hurtSequence);
 
+        bundle.addNamedAnimation(new NamedAnimation("lightPain", .1f, AtlasManager.instance.getAtlas("bot").findRegions("lightPain/botPain"),
+                AtlasManager.instance.getAtlas("bot").findRegions("lightPain/botPain"), new Vector2(0, 0), new Vector2(width, height)));
+        bundle.addNamedAnimation(new NamedAnimation("heavyPain", .1f, AtlasManager.instance.getAtlas("bot").findRegions("heavyPain/botPain"),
+                AtlasManager.instance.getAtlas("bot").findRegions("heavyPain/botPain"), new Vector2(0, 0), new Vector2(width, height)));
+        bundle.addNamedAnimation(new NamedAnimation("die", .1f, AtlasManager.instance.getAtlas("bot").findRegions("die/botDie"),
+                AtlasManager.instance.getAtlas("bot").findRegions("die/botDie"), new Vector2(0, 0), new Vector2(width, height)));
+
 
         animator = new AnimatorTrait(this, bundle.getAnimations());
         traits.add(animator);
