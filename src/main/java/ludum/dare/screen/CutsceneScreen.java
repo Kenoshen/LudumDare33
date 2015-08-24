@@ -42,9 +42,9 @@ public class CutsceneScreen implements Screen {
         keyboard = CKeyboard.instance;
 
         listStoryText.add(generateWrappableLabel("In the future... ", SkinManager.instance.getSkin("menu-skin"), true));
-        listStoryText.add(generateWrappableLabel("generic stories are told... ", SkinManager.instance.getSkin("menu-skin"), true));
-        listStoryText.add(generateWrappableLabel("Something something hobos... ", SkinManager.instance.getSkin("menu-skin"), true));
-        listStoryText.add(generateWrappableLabel("One comes back years after the\nrest had fallen", SkinManager.instance.getSkin("menu-skin"), true));
+        listStoryText.add(generateWrappableLabel("man has been extinct for centuries...", SkinManager.instance.getSkin("menu-skin"), true));
+        listStoryText.add(generateWrappableLabel("One hobo, displaced in time...", SkinManager.instance.getSkin("menu-skin"), true));
+        listStoryText.add(generateWrappableLabel("Will become the monster he needs to be...", SkinManager.instance.getSkin("menu-skin"), true));
 
         bitmapFont = new BitmapFont();
 

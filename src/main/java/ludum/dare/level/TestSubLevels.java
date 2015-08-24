@@ -54,7 +54,7 @@ public class TestSubLevels extends Level{
     private List<GameObject> section0(){
         objs = new ArrayList<>();
 
-        sectionSetup(0, "background_one");
+        sectionSetup(0);
         player = new Player(0, -5, 0, CMouse.instance, CKeyboard.instance, null);
         objs.add(player);
         path(0, new Vector2(0, -3), new Vector2(screenWidth, -1));
@@ -70,7 +70,7 @@ public class TestSubLevels extends Level{
     private List<GameObject> section1(){
         objs = new ArrayList<>();
 
-        sectionSetup(1, "background_two");
+        sectionSetup(1);
 
         path(1, new Vector2(0, -1), new Vector2(screenWidth, -1));
 
@@ -155,9 +155,9 @@ public class TestSubLevels extends Level{
     }
 
 
-    private void sectionSetup(final int section, String background){
+    private void sectionSetup(final int section){
         objs.add(new Background(section, 0.01f, "environment/background"));
-        objs.add(new Background(section, "environment/" + background));
+        objs.add(new Background(section, "environment/" + section +"frame"));
         newBottomBoundary(section);
 
 
