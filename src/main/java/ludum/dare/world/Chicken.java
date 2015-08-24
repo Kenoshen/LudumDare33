@@ -37,8 +37,8 @@ public class Chicken extends GameObject{
 
         AnimationBundle bundle = new AnimationBundle();
 
-        bundle.addNamedAnimation(new NamedAnimation("NOANIMATION", .1f, AtlasManager.instance.getAtlas("collectables").findRegions("chicken"),
-                AtlasManager.instance.getAtlas("collectables").findRegions("chicken"), new Vector2(0, 0), new Vector2(size, size*.75f)));
+        bundle.addNamedAnimation(new NamedAnimation("NOANIMATION", .1f, AtlasManager.instance.findRegions("collectables/chicken"),
+                AtlasManager.instance.findRegions("collectables/chicken_n"), new Vector2(0, 0), new Vector2(size, size*.75f)));
 
         CollisionSequence hitSequence = new CollisionSequence();
         hitSequence.name = "NOANIMATION";
