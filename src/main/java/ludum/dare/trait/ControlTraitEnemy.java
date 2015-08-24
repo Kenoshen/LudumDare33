@@ -134,9 +134,6 @@ public class ControlTraitEnemy extends Trait implements AnimationCallback {
 
     @Override
     public void animationEnded(String name) {
-        if (name.equals("punch")) {
-
-        } else if(name.equals("pain") || name.equals("backpain")){
-        }
+        attacking = false;
     }
 }
