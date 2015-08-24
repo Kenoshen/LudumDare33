@@ -73,11 +73,23 @@ public class GameScreen implements Screen {
     private Comparator<? super GameObject> compare = new Comparator<GameObject>() {
         @Override
         public int compare(GameObject o1, GameObject o2) {
-            if (o1.getTrait(PhysicalTrait.class) != null && o2.getTrait(PhysicalTrait.class) != null) {
-                return o1.getTrait(PhysicalTrait.class).body.getPosition().y >= o2.getTrait(PhysicalTrait.class).body.getPosition().y ? -1 : 1;
-            } else {
-                return o1.getTrait(PositionTrait.class).y >= o2.getTrait(PositionTrait.class).y ? -1 : 1;
+            List<Trait> o1Traits = o1.getTraits(PhysicalTrait.class, PositionTrait.class);
+            float y1 = 0;
+            if (o1Traits.get(0) != null){
+                y1 = ((PhysicalTrait) o1Traits.get(0)).body.getPosition().y;
+            } else if (o1Traits.get(1) != null){
+                y1 = ((PositionTrait) o1Traits.get(1)).y;
             }
+
+            List<Trait> o2Traits = o2.getTraits(PhysicalTrait.class, PositionTrait.class);
+            float y2 = 0;
+            if (o2Traits.get(0) != null){
+                y2 = ((PhysicalTrait) o2Traits.get(0)).body.getPosition().y;
+            } else if (o2Traits.get(1) != null){
+                y2 = ((PositionTrait) o2Traits.get(1)).y;
+            }
+
+            return y1 >= y2 ? -1 : 1;
         }
     };
 
