@@ -35,6 +35,19 @@ public class EnemyBasic extends GameObject{
         }
     };
 
+    public void collidedWith(GameObject p){
+        Vector2 v = new Vector2(0, 0);
+        PositionTrait ePos = getTrait(PositionTrait.class);
+        PositionTrait pPos = p.getTrait(PositionTrait.class);
+        String pAnimName = p.getTrait(AnimatorTrait.class).getCurrentAnimation().getName();
+
+        if(pAnimName == "punch"){
+
+        } else if(pAnimName == "punch2" || pAnimName == "jumpKick"){
+
+        }
+    }
+
     private HealthCallback healthCallback = new HealthCallback() {
         @Override
         public void damageReceived(int amount, GameObject from) {
@@ -51,6 +64,7 @@ public class EnemyBasic extends GameObject{
         traits.add(new PositionTrait(this, x, y, z));
         traits.add(new DrawableTrait(this));
         traits.add(new CollidableTrait(this, collisionFunc));
+        traits.add(new ControlTraitEnemy(this));
 
         traits.add(new HealthTrait(this, 80, healthCallback));
 
@@ -63,6 +77,8 @@ public class EnemyBasic extends GameObject{
                 AtlasManager.instance.getAtlas("bot").findRegions("walk/botWalk"), new Vector2(0, -.7f), new Vector2(width, height)));
         bundle.addNamedAnimation(new NamedAnimation("hit", .1f, AtlasManager.instance.getAtlas("bot").findRegions("hit/botHit"),
                 AtlasManager.instance.getAtlas("bot").findRegions("hit/botHit"), new Vector2(0, -.7f), new Vector2(width * 1.5f, height)));
+        bundle.addNamedAnimation(new NamedAnimation("lightPain", .1f, AtlasManager.instance.getAtlas("bot").findRegions("pain/botPain"),
+                AtlasManager.instance.getAtlas("bot").findRegions("pain/botPain"), new Vector2(0, 0), new Vector2(width, height)));
 
         CollisionSequence hitSequence = new CollisionSequence();
         hitSequence.name = "hit";
@@ -110,4 +126,3 @@ public class EnemyBasic extends GameObject{
     }
 
 }
-
