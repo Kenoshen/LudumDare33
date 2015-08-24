@@ -61,8 +61,9 @@ public class GameScreen implements Screen {
 
     List<Tups.Tup2<GameObject, GameObject>> listCollisions;
 
-    public List<GameObject> gameObjects = new ArrayList<>();
+    public  List<GameObject> gameObjects = new ArrayList<>();
     private List<GameObject> objsToDelete = new ArrayList<>();
+    private static List<GameObject> objsToAdd = new ArrayList<>();
 
     private AIHiveMind AIHM = new AIHiveMind();
 
@@ -157,7 +158,7 @@ public class GameScreen implements Screen {
 
         world.update(Conf.instance.worldStepTime());
         for (GameObject obj : gameObjects){
-            List<Trait> traits = obj.getTraits(InputHandlerTrait.class, ControlTrait.class, PhysicalTrait.class, DebugTrait.class, UpdatableTrait.class, PathFollowerTrait.class);
+            List<Trait> traits = obj.getTraits(InputHandlerTrait.class, ControlTrait.class, PhysicalTrait.class, DebugTrait.class, UpdatableTrait.class, PathFollowerTrait.class, MoveDirectionTrait.class);
             if (traits.get(0) != null) {
                 ((InputHandlerTrait) traits.get(0)).update();
             }
@@ -176,6 +177,9 @@ public class GameScreen implements Screen {
             if (traits.get(5) != null) {
                 ((PathFollowerTrait) traits.get(5)).travelOnPath(delta);
             }
+            if (traits.get(6) != null) {
+                ((MoveDirectionTrait) traits.get(6)).travel(delta);
+            }
 
             // handle deletion of objects gracefully
             if (obj.shouldBeDeleted()) {
@@ -184,6 +188,7 @@ public class GameScreen implements Screen {
         }
 
         removeMarkedGameObjects();
+        addNewGameObjects();
         AIHiveMind.update();
 
         camera.update();
@@ -269,6 +274,17 @@ public class GameScreen implements Screen {
 
         music.stop();
         music.dispose();
+    }
+
+    public static void queueAddObject(GameObject obj) {
+        objsToAdd.add(obj);
+    }
+
+    private void addNewGameObjects() {
+        for(GameObject newObj : objsToAdd) {
+            gameObjects.add(newObj);
+        }
+        objsToAdd.clear();
     }
 
     private void removeMarkedGameObjects(){
