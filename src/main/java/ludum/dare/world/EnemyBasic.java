@@ -23,6 +23,7 @@ public class EnemyBasic extends GameObject{
     private PhysicalTrait physical;
     private AnimatorTrait animator;
     public Vector2 target;
+    public boolean hitFromRight;
 
     public boolean rightFacing = false;
 
@@ -69,8 +70,12 @@ public class EnemyBasic extends GameObject{
                 AtlasManager.instance.getAtlas("bot").findRegions("walk/botWalk"), new Vector2(0, -.7f), new Vector2(width, height)));
         bundle.addNamedAnimation(new NamedAnimation("hit", .1f, AtlasManager.instance.getAtlas("bot").findRegions("hit/botHit"),
                 AtlasManager.instance.getAtlas("bot").findRegions("hit/botHit"), new Vector2(0, -.7f), new Vector2(width * 1.5f, height)));
-        bundle.addNamedAnimation(new NamedAnimation("lightPain", .1f, AtlasManager.instance.getAtlas("bot").findRegions("pain/botPain"),
-                AtlasManager.instance.getAtlas("bot").findRegions("pain/botPain"), new Vector2(0, 0), new Vector2(width, height)));
+        bundle.addNamedAnimation(new NamedAnimation("lightPain", .1f, AtlasManager.instance.getAtlas("bot").findRegions("lightPain/botPain"),
+                AtlasManager.instance.getAtlas("bot").findRegions("lightPain/botPain"), new Vector2(0, 0), new Vector2(width, height)));
+        bundle.addNamedAnimation(new NamedAnimation("heavyPain", .1f, AtlasManager.instance.getAtlas("bot").findRegions("heavyPain/botPain"),
+                AtlasManager.instance.getAtlas("bot").findRegions("heavyPain/botPain"), new Vector2(0, 0), new Vector2(width, height)));
+        bundle.addNamedAnimation(new NamedAnimation("die", .1f, AtlasManager.instance.getAtlas("bot").findRegions("die/botDie"),
+                AtlasManager.instance.getAtlas("bot").findRegions("die/botDie"), new Vector2(0, 0), new Vector2(width, height)));
 
         CollisionSequence hitSequence = new CollisionSequence();
         hitSequence.name = "hit";
@@ -118,15 +123,56 @@ public class EnemyBasic extends GameObject{
     }
     public void collidedWith(GameObject p){
         Vector2 v = new Vector2(0, 0);
+        ControlTraitEnemy myControl = getTrait(ControlTraitEnemy.class);
         PositionTrait ePos = getTrait(PositionTrait.class);
         PositionTrait pPos = p.getTrait(PositionTrait.class);
         String pAnimName = p.getTrait(AnimatorTrait.class).getCurrentAnimation().getName();
 
         if(pAnimName == "punch"){
-
+            System.out.println("I got punched");
+            if(ePos.x < pPos.x && ePos.y < pPos.y){
+                hitFromRight = true;
+                v.x -= 3;
+                v.y -= 1;
+            }
+            if(ePos.x >= pPos.x && ePos.y < pPos.y){
+                hitFromRight = false;
+                v.x += 3;
+                v.y -= 1;
+            }
+            if(ePos.x >= pPos.x && ePos.y >= pPos.y){
+                hitFromRight = false;
+                v.x += 3;
+                v.y += 1;
+            }
+            if(ePos.x < pPos.x && ePos.y >= pPos.y){
+                hitFromRight = true;
+                v.x -= 3;
+                v.y += 1;
+            }
         } else if(pAnimName == "punch2" || pAnimName == "jumpKick"){
-
+            if(ePos.x < pPos.x && ePos.y < pPos.y){
+                hitFromRight = true;
+                v.x -= 10;
+                v.y -= 5;
+            }
+            if(ePos.x >= pPos.x && ePos.y < pPos.y){
+                hitFromRight = false;
+                v.x += 10;
+                v.y -= 5;
+            }
+            if(ePos.x >= pPos.x && ePos.y >= pPos.y){
+                hitFromRight = false;
+                v.x += 10;
+                v.y += 5;
+            }
+            if(ePos.x < pPos.x && ePos.y >= pPos.y){
+                hitFromRight = true;
+                v.x -= 10;
+                v.y += 5;
+            }
         }
+        getTrait(PhysicalTrait.class).body.body.setLinearVelocity(v);
     }
 
     public void updateTarget(Vector2 t){
