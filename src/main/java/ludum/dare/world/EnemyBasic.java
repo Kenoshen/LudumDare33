@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 import ludum.dare.collision.CollisionGroup;
 import ludum.dare.collision.CollisionSequence;
 import ludum.dare.screen.GameScreen;
-import ludum.dare.utils.CollisionCallback;
+import ludum.dare.utils.*;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -14,14 +14,11 @@ import com.winger.physics.CBody;
 import com.winger.physics.body.BoxBody;
 import ludum.dare.collision.AnimationBundle;
 import ludum.dare.trait.*;
-import ludum.dare.utils.AtlasManager;
-import ludum.dare.utils.HealthCallback;
-import ludum.dare.utils.NamedAnimation;
 
 /**
  * Created by jake on 8/21/2015.
  */
-public class EnemyBasic extends GameObject{
+public class EnemyBasic extends GameObject implements AnimationCallback {
     private PhysicalTrait physical;
     private AnimatorTrait animator;
     public Vector2 target;
@@ -129,6 +126,7 @@ public class EnemyBasic extends GameObject{
 
 
         animator = new AnimatorTrait(this, bundle.getAnimations());
+        animator.registerAnimationCallback(this);
         traits.add(animator);
         traits.add(new TimedCollisionTrait(this, bundle));
 
@@ -204,5 +202,17 @@ public class EnemyBasic extends GameObject{
 
     public void updateTarget(Vector2 t){
         target = t;
+    }
+
+    @Override
+    public void animationStarted(String name) {
+        if (name.equals("die")) {
+            GameScreen.addObject(new Explosion(getTrait(PositionTrait.class).x, getTrait(PositionTrait.class).y, 12));
+        }
+    }
+
+    @Override
+    public void animationEnded(String name) {
+
     }
 }
