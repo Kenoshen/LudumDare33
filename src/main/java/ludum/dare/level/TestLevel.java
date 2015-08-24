@@ -28,8 +28,9 @@ public class TestLevel extends Level{
     public List<GameObject> loadLevel(){
         List<GameObject> objs = new ArrayList<>();
 
-
+//        objs.add(new EnemyBasic(15, -10, 0));
         objs.add(new EnemyThrower(15, -10, 0));
+//        objs.add(new EnemyHeavy(15, -10, 0));
         objs.add(new Fourty(-10,-10,0,3));
         objs.add(new Chicken(-15,-10,0,6));
 

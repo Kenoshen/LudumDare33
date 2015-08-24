@@ -1,6 +1,5 @@
 package ludum.dare.trait;
 
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import ludum.dare.screen.GameScreen;
 import ludum.dare.utils.AnimationCallback;
@@ -16,6 +15,8 @@ public class AIMovementRangedTrait extends Trait implements AnimationCallback{
     private Vector2 aim = new Vector2();
     private PositionTrait position;
     private boolean shooting;
+    private long lastShot = 0;
+    private long shootTimer = 3000;
 
     public AIMovementRangedTrait(GameObject obj, float s, float md) {
         super(obj);
@@ -75,10 +76,12 @@ public class AIMovementRangedTrait extends Trait implements AnimationCallback{
         if(vel.x == 0 && vel.y == 0) {
 
             if(!shooting){
-                System.out.println("will shoot");
-                shooting = true;
-                self.getTrait(AnimatorTrait.class).setState("shoot", false);
-                SoundLibrary.GetSound("Electric_Charge").play();
+                if (System.currentTimeMillis() - lastShot >= shootTimer) {
+                    System.out.println("will shoot");
+                    shooting = true;
+                    self.getTrait(AnimatorTrait.class).setState("shoot", false);
+                    SoundLibrary.GetSound("Electric_Charge").play();
+                }
             }
         }
         vel = vel.nor().scl(speed);
@@ -97,6 +100,7 @@ public class AIMovementRangedTrait extends Trait implements AnimationCallback{
         if (name.equals("shoot")) {
             GameScreen.addObject(new SparkBall(position.x, position.y+1, 0, aim.cpy().nor(), 10));
             animator.setState("walk");
+            lastShot = System.currentTimeMillis();
             shooting = false;
             System.out.println("done shoot");
         }

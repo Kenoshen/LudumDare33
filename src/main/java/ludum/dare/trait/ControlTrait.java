@@ -157,8 +157,10 @@ public class ControlTrait extends Trait implements AnimationCallback {
             if (!landing && !attacking) {
                 animator.changeStateIfUnique("jump", false);
             }
-        } else if (vel.len() > PLAYER_ANIMATION_VEL_CHANGE){
+        } else if (vel.len() > PLAYER_ANIMATION_VEL_CHANGE) {
             animator.changeStateIfUnique("walk", true);
+        } else if (imob.imob && imob.type.equals(ImmobilizedTrait.Type.ZAP)) {
+            animator.changeStateIfUnique("zap", false);
         } else if(imob.imob && rightFacing && ((Player)self).hitFromRight){
             animator.changeStateIfUnique("pain", false);
         } else if(imob.imob && rightFacing && !((Player)self).hitFromRight){
@@ -193,10 +195,12 @@ public class ControlTrait extends Trait implements AnimationCallback {
 
     @Override
     public void animationStarted(String name) {
+        System.out.println(name + " started");
     }
 
     @Override
     public void animationEnded(String name) {
+        System.out.println(name + " ended");
         if (name.equals("punch")) {
             if (queuedAttack) {
                 animator.setState("punch2", false);
@@ -214,7 +218,7 @@ public class ControlTrait extends Trait implements AnimationCallback {
             landing = false;
             jumping = false;
             attacking = false;
-        } else if(name.equals("pain") || name.equals("backpain")){
+        } else if(name.equals("pain") || name.equals("backpain") || name.equals("zap")){
             imob.imob = false;
         }
         else {
