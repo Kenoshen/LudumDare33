@@ -1,8 +1,10 @@
 package ludum.dare.trait;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import ludum.dare.screen.GameScreen;
 import ludum.dare.utils.AnimationCallback;
+import ludum.dare.world.SoundLibrary;
 import ludum.dare.world.SparkBall;
 
 /**
@@ -13,6 +15,7 @@ public class AIMovementRangedTrait extends Trait implements AnimationCallback{
     private AnimatorTrait animator;
     private Vector2 aim = new Vector2();
     private PositionTrait position;
+    private boolean shooting;
 
     public AIMovementRangedTrait(GameObject obj, float s, float md) {
         super(obj);
@@ -32,10 +35,14 @@ public class AIMovementRangedTrait extends Trait implements AnimationCallback{
         animator = self.getTrait(AnimatorTrait.class);
         animator.registerAnimationCallback(this);
         position = self.getTrait(PositionTrait.class);
+        shooting = false;
     }
 
     public void updateMovement(Vector2 target){
         aim = target.cpy().sub(position.x, position.y).sub(0, 7);
+        if (shooting) {
+            return;
+        }
         Vector2 vel = new Vector2(0, 0);
         if(target.x < position.x){
             self.getTrait(AnimatorTrait.class).flipped = false;
@@ -66,7 +73,13 @@ public class AIMovementRangedTrait extends Trait implements AnimationCallback{
 //            log.debug("Enemy: Want to move up");
         }
         if(vel.x == 0 && vel.y == 0) {
-            self.getTrait(AnimatorTrait.class).changeStateIfUnique("shoot", false);
+
+            if(!shooting){
+                System.out.println("will shoot");
+                shooting = true;
+                self.getTrait(AnimatorTrait.class).setState("shoot", false);
+                SoundLibrary.GetSound("Electric_Charge").play();
+            }
         }
         vel = vel.nor().scl(speed);
         self.getTrait(PhysicalTrait.class).body.body.setLinearVelocity(vel);
@@ -74,7 +87,9 @@ public class AIMovementRangedTrait extends Trait implements AnimationCallback{
 
     @Override
     public void animationStarted(String name) {
-
+        if (name.equals("walk")) {
+            shooting = false;
+        }
     }
 
     @Override
@@ -82,6 +97,8 @@ public class AIMovementRangedTrait extends Trait implements AnimationCallback{
         if (name.equals("shoot")) {
             GameScreen.addObject(new SparkBall(position.x, position.y+1, 0, aim.cpy().nor(), 10));
             animator.setState("walk");
+            shooting = false;
+            System.out.println("done shoot");
         }
     }
 }

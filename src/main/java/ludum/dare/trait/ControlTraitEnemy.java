@@ -4,6 +4,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.winger.physics.body.BoxBody;
 import ludum.dare.Conf;
 import ludum.dare.utils.AnimationCallback;
+import ludum.dare.world.EnemyBasic;
+import ludum.dare.world.EnemyHeavy;
 import ludum.dare.world.Player;
 import ludum.dare.world.SoundLibrary;
 
@@ -17,9 +19,20 @@ public class ControlTraitEnemy extends Trait implements AnimationCallback {
     private AnimatorTrait animator;
     private HealthTrait health;
     private boolean rightFacing;
+    private ImmobilizedTrait imob;
 
-    public ControlTraitEnemy(GameObject obj) {
+    private boolean attacking = false;
+
+    private float speed = 7;
+    private float minDist = 9;
+
+
+    public boolean dead = false;
+
+    public ControlTraitEnemy(GameObject obj, float speed, float minDist) {
         super(obj);
+        this.speed = speed;
+        this.minDist = minDist;
     }
 
     @Override
@@ -29,6 +42,12 @@ public class ControlTraitEnemy extends Trait implements AnimationCallback {
         animator = self.getTrait(AnimatorTrait.class);
         animator.registerAnimationCallback(this);
         health = self.getTrait(HealthTrait.class);
+        imob = self.getTrait(ImmobilizedTrait.class);
+        if (self instanceof EnemyBasic) {
+            rightFacing = ((EnemyBasic) self).rightFacing;
+        } else if (self instanceof EnemyHeavy) {
+            rightFacing = ((EnemyHeavy)self).rightFacing;
+        }
 
         if (!(physical.body instanceof BoxBody)){
             throw new RuntimeException("InputHandlerTrait requires PhysicalTrait, but it also requires a BoxBody for the physicalTrait.body");
@@ -42,30 +61,75 @@ public class ControlTraitEnemy extends Trait implements AnimationCallback {
     }
 
     public void update() {
+        Vector2 target = new Vector2();
+        if (self instanceof EnemyBasic) {
+            target = ((EnemyBasic) self).target;
+        } else if (self instanceof EnemyHeavy) {
+            target = ((EnemyHeavy) self).target;
+        }
+        Vector2 myPos = new Vector2(self.getTrait(PositionTrait.class).x, self.getTrait(PositionTrait.class).y) ;
+        if(dead) {
             // wipe yo'self off. You dead.
             zeroOutVelocity();
+        }
         if (health.health <= 0) {
             System.out.println("I'M FUCKING DEAD");
-            animator.changeStateIfUnique("death", false);
+            animator.changeStateIfUnique("die", false);
+            dead = true;
             physical.setActive(false);
             return;
         }
-        Vector2 movement = new Vector2(0, 0);
         // character can either attack or move. not both.
-                animator.setState("punch", false);
-
-        if (movement.len() < 1){
-            zeroOutVelocity();
-        } else {
-            physical.body.body.setLinearVelocity(movement);
+        if (attacking) {
+            return;
         }
 
-        Vector2 vel = physical.body.getLinearVelocity();
+        Vector2 vel = new Vector2(0, 0);
+        if(target.x < myPos.x){
+            if (myPos.x - target.x >minDist){
+                vel.x -= speed;
+                self.getTrait(AnimatorTrait.class).changeStateIfUnique("walk", true);
+//            log.debug("Enemy: Want to move left");
+            }
+        }
+        if(target.x >= myPos.x){
+            if (target.x - myPos.x>minDist){
+                vel.x += speed;
+                self.getTrait(AnimatorTrait.class).changeStateIfUnique("walk", true);
+//            log.debug("Enemy: Want to move right");
+            }
+        }
+        if((target.y < myPos.y)
+                && (myPos.y - target.y)>minDist/10){
+            vel.y -= speed;
+            self.getTrait(AnimatorTrait.class).changeStateIfUnique("walk", true);
+//            log.debug("Enemy: Want to move down");
+        }
+        if((target.y >= myPos.y)
+                && (target.y - myPos.y)>minDist/10){
+            vel.y += speed;
+            self.getTrait(AnimatorTrait.class).changeStateIfUnique("walk", true);
+//            log.debug("Enemy: Want to move up");
+        }
+        if(vel.x == 0 && vel.y == 0) {
+            SoundLibrary.GetSound("Ground_Pound").play();
+            self.getTrait(AnimatorTrait.class).setState("hit", false);
+            attacking = true;
+        }
+        vel = vel.nor().scl(speed);
+        self.getTrait(PhysicalTrait.class).body.body.setLinearVelocity(vel);
 
+        if (vel.len() < 1){
+            zeroOutVelocity();
+        } else {
+            physical.body.body.setLinearVelocity(vel);
+        }
+
+        vel = physical.body.getLinearVelocity();
         if (vel.x > 0){
-            animator.flipped = false;
-        } else if(vel.x < 0) {
             animator.flipped = true;
+        } else if(vel.x < 0) {
+            animator.flipped = false;
         }
     }
 
@@ -82,9 +146,9 @@ public class ControlTraitEnemy extends Trait implements AnimationCallback {
 
     @Override
     public void animationEnded(String name) {
-        if (name.equals("punch")) {
-
-        } else if(name.equals("pain") || name.equals("backpain")){
+        attacking = false;
+        if(name.equals("die")){
+            self.markForDeletion();
         }
     }
 }

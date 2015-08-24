@@ -89,7 +89,11 @@ public class GameScreen implements Screen {
                 y2 = ((PositionTrait) o2Traits.get(1)).y;
             }
 
-            return y1 >= y2 ? -1 : 1;
+            if (y1 == y2) {
+                return Integer.compare(o1.hashCode(), o2.hashCode());
+            } else {
+                return y1 > y2 ? -1 : 1;
+            }
         }
     };
 
@@ -120,7 +124,7 @@ public class GameScreen implements Screen {
         shaper = new ShapeRenderer();
         //
         final GameScreen self = this;
-        TextButton btn = new TextButton("Back", SkinManager.instance.getSkin("menu-skin"), "simple");
+        TextButton btn = new TextButton("Back", SkinManager.instance.getSkin("menu-skin"), "button");
         btn.setPosition(50, 50);
         btn.addListener(new ClickListener() {
             @Override
@@ -171,8 +175,9 @@ public class GameScreen implements Screen {
         stage.act();
 
         world.update(Conf.instance.worldStepTime());
+        AIHiveMind.update();
         for (GameObject obj : gameObjects){
-            List<Trait> traits = obj.getTraits(InputHandlerTrait.class, ControlTrait.class, PhysicalTrait.class, DebugTrait.class, UpdatableTrait.class, PathFollowerTrait.class, MoveDirectionTrait.class);
+            List<Trait> traits = obj.getTraits(InputHandlerTrait.class, ControlTrait.class, PhysicalTrait.class, DebugTrait.class, UpdatableTrait.class, PathFollowerTrait.class, MoveDirectionTrait.class, ControlTraitEnemy.class);
             if (traits.get(0) != null) {
                 ((InputHandlerTrait) traits.get(0)).update();
             }
@@ -194,6 +199,9 @@ public class GameScreen implements Screen {
             if (traits.get(6) != null) {
                 ((MoveDirectionTrait) traits.get(6)).travel(delta);
             }
+            if(traits.get(7) != null){
+                ((ControlTraitEnemy) traits.get(7)).update();
+            }
 
             // handle deletion of objects gracefully
             if (obj.shouldBeDeleted()) {
@@ -203,7 +211,7 @@ public class GameScreen implements Screen {
 
         removeMarkedGameObjects();
         addObjectsToAdd();
-        AIHiveMind.update();
+       
 
         camera.update();
         batch.setProjectionMatrix(camera.combined);

@@ -60,6 +60,7 @@ public class Game extends com.badlogic.gdx.Game {
         AtlasManager.instance.loadAtlas("packed/bum_n.atlas");
         AtlasManager.instance.loadAtlas("packed/bot.atlas");
         AtlasManager.instance.loadAtlas("packed/bot_n.atlas");
+        AtlasManager.instance.loadAtlas("packed/heavybot.atlas");
         AtlasManager.instance.loadAtlas("packed/spark.atlas");
         AtlasManager.instance.loadAtlas("packed/spark_n.atlas");
         AtlasManager.instance.loadAtlas("packed/environment.atlas");
