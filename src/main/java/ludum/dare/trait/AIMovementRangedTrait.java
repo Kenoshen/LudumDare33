@@ -80,7 +80,7 @@ public class AIMovementRangedTrait extends Trait implements AnimationCallback{
     @Override
     public void animationEnded(String name) {
         if (name.equals("shoot")) {
-            GameScreen.queueAddObject(new SparkBall(position.x, position.y+1, 0, aim.cpy().nor(), 10));
+            GameScreen.addObject(new SparkBall(position.x, position.y+1, 0, aim.cpy().nor(), 10));
             animator.setState("walk");
         }
     }

@@ -202,7 +202,6 @@ public class GameScreen implements Screen {
         }
 
         removeMarkedGameObjects();
-        addNewGameObjects();
         addObjectsToAdd();
         AIHiveMind.update();
 
@@ -291,17 +290,6 @@ public class GameScreen implements Screen {
         music.dispose();
     }
 
-    public static void queueAddObject(GameObject obj) {
-        objsToAdd.add(obj);
-    }
-
-    private void addNewGameObjects() {
-        for(GameObject newObj : objsToAdd) {
-            gameObjects.add(newObj);
-        }
-        objsToAdd.clear();
-    }
-
     private void removeMarkedGameObjects(){
         // handle deletion of objects gracefully
         if (objsToDelete.size() > 0){
@@ -316,7 +304,11 @@ public class GameScreen implements Screen {
         }
     }
 
-    public void addObjects(List<GameObject> objects){
+    public static void addObject(GameObject object){
+        objsToAdd.add(object);
+    }
+
+    public static void addObjects(List<GameObject> objects){
         objsToAdd.addAll(objects);
     }
 
