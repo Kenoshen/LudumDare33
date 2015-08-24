@@ -53,7 +53,7 @@ public class AtlasManager {
                 return region;
             }
         }
-        return null;
+        throw new RuntimeException("Could not find texture region with name: " + name);
     }
 
     public Array<TextureAtlas.AtlasRegion> findRegions(String name){
@@ -64,6 +64,6 @@ public class AtlasManager {
                 return regions;
             }
         }
-        return null;
+        throw new RuntimeException("Could not find texture regions with name: " + name);
     }
 }

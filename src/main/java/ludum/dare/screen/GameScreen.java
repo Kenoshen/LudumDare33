@@ -99,6 +99,9 @@ public class GameScreen implements Screen {
 
     public GameScreen(final Game game, Level level){
 
+        AtlasManager.instance.loadAtlas("packed/game.atlas");
+        AtlasManager.instance.loadAtlas("packed/game_n.atlas");
+
         music = SoundLibrary.GetMusic("Main_Song");
         music.setVolume(.5f);
         music.play();

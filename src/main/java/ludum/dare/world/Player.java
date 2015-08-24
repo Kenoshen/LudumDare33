@@ -264,7 +264,7 @@ public class Player extends GameObject {
 
 
         bundle.addNamedAnimation(new NamedAnimation("land", .1f,
-                AtlasManager.instance.findRegions("bum/land/bumLand"), AtlasManager.instance.findRegions("bum/cross/bumCross_n"),
+                AtlasManager.instance.findRegions("bum/land/bumLand"), AtlasManager.instance.findRegions("bum/land/bumLand_n"),
                 new Vector2(0, 1.75f), new Vector2(width, height * 1.25f)));
         CollisionSequence landSequence = new CollisionSequence();
         landSequence.name = "land";
@@ -285,7 +285,7 @@ public class Player extends GameObject {
         bundle.addHurtboxSequence(landSequence);
 
         bundle.addNamedAnimation(new NamedAnimation("zap", .1f,
-                AtlasManager.instance.findRegions("bum/zap/bumShock"), AtlasManager.instance.findRegions("bum/zap/bumShock"),
+                AtlasManager.instance.findRegions("bum/zap/bumShock"), AtlasManager.instance.findRegions("bum/zap/bumShock_n"),
                 new Vector2(0,0), new Vector2(width, height)));
 
         bundle.addNamedAnimation(new NamedAnimation("death", .1f,
