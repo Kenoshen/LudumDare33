@@ -2,6 +2,7 @@ package ludum.dare.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -35,6 +36,8 @@ public class SplashScreen implements Screen {
 
     @Override
     public void show() {
+        AtlasManager.instance.loadAtlasAsynch("packed/game.atlas");
+        AtlasManager.instance.loadAtlasAsynch("packed/game_n.atlas");
         bdWallpaper.addAction(Actions.alpha(0));
         ldWallpaper.addAction(
                 Actions.sequence(
@@ -68,6 +71,7 @@ public class SplashScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        AtlasManager.instance.update();
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
