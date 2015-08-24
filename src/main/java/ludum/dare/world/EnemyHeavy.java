@@ -51,7 +51,7 @@ public class EnemyHeavy extends GameObject{
         traits.add(new DrawableTrait(this));
         traits.add(new CollidableTrait(this, collisionFunc));
 
-        traits.add(new HealthTrait(this, 1, null));
+        traits.add(new HealthTrait(this, 80, null));
 
         //This is to cache the sound
         SoundLibrary.GetSound("Ground_Pound");

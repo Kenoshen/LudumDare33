@@ -61,6 +61,7 @@ public class GameScreen implements Screen {
     private CKeyboard keyboard;
 
     private SpriteBatch batch;
+    private SpriteBatch uiBatch;
     private ShapeRenderer shaper;
 
     private Music music;
@@ -128,6 +129,7 @@ public class GameScreen implements Screen {
         keyboard = CKeyboard.instance;
         //
         batch = new SpriteBatch();
+        uiBatch = new SpriteBatch();
         program = createShader();
         batch.setShader(program);
         shaper = new ShapeRenderer();
@@ -234,6 +236,7 @@ public class GameScreen implements Screen {
 
         camera.update();
         batch.setProjectionMatrix(camera.combined);
+        uiBatch.setProjectionMatrix(camera.combined);
         shaper.setProjectionMatrix(camera.combined);
 
         batch.begin();
@@ -241,9 +244,11 @@ public class GameScreen implements Screen {
 
         Collections.sort(gameObjects, compare);
 
+        HealthBarTrait healthBarer = null;
+
         int currentNumberOfLights = 0;
         for (GameObject obj : gameObjects){
-            List<Trait> traits = obj.getTraits(AnimatorTrait.class, DrawableTrait.class, TimedCollisionTrait.class, CameraFollowTrait.class, CollidableTrait.class, LightTrait.class, PositionTrait.class);
+            List<Trait> traits = obj.getTraits(AnimatorTrait.class, DrawableTrait.class, TimedCollisionTrait.class, CameraFollowTrait.class, CollidableTrait.class, LightTrait.class, PositionTrait.class, HealthBarTrait.class);
             PositionTrait tmpPos = (PositionTrait)traits.get(6);
             if (tmpPos != null){
                 Vector2 thingPos = new Vector2(tmpPos.x, tmpPos.y);
@@ -278,6 +283,10 @@ public class GameScreen implements Screen {
                     log.debug("currentNumberOfLights("+ (currentNumberOfLights + 1) + ") cannot exceed MAX_LIGHTS("+ MAX_LIGHTS + ")");
                 }
             }
+            if (traits.get(7) != null) {
+                healthBarer = ((HealthBarTrait) traits.get(6));
+
+            }
         }
 
         for (int i = currentNumberOfLights; i < MAX_LIGHTS; i++){
@@ -288,6 +297,12 @@ public class GameScreen implements Screen {
         listCollisions.clear();
         batch.end();
         shaper.end();
+        uiBatch.begin();
+        
+        if (healthBarer != null) {
+            healthBarer.draw(camera, uiBatch);
+        }
+        uiBatch.end();
 
         if (world.debug() && DEBUG_DRAW){
             world.draw();
