@@ -65,6 +65,7 @@ public class GameScreen implements Screen {
 
     public List<GameObject> gameObjects = new ArrayList<>();
     private List<GameObject> objsToDelete = new ArrayList<>();
+    private List<GameObject> objsToAdd = new ArrayList<>();
 
     private AIHiveMind AIHM = new AIHiveMind();
 
