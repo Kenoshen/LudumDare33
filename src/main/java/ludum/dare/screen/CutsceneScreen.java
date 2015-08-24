@@ -74,6 +74,7 @@ public class CutsceneScreen implements Screen {
         }
 
         introMusic.play();
+        introMusic.setVolume(0.4f);
         showNextText(0);
     }
 
@@ -126,11 +127,15 @@ public class CutsceneScreen implements Screen {
         }
 
         if (fade) {
-            introMusic.setVolume(introMusic.getVolume() - .008f);
-            if (introMusic.getVolume() <= .1) {
-                introMusic.stop();
+//            float vol = introMusic.getVolume() - .008f;
+//            if (vol < 0){
+//                vol = 0;
+//            }
+//            introMusic.setVolume(vol);
+//            if (vol == 0) {
+//                introMusic.stop();
                 game.setScreen(new SplashScreen(game));
-            }
+//            }
         }
     }
 

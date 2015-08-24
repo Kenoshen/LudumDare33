@@ -16,6 +16,7 @@ public class PackTextures
         //
         TexturePacker.process(settings, "src/main/resources/imgs/ui/menu", "src/main/resources/packed", "ui");
         TexturePacker.process(settings, "src/main/resources/imgs/ui/background", "src/main/resources/packed", "ui-background");
+        TexturePacker.process(settings, "src/main/resources/imgs/ui/panels", "src/main/resources/packed", "panels");
         //
         TexturePacker.process(settings, "src/main/resources/imgs/game", "src/main/resources/packed", "game");
         TexturePacker.process(settings, "src/main/resources/imgs/game_n", "src/main/resources/packed", "game_n");

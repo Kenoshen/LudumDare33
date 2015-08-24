@@ -46,11 +46,11 @@ public class Game extends com.badlogic.gdx.Game {
         //
         AtlasManager.instance.loadAtlas("packed/ui.atlas");
         AtlasManager.instance.loadAtlas("packed/ui-background.atlas");
+        AtlasManager.instance.loadAtlas("packed/panels.atlas");
         //
         SkinManager.instance.loadSkin("skins/menu-skin.json", "ui");
         //
         AtlasManager.instance.loadAtlas("packed/misc.atlas");
-        //
         //
         setScreen(new ComicCutsceneScreen(this));
         //setScreen(new GameScreen(this, new DebugSprites()));
