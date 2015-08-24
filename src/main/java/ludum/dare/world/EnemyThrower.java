@@ -74,6 +74,10 @@ public class EnemyThrower extends GameObject{
         }
         bundle.addHurtboxSequence(shootSequence);
 
+        bundle.addNamedAnimation(new NamedAnimation("die", .1f, AtlasManager.instance.findRegions("bot/die/botDie"),
+                AtlasManager.instance.findRegions("bot/die/botDie_n"), new Vector2(0, 0), new Vector2(width, height)));
+
+
         animator = new AnimatorTrait(this, bundle.getAnimations());
         traits.add(animator);
         traits.add(new TimedCollisionTrait(this, bundle));

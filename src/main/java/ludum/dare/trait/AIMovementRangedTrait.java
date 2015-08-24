@@ -14,9 +14,13 @@ public class AIMovementRangedTrait extends Trait implements AnimationCallback{
     private AnimatorTrait animator;
     private Vector2 aim = new Vector2();
     private PositionTrait position;
+    private PhysicalTrait physical;
+    private HealthTrait health;
     private boolean shooting;
     private long lastShot = 0;
     private long shootTimer = 3000;
+
+    private boolean dead = false;
 
     public AIMovementRangedTrait(GameObject obj, float s, float md) {
         super(obj);
@@ -26,7 +30,7 @@ public class AIMovementRangedTrait extends Trait implements AnimationCallback{
 
     @Override
     public Class[] requires() {
-        return new Class[] {AnimatorTrait.class};
+        return new Class[] {AnimatorTrait.class, PhysicalTrait.class, HealthTrait.class};
     }
 
 
@@ -36,10 +40,24 @@ public class AIMovementRangedTrait extends Trait implements AnimationCallback{
         animator = self.getTrait(AnimatorTrait.class);
         animator.registerAnimationCallback(this);
         position = self.getTrait(PositionTrait.class);
+        physical = self.getTrait(PhysicalTrait.class);
+        health = self.getTrait(HealthTrait.class);
         shooting = false;
     }
 
     public void updateMovement(Vector2 target){
+        if(dead) {
+            // wipe yo'self off. You dead.
+            zeroOutVelocity();
+            return;
+        }
+        if (health.health <= 0) {
+            animator.changeStateIfUnique("die", false);
+            dead = true;
+            physical.setActive(false);
+            return;
+        }
+
         aim = target.cpy().sub(position.x, position.y).sub(0, 7);
         if (shooting) {
             return;
@@ -88,10 +106,19 @@ public class AIMovementRangedTrait extends Trait implements AnimationCallback{
         self.getTrait(PhysicalTrait.class).body.body.setLinearVelocity(vel);
     }
 
+    private void zeroOutVelocity() {
+        Vector2 vel = physical.body.body.getLinearVelocity();
+        vel.x *= -1;
+        vel.y *= -1;
+        physical.body.body.applyLinearImpulse(vel, new Vector2(0, 0), true);
+    }
+
     @Override
     public void animationStarted(String name) {
         if (name.equals("walk")) {
             shooting = false;
+        } else if (name.equals("die")) {
+            SoundLibrary.GetSound("Robot_Death").play();
         }
     }
 
@@ -102,7 +129,8 @@ public class AIMovementRangedTrait extends Trait implements AnimationCallback{
             animator.setState("walk");
             lastShot = System.currentTimeMillis();
             shooting = false;
-            System.out.println("done shoot");
+        } else if (name.equals("die")) {
+            self.markForDeletion();
         }
     }
 }

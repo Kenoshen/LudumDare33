@@ -26,13 +26,16 @@ public class ControlTraitEnemy extends Trait implements AnimationCallback {
     private float speed = 7;
     private float minDist = 9;
 
+    private long attackTime;
+    private long lastAttacked;
 
     public boolean dead = false;
 
-    public ControlTraitEnemy(GameObject obj, float speed, float minDist) {
+    public ControlTraitEnemy(GameObject obj, float speed, float minDist, float attackTime) {
         super(obj);
         this.speed = speed;
         this.minDist = minDist;
+        this.attackTime = (long)(attackTime * 1000);
     }
 
     @Override
@@ -71,10 +74,11 @@ public class ControlTraitEnemy extends Trait implements AnimationCallback {
         if(dead) {
             // wipe yo'self off. You dead.
             zeroOutVelocity();
+            return;
         }
         if (health.health <= 0) {
-            System.out.println("I'M FUCKING DEAD");
             animator.changeStateIfUnique("die", false);
+            SoundLibrary.GetSound("Robot_Death").play();
             dead = true;
             physical.setActive(false);
             return;
@@ -88,33 +92,38 @@ public class ControlTraitEnemy extends Trait implements AnimationCallback {
         if(target.x < myPos.x){
             if (myPos.x - target.x >minDist){
                 vel.x -= speed;
-                self.getTrait(AnimatorTrait.class).changeStateIfUnique("walk", true);
+                animator.changeStateIfUnique("walk", true);
 //            log.debug("Enemy: Want to move left");
             }
         }
         if(target.x >= myPos.x){
             if (target.x - myPos.x>minDist){
                 vel.x += speed;
-                self.getTrait(AnimatorTrait.class).changeStateIfUnique("walk", true);
+                animator.changeStateIfUnique("walk", true);
 //            log.debug("Enemy: Want to move right");
             }
         }
         if((target.y < myPos.y)
                 && (myPos.y - target.y)>minDist/10){
             vel.y -= speed;
-            self.getTrait(AnimatorTrait.class).changeStateIfUnique("walk", true);
+            animator.changeStateIfUnique("walk", true);
 //            log.debug("Enemy: Want to move down");
         }
         if((target.y >= myPos.y)
                 && (target.y - myPos.y)>minDist/10){
             vel.y += speed;
-            self.getTrait(AnimatorTrait.class).changeStateIfUnique("walk", true);
+            animator.changeStateIfUnique("walk", true);
 //            log.debug("Enemy: Want to move up");
         }
         if(vel.x == 0 && vel.y == 0) {
-            SoundLibrary.GetSound("Ground_Pound").play();
-            self.getTrait(AnimatorTrait.class).setState("hit", false);
-            attacking = true;
+            if (System.currentTimeMillis() - lastAttacked >= attackTime) {
+                SoundLibrary.GetSound("Ground_Pound").play();
+                animator.setState("hit", false);
+                attacking = true;
+                lastAttacked = System.currentTimeMillis();
+            } else {
+                animator.setState("stand", false);
+            }
         }
         vel = vel.nor().scl(speed);
         self.getTrait(PhysicalTrait.class).body.body.setLinearVelocity(vel);
