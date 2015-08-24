@@ -112,6 +112,7 @@ public class ControlTraitEnemy extends Trait implements AnimationCallback {
 //            log.debug("Enemy: Want to move up");
         }
         if(vel.x == 0 && vel.y == 0) {
+            SoundLibrary.GetSound("Ground_Pound").play();
             self.getTrait(AnimatorTrait.class).setState("hit", false);
             attacking = true;
         }
