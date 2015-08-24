@@ -3,6 +3,7 @@ package ludum.dare.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -29,6 +30,7 @@ import ludum.dare.level.Level;
 import ludum.dare.trait.*;
 import ludum.dare.utils.AtlasManager;
 import ludum.dare.utils.SkinManager;
+import ludum.dare.utils.Sprite;
 import ludum.dare.world.AIHiveMind;
 import ludum.dare.world.SoundLibrary;
 
@@ -71,11 +73,23 @@ public class GameScreen implements Screen {
     private Comparator<? super GameObject> compare = new Comparator<GameObject>() {
         @Override
         public int compare(GameObject o1, GameObject o2) {
-            if (o1.getTrait(PhysicalTrait.class) != null && o2.getTrait(PhysicalTrait.class) != null) {
-                return o1.getTrait(PhysicalTrait.class).body.getPosition().y >= o2.getTrait(PhysicalTrait.class).body.getPosition().y ? -1 : 1;
-            } else {
-                return o1.getTrait(PositionTrait.class).y >= o2.getTrait(PositionTrait.class).y ? -1 : 1;
+            List<Trait> o1Traits = o1.getTraits(PhysicalTrait.class, PositionTrait.class);
+            float y1 = 0;
+            if (o1Traits.get(0) != null){
+                y1 = ((PhysicalTrait) o1Traits.get(0)).body.getPosition().y;
+            } else if (o1Traits.get(1) != null){
+                y1 = ((PositionTrait) o1Traits.get(1)).y;
             }
+
+            List<Trait> o2Traits = o2.getTraits(PhysicalTrait.class, PositionTrait.class);
+            float y2 = 0;
+            if (o2Traits.get(0) != null){
+                y2 = ((PhysicalTrait) o2Traits.get(0)).body.getPosition().y;
+            } else if (o2Traits.get(1) != null){
+                y2 = ((PositionTrait) o2Traits.get(1)).y;
+            }
+
+            return y1 >= y2 ? -1 : 1;
         }
     };
 
@@ -102,7 +116,7 @@ public class GameScreen implements Screen {
         //
         batch = new SpriteBatch();
         program = createShader();
-//        batch.setShader(program);
+        //batch.setShader(program);
         shaper = new ShapeRenderer();
         //
         final GameScreen self = this;
@@ -189,6 +203,7 @@ public class GameScreen implements Screen {
 
         removeMarkedGameObjects();
         addNewGameObjects();
+        addObjectsToAdd();
         AIHiveMind.update();
 
         camera.update();
@@ -299,6 +314,15 @@ public class GameScreen implements Screen {
             }
             objsToDelete = new ArrayList<>();
         }
+    }
+
+    public void addObjects(List<GameObject> objects){
+        objsToAdd.addAll(objects);
+    }
+
+    private void addObjectsToAdd(){
+        gameObjects.addAll(objsToAdd);
+        objsToAdd.clear();
     }
 
     private ShaderProgram createShader() {
