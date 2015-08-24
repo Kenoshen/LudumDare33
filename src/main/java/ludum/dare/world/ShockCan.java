@@ -12,6 +12,7 @@ import ludum.dare.collision.CollisionSequence;
 import ludum.dare.screen.GameScreen;
 import ludum.dare.trait.*;
 import ludum.dare.utils.AtlasManager;
+import ludum.dare.utils.HealthCallback;
 import ludum.dare.utils.NamedAnimation;
 
 /**
@@ -24,13 +25,30 @@ public class ShockCan extends GameObject{
 
     private boolean isRed = true;
 
+    private HealthCallback callback = new HealthCallback() {
+        @Override
+        public void damageReceived(int amount, GameObject from) {
+
+        }
+
+        @Override
+        public void healthRegained(int amount, GameObject from) {
+
+        }
+
+        @Override
+        public void died() {
+            SoundLibrary.GetSound("Robot_Death").play();
+            GameScreen.addObject(new Explosion(getTrait(PositionTrait.class).x, getTrait(PositionTrait.class).y-1, 20));
+        }
+    };
 
     public ShockCan(float x, float y, float z){
         float size = 8;
         traits.add(new PositionTrait(this, x, y, z));
         traits.add(new DrawableTrait(this));
 
-        traits.add(new HealthTrait(this, 80, null));
+        traits.add(new HealthTrait(this, 80, callback));
         traits.add(new AITrait(this));
 
         AnimationBundle bundle = new AnimationBundle();
