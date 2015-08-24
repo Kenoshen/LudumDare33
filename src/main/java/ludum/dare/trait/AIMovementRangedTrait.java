@@ -39,6 +39,9 @@ public class AIMovementRangedTrait extends Trait implements AnimationCallback{
     }
 
     public void updateMovement(Vector2 target){
+        if (shooting) {
+            return;
+        }
         aim = target.cpy().sub(position.x, position.y).sub(0, 7);
         Vector2 vel = new Vector2(0, 0);
         if(target.x < position.x){
@@ -72,8 +75,9 @@ public class AIMovementRangedTrait extends Trait implements AnimationCallback{
         if(vel.x == 0 && vel.y == 0) {
 
             if(!shooting){
+                System.out.println("will shoot");
                 shooting = true;
-                self.getTrait(AnimatorTrait.class).changeStateIfUnique("shoot", false);
+                self.getTrait(AnimatorTrait.class).setState("shoot", false);
                 SoundLibrary.GetSound("Electric_Charge").play();
             }
         }
@@ -83,7 +87,9 @@ public class AIMovementRangedTrait extends Trait implements AnimationCallback{
 
     @Override
     public void animationStarted(String name) {
-
+        if (name.equals("walk")) {
+            shooting = false;
+        }
     }
 
     @Override
@@ -92,6 +98,7 @@ public class AIMovementRangedTrait extends Trait implements AnimationCallback{
             GameScreen.addObject(new SparkBall(position.x, position.y+1, 0, aim.cpy().nor(), 10));
             animator.setState("walk");
             shooting = false;
+            System.out.println("done shoot");
         }
     }
 }
