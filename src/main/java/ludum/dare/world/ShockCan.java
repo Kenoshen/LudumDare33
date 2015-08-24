@@ -9,40 +9,43 @@ import com.winger.physics.body.BoxBody;
 import ludum.dare.collision.AnimationBundle;
 import ludum.dare.collision.CollisionGroup;
 import ludum.dare.collision.CollisionSequence;
+import ludum.dare.screen.GameScreen;
 import ludum.dare.trait.*;
 import ludum.dare.utils.AtlasManager;
 import ludum.dare.utils.NamedAnimation;
+
+import javax.swing.text.Position;
 
 /**
  * Created by jake on 8/22/2015.
  */
 public class ShockCan extends GameObject{
     private PhysicalTrait physical;
-    private Vector2 target;
+    public Vector2 target;
     private AnimatorTrait animator;
 
 
     public ShockCan(float x, float y, float z){
-        float width = 12;
-        float height = 12;
+        float size = 8;
         traits.add(new PositionTrait(this, x, y, z));
         traits.add(new DrawableTrait(this));
 
         traits.add(new HealthTrait(this, 80, null));
+        traits.add(new AITrait(this));
 
         AnimationBundle bundle = new AnimationBundle();
 
-        NamedAnimation red = new NamedAnimation("red", .1f,AtlasManager.instance.findRegions("box/boxRed"), AtlasManager.instance.findRegions("box/boxRed"), new Vector2(0, 0), new Vector2(width*1.5f, height));
+        NamedAnimation red = new NamedAnimation("red", .1f,AtlasManager.instance.findRegions("box/boxRed"), AtlasManager.instance.findRegions("box/boxRed"), new Vector2(0, 0), new Vector2(size, size));
         bundle.addNamedAnimation(red);
-        NamedAnimation redDent = new NamedAnimation("redDent", .1f,AtlasManager.instance.findRegions("box/boxRedDent"), AtlasManager.instance.findRegions("box/boxRedDent"), new Vector2(0, 0), new Vector2(width*1.5f, height));
+        NamedAnimation redDent = new NamedAnimation("redDent", .1f,AtlasManager.instance.findRegions("box/boxRedDent"), AtlasManager.instance.findRegions("box/boxRedDent"), new Vector2(0, 0), new Vector2(size, size*2));
         bundle.addNamedAnimation(redDent);
-        NamedAnimation green = new NamedAnimation("green", .1f,AtlasManager.instance.findRegions("box/boxGreen"), AtlasManager.instance.findRegions("box/boxGreen"), new Vector2(0, 0), new Vector2(width*1.5f, height));
+        NamedAnimation green = new NamedAnimation("green", .1f,AtlasManager.instance.findRegions("box/boxGreen"), AtlasManager.instance.findRegions("box/boxGreen"), new Vector2(0, 0), new Vector2(size, size*2));
         bundle.addNamedAnimation(green);
-        NamedAnimation greenDent = new NamedAnimation("greenDent", .1f,AtlasManager.instance.findRegions("box/boxGreenDent"), AtlasManager.instance.findRegions("box/boxGreenDent"), new Vector2(0, 0), new Vector2(width*1.5f, height));
+        NamedAnimation greenDent = new NamedAnimation("greenDent", .1f,AtlasManager.instance.findRegions("box/boxGreenDent"), AtlasManager.instance.findRegions("box/boxGreenDent"), new Vector2(0, 0), new Vector2(size, size*2));
         bundle.addNamedAnimation(greenDent);
-        NamedAnimation broken = new NamedAnimation("broken", .1f,AtlasManager.instance.findRegions("box/boxBroken"), AtlasManager.instance.findRegions("box/boxBroken"), new Vector2(0, 0), new Vector2(width*1.5f, height));
+        NamedAnimation broken = new NamedAnimation("broken", .1f,AtlasManager.instance.findRegions("box/boxBroken"), AtlasManager.instance.findRegions("box/boxBroken"), new Vector2(0, 0), new Vector2(size, size*2));
         bundle.addNamedAnimation(broken);
-        NamedAnimation dead = new NamedAnimation("dead", .1f,AtlasManager.instance.findRegions("box/boxDead"), AtlasManager.instance.findRegions("box/boxDead"), new Vector2(0, 0), new Vector2(width*1.5f, height));
+        NamedAnimation dead = new NamedAnimation("dead", .1f,AtlasManager.instance.findRegions("box/boxDead"), AtlasManager.instance.findRegions("box/boxDead"), new Vector2(0, 0), new Vector2(size, size*2));
         bundle.addNamedAnimation(dead);
 
 
@@ -84,13 +87,19 @@ public class ShockCan extends GameObject{
         bd.position.x = x;
         bd.position.y = y;
         bd.fixedRotation = true;
-        CBody body = new BoxBody(width/2, 1).init(fd, bd);
+        CBody body = new BoxBody(size/2, 1).init(fd, bd);
         physical = new PhysicalTrait(this, body);
-        physical.setOffset(0, height/2 - .5f);
+        physical.setOffset(0, size/2 - .5f);
         traits.add(physical);
 
         traits.add(new DebugTrait(this));
 
         initializeTraits();
+    }
+
+    public void shoot() {
+        PositionTrait position = getTrait(PositionTrait.class);
+        Vector2 aim = target.cpy().sub(position.x, position.y).sub(0, 5);
+        GameScreen.addObject(new SparkBall(position.x, position.y-1, 0, aim.cpy().nor(), 10));
     }
 }

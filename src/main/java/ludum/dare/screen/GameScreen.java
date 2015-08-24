@@ -197,7 +197,7 @@ public class GameScreen implements Screen {
         world.update(Conf.instance.worldStepTime());
         AIHiveMind.update();
         for (GameObject obj : gameObjects){
-            List<Trait> traits = obj.getTraits(InputHandlerTrait.class, ControlTrait.class, PhysicalTrait.class, DebugTrait.class, UpdatableTrait.class, PathFollowerTrait.class, MoveDirectionTrait.class, ControlTraitEnemy.class, PositionTrait.class);
+            List<Trait> traits = obj.getTraits(InputHandlerTrait.class, ControlTrait.class, PhysicalTrait.class, DebugTrait.class, UpdatableTrait.class, PathFollowerTrait.class, MoveDirectionTrait.class, ControlTraitEnemy.class, PositionTrait.class, BossTrait.class);
 
             if (traits.get(0) != null) {
                 ((InputHandlerTrait) traits.get(0)).update();
@@ -222,6 +222,9 @@ public class GameScreen implements Screen {
             }
             if(traits.get(7) != null){
                 ((ControlTraitEnemy) traits.get(7)).update();
+            }
+            if(traits.get(9) != null){
+                ((BossTrait) traits.get(9)).update(delta);
             }
 
             // handle deletion of objects gracefully
