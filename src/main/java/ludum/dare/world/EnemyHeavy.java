@@ -1,7 +1,10 @@
 package ludum.dare.world;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
+import ludum.dare.utils.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -12,7 +15,10 @@ import ludum.dare.collision.CollisionGroup;
 import ludum.dare.collision.CollisionSequence;
 import ludum.dare.trait.*;
 import ludum.dare.utils.AtlasManager;
+import ludum.dare.utils.CollisionCallback;
 import ludum.dare.utils.NamedAnimation;
+
+import java.util.Map;
 
 /**
  * Created by jake on 8/22/2015.
@@ -24,14 +30,28 @@ public class EnemyHeavy extends GameObject{
 
     public boolean rightFacing = false;
 
+    private CollisionCallback collisionFunc = new CollisionCallback() {
+        @Override
+        public void collide(GameObject obj) {
+            if (obj.getTrait(InputHandlerTrait.class) == null) {
+                return;
+            }
+            HealthTrait health = obj.getTrait(HealthTrait.class);
+            if (health != null) {
+                health.damage(20, EnemyHeavy.this);
+            }
+        }
+    };
+
 
     public EnemyHeavy(float x, float y, float z){
         float width = 12;
         float height =12;
         traits.add(new PositionTrait(this, x, y, z));
         traits.add(new DrawableTrait(this));
+        traits.add(new CollidableTrait(this, collisionFunc));
 
-        traits.add(new HealthTrait(this, 50, null));
+        traits.add(new HealthTrait(this, 1, null));
 
         //This is to cache the sound
         SoundLibrary.GetSound("Ground_Pound");
@@ -39,7 +59,14 @@ public class EnemyHeavy extends GameObject{
         AnimationBundle bundle = new AnimationBundle();
 
         bundle.addNamedAnimation(new NamedAnimation("stand", .1f, AtlasManager.instance.getAtlas("heavybot").findRegions("stand/heavyStand"), AtlasManager.instance.getAtlas("heavybot").findRegions("stand/heavyStand"), new Vector2(0, 0), new Vector2(width * 1.5f, height)));
+        CollisionSequence standSequence = new CollisionSequence();
+        standSequence.name = "stand";
 
+        CollisionGroup standGroup = new CollisionGroup();
+        standGroup.boxes = new Rectangle[] {new Rectangle(-2,-5.5f,4,10)};
+
+        standSequence.frames = new CollisionGroup[] {standGroup};
+        bundle.addHurtboxSequence(standSequence);
 
         bundle.addNamedAnimation(new NamedAnimation("walk", .1f, AtlasManager.instance.getAtlas("heavybot").findRegions("walk/heavyWalk"), AtlasManager.instance.getAtlas("heavybot").findRegions("walk/heavyWalk"), new Vector2(0, 0), new Vector2(width * 1.5f, height)));
         CollisionSequence walkSequence = new CollisionSequence();
@@ -91,6 +118,10 @@ public class EnemyHeavy extends GameObject{
 
         bundle.addHitboxSequence(hitBoxSeq);
 
+        bundle.addNamedAnimation(new NamedAnimation("die", .1f, AtlasManager.instance.getAtlas("bot").findRegions("die/botDie"),
+                AtlasManager.instance.getAtlas("bot").findRegions("die/botDie"), new Vector2(4, 0), new Vector2(width * 1.5f, height)));
+
+
         animator = new AnimatorTrait(this, bundle.getAnimations());
         traits.add(animator);
 
@@ -98,7 +129,7 @@ public class EnemyHeavy extends GameObject{
 
         traits.add(new AITrait(this));
         traits.add(new AIMovementAggressiveTrait(this));
-        traits.add(new ControlTraitEnemy(this, 3, 12));
+        traits.add(new ControlTraitEnemy(this, 3, 12, 3));
 
         FixtureDef fd = new FixtureDef();
         BodyDef bd = new BodyDef();

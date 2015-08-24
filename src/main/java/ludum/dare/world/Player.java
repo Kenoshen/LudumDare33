@@ -330,7 +330,7 @@ public class Player extends GameObject {
         Vector2 v = new Vector2(0,0);
         ControlTrait myControl = getTrait(ControlTrait.class);
         HealthTrait healthTrait = getTrait(HealthTrait.class);
-        if(o instanceof EnemyBasic){
+        if(o instanceof EnemyBasic || o instanceof EnemyHeavy){
             getTrait(ImmobilizedTrait.class).imob = true;
             getTrait(ImmobilizedTrait.class).type = ImmobilizedTrait.Type.HIT;
             myControl.queuedAttack = false;
