@@ -26,6 +26,9 @@ public class BossLevel extends Level {
 
     @Override
     public List<GameObject> loadLevel() {
+        AtlasManager.instance.loadAtlasAsynch("packed/game.atlas");
+        AtlasManager.instance.loadAtlasAsynch("packed/game_n.atlas");
+        AtlasManager.instance.finishLoading();
         List<GameObject> objs = new ArrayList<>();
 
         ShockCan can1 = new ShockCan(12, 0, 0);
