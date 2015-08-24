@@ -39,10 +39,10 @@ public class AIMovementRangedTrait extends Trait implements AnimationCallback{
     }
 
     public void updateMovement(Vector2 target){
+        aim = target.cpy().sub(position.x, position.y).sub(0, 7);
         if (shooting) {
             return;
         }
-        aim = target.cpy().sub(position.x, position.y).sub(0, 7);
         Vector2 vel = new Vector2(0, 0);
         if(target.x < position.x){
             self.getTrait(AnimatorTrait.class).flipped = false;
