@@ -23,6 +23,7 @@ public class EnemyBasic extends GameObject{
     private PhysicalTrait physical;
     private AnimatorTrait animator;
     public Vector2 target;
+    public boolean hitFromRight;
 
     public boolean rightFacing = false;
 
@@ -138,15 +139,56 @@ public class EnemyBasic extends GameObject{
     }
     public void collidedWith(GameObject p){
         Vector2 v = new Vector2(0, 0);
+        ControlTraitEnemy myControl = getTrait(ControlTraitEnemy.class);
         PositionTrait ePos = getTrait(PositionTrait.class);
         PositionTrait pPos = p.getTrait(PositionTrait.class);
         String pAnimName = p.getTrait(AnimatorTrait.class).getCurrentAnimation().getName();
 
         if(pAnimName == "punch"){
-
+            System.out.println("I got punched");
+            if(ePos.x < pPos.x && ePos.y < pPos.y){
+                hitFromRight = true;
+                v.x -= 3;
+                v.y -= 1;
+            }
+            if(ePos.x >= pPos.x && ePos.y < pPos.y){
+                hitFromRight = false;
+                v.x += 3;
+                v.y -= 1;
+            }
+            if(ePos.x >= pPos.x && ePos.y >= pPos.y){
+                hitFromRight = false;
+                v.x += 3;
+                v.y += 1;
+            }
+            if(ePos.x < pPos.x && ePos.y >= pPos.y){
+                hitFromRight = true;
+                v.x -= 3;
+                v.y += 1;
+            }
         } else if(pAnimName == "punch2" || pAnimName == "jumpKick"){
-
+            if(ePos.x < pPos.x && ePos.y < pPos.y){
+                hitFromRight = true;
+                v.x -= 10;
+                v.y -= 5;
+            }
+            if(ePos.x >= pPos.x && ePos.y < pPos.y){
+                hitFromRight = false;
+                v.x += 10;
+                v.y -= 5;
+            }
+            if(ePos.x >= pPos.x && ePos.y >= pPos.y){
+                hitFromRight = false;
+                v.x += 10;
+                v.y += 5;
+            }
+            if(ePos.x < pPos.x && ePos.y >= pPos.y){
+                hitFromRight = true;
+                v.x -= 10;
+                v.y += 5;
+            }
         }
+        getTrait(PhysicalTrait.class).body.body.setLinearVelocity(v);
     }
 
     public void updateTarget(Vector2 t){

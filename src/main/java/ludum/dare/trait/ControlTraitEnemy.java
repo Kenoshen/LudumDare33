@@ -73,9 +73,8 @@ public class ControlTraitEnemy extends Trait implements AnimationCallback {
             zeroOutVelocity();
         }
         if (health.health <= 0) {
-            //TODO: add enemy death animation, enemy dieing will crash game until this added
             System.out.println("I'M FUCKING DEAD");
-            animator.changeStateIfUnique("death", false);
+            animator.changeStateIfUnique("die", false);
             dead = true;
             physical.setActive(false);
             return;
@@ -113,6 +112,7 @@ public class ControlTraitEnemy extends Trait implements AnimationCallback {
 //            log.debug("Enemy: Want to move up");
         }
         if(vel.x == 0 && vel.y == 0) {
+            SoundLibrary.GetSound("Ground_Pound").play();
             self.getTrait(AnimatorTrait.class).setState("hit", false);
             attacking = true;
         }
@@ -147,5 +147,8 @@ public class ControlTraitEnemy extends Trait implements AnimationCallback {
     @Override
     public void animationEnded(String name) {
         attacking = false;
+        if(name.equals("die")){
+            self.markForDeletion();
+        }
     }
 }
