@@ -2,6 +2,7 @@ package ludum.dare.trait;
 
 import com.badlogic.gdx.math.MathUtils;
 import ludum.dare.world.Boss;
+import ludum.dare.world.SoundLibrary;
 
 /**
  * Created by Admin on 8/24/2015.
@@ -16,6 +17,7 @@ public class BossTrait extends Trait {
 
     private int shotsFired = 0;
     private float shotSpeed = .75f;
+    private boolean soundPlayed = false;
     private boolean enemySpawned = false;
 
     private enum State {
@@ -38,8 +40,6 @@ public class BossTrait extends Trait {
 
     public void update(float delta) {
         elapsedTime += delta;
-
-        System.out.println(state + " " + elapsedTime);
 
         if (!started) {
             if (elapsedTime >= 3) {
@@ -72,26 +72,45 @@ public class BossTrait extends Trait {
                         break;
                 }
                 elapsedTime = 0;
-                System.out.println("State " + state + " chosen");
             }
         } else if (state.equals(State.CAN_1_ATTACK)) {
+            if (boss.can1.getTrait(HealthTrait.class).health <= 0) {
+                state = State.WAIT;
+            }
+            boss.can1.goGreen();
             if (shotsFired < 5) {
-                if (elapsedTime >= shotsFired * shotSpeed) {
+                float nextShotAt = 2 + shotsFired * shotSpeed;
+                if (!soundPlayed && elapsedTime >= nextShotAt - .8f) {
+                    soundPlayed = true;
+                    SoundLibrary.GetSound("Electric_Charge").play();
+                }
+                if (elapsedTime >= nextShotAt) {
                     boss.can1.shoot();
                     shotsFired++;
-                    System.out.println("Shoot Can 1");
+                    soundPlayed = false;
                 }
             } else {
+                boss.can1.goRed();
                 state = State.RESET;
             }
         } else if (state.equals(State.CAN_2_ATTACK)) {
+            if (boss.can2.getTrait(HealthTrait.class).health <= 0) {
+                state = State.WAIT;
+            }
+            boss.can2.goGreen();
             if (shotsFired < 5) {
-                if (elapsedTime >= shotsFired * shotSpeed) {
+                float nextShotAt = 2 + shotsFired * shotSpeed;
+                if (!soundPlayed && elapsedTime >= nextShotAt - .7f) {
+                    soundPlayed = true;
+                    SoundLibrary.GetSound("Electric_Charge").play();
+                }
+                if (elapsedTime >= nextShotAt) {
                     boss.can2.shoot();
                     shotsFired++;
-                    System.out.println("Shoot Can 2");
+                    soundPlayed = false;
                 }
             } else {
+                boss.can2.goRed();
                 state = State.RESET;
             }
         } else if (state.equals(State.SPAWN)) {
