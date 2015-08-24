@@ -284,7 +284,7 @@ public class GameScreen implements Screen {
                 }
             }
             if (traits.get(7) != null) {
-                healthBarer = ((HealthBarTrait) traits.get(6));
+                healthBarer = ((HealthBarTrait) traits.get(7));
 
             }
         }

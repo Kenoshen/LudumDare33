@@ -89,8 +89,6 @@ public class ShockCan extends GameObject{
         physical.setOffset(0, height/2 - .5f);
         traits.add(physical);
 
-        traits.add(new ShockCanTrait(this));
-
         traits.add(new DebugTrait(this));
 
         initializeTraits();
