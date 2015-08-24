@@ -51,6 +51,7 @@ public class SpawnerDoor extends GameObject{
         CBody body = new BoxBody(size/2, 1).init(fd, bd);
         physical = new PhysicalTrait(this, body);
         physical.setOffset(0, size/2 - .5f);
+        physical.setSensor(true);
         traits.add(physical);
 
         traits.add(new DebugTrait(this));
@@ -61,6 +62,8 @@ public class SpawnerDoor extends GameObject{
 
     public void spawnSomething() {
         PositionTrait position = getTrait(PositionTrait.class);
-        GameScreen.addObject(new SparkBall(position.x, position.y - 8, 0, new Vector2(1, -1), 20));
+        EnemyBasic basic = new EnemyBasic(position.x, position.y - 8, 0);
+        basic.initializeTraits();
+        GameScreen.addObject(basic);
     }
 }
