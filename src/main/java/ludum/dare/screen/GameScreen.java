@@ -120,7 +120,7 @@ public class GameScreen implements Screen {
         shaper = new ShapeRenderer();
         //
         final GameScreen self = this;
-        TextButton btn = new TextButton("Back", SkinManager.instance.getSkin("menu-skin"), "simple");
+        TextButton btn = new TextButton("Back", SkinManager.instance.getSkin("menu-skin"), "button");
         btn.setPosition(50, 50);
         btn.addListener(new ClickListener() {
             @Override

@@ -10,34 +10,34 @@
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable": {
-    "simple-black": {
-      "name": "simple",
-      "color": "black"
+    "button-white": {
+      "name": "button",
+      "color": "white"
     },
-    "simple-down-black": {
+    "simple-down-white": {
       "name": "simple-down",
+      "color": "white"
+    },
+    "flare-black": {
+      "name": "flare",
       "color": "black"
     },
-    "flare-green": {
-      "name": "flare",
-      "color": "green"
-    },
-    "flare-down-green": {
+    "flare-down-black": {
       "name": "flare-down",
-      "color": "green"
+      "color": "black"
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
-    "simple": {
-      "up": "simple-black" ,
-      "down": "simple-down-black",
+    "button": {
+      "up": "button-white" ,
+      "down": "button-white",
       "font": "chalkFont",
-      "fontColor": "green",
+      "fontColor": "black",
       "pressedOffsetY": -4
     },
     "flare": {
-      "up": "flare-green" ,
-      "down": "flare-down-green",
+      "up": "flare-black" ,
+      "down": "flare-down-black",
       "font": "chalkFont",
       "fontColor": "white",
       "pressedOffsetY": -4

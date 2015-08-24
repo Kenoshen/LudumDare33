@@ -3,14 +3,16 @@ package ludum.dare.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import ludum.dare.Game;
+import ludum.dare.level.TestLevel;
+import ludum.dare.level.TestSubLevels;
 import ludum.dare.utils.SkinManager;
 
 
@@ -23,6 +25,8 @@ public class MainMenuScreen implements Screen {
     private Stage stage = new Stage();
 
     private Table menu;
+    private Image background;
+    private Label title;
     private TextButton playBtn;
     private TextButton highscoreBtn;
     private TextButton optionsBtn;
@@ -33,16 +37,29 @@ public class MainMenuScreen implements Screen {
 
         Skin skin = SkinManager.instance.getSkin("menu-skin");
 
-        playBtn = new TextButton("Play", skin, "flare");
+
+        Texture backgroundTex = new Texture(Gdx.files.internal("imgs/game/misc/frame_0.png"));
+        background = new Image(backgroundTex);
+        background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        title = new Label("Robo Hobo", skin);
+        title.setFontScale(2);
+        title.setAlignment(Align.top);
+        title.setFillParent(true);
+
+        playBtn = new TextButton("Play", skin, "button");
         playBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new LevelSelectScreen(game));
+                TestSubLevels level = new TestSubLevels();
+                GameScreen screen = new GameScreen(game, level);
+                level.gameScreen = screen;
+                game.setScreen(screen);
             }
         });
-        highscoreBtn = new TextButton("Highscores", skin, "flare");
-        optionsBtn = new TextButton("Options", skin, "simple");
-        quitBtn = new TextButton("Exit", skin, "simple");
+        highscoreBtn = new TextButton("Highscores", skin, "button");
+        optionsBtn = new TextButton("Options", skin, "button");
+        quitBtn = new TextButton("Exit", skin, "button");
         quitBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -50,13 +67,17 @@ public class MainMenuScreen implements Screen {
             }
         });
 
+
         menu = new Table();
         menu.add(playBtn).height(60).padBottom(5).padTop(150).row();
-        menu.add(highscoreBtn).height(60).padBottom(5).row();
-        menu.add(optionsBtn).height(60).padBottom(5).row();
-        menu.add(quitBtn).height(60).padBottom(5).row();
+//        menu.add(highscoreBtn).height(60).padBottom(5).row();
+//        menu.add(optionsBtn).height(60).padBottom(5).row();
+//        menu.add(quitBtn).height(60).padBottom(5).row();
+        menu.align(Align.center);
         menu.setFillParent(true);
 
+        stage.addActor(background);
+        stage.addActor(title);
         stage.addActor(menu);
 
         Gdx.input.setInputProcessor(stage);
