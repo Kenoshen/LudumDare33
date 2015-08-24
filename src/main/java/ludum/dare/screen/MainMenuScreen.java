@@ -2,6 +2,7 @@ package ludum.dare.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -14,6 +15,7 @@ import ludum.dare.Game;
 import ludum.dare.level.TestSubLevels;
 import ludum.dare.utils.AtlasManager;
 import ludum.dare.utils.SkinManager;
+import ludum.dare.world.SoundLibrary;
 
 
 /**
@@ -95,6 +97,12 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void show() {
+        Music music = SoundLibrary.GetMusic("intro-withoutDelay");
+        if (!music.isPlaying()) {
+            music.setLooping(true);
+            music.setVolume(0.4f);
+            music.play();
+        }
         // animate the main menu when entering
         int seconds = 1;
         int moveOff = Gdx.graphics.getWidth();
