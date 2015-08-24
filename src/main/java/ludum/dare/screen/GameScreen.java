@@ -62,6 +62,7 @@ public class GameScreen implements Screen {
 
     public List<GameObject> gameObjects = new ArrayList<>();
     private List<GameObject> objsToDelete = new ArrayList<>();
+    private List<GameObject> objsToAdd = new ArrayList<>();
 
     private AIHiveMind AIHM = new AIHiveMind();
 
@@ -91,7 +92,7 @@ public class GameScreen implements Screen {
         //
         batch = new SpriteBatch();
         program = createShader();
-        batch.setShader(program);
+        //batch.setShader(program);
         shaper = new ShapeRenderer();
         //
         final GameScreen self = this;
@@ -174,6 +175,7 @@ public class GameScreen implements Screen {
         }
 
         removeMarkedGameObjects();
+        addObjectsToAdd();
         AIHiveMind.update();
 
         camera.update();
@@ -272,6 +274,15 @@ public class GameScreen implements Screen {
             }
             objsToDelete = new ArrayList<>();
         }
+    }
+
+    public void addObjects(List<GameObject> objects){
+        objsToAdd.addAll(objects);
+    }
+
+    private void addObjectsToAdd(){
+        gameObjects.addAll(objsToAdd);
+        objsToAdd.clear();
     }
 
     private ShaderProgram createShader() {
