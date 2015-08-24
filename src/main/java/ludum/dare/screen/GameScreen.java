@@ -47,7 +47,7 @@ import java.util.List;
 public class GameScreen implements Screen {
     private static final HTMLLogger log = HTMLLogger.getLogger(GameScreen.class, LogGroup.System);
 
-    private static final boolean DEBUG_DRAW = false;
+    private static final boolean DEBUG_DRAW = true;
     private static final int MAX_LIGHTS = 10;
     private static final float DIST_FROM_CAM_BEFORE_DEATH = 96;
 

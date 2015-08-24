@@ -77,6 +77,7 @@ public class TestSubLevels extends Level{
         light(Color.BLUE.cpy(), 20, 0, new Vector2(xOffset(1) + 13, 5));
 
         final Boundary rightSideBoundary = newRightSideBoundary(1);
+        enemyWaves(1, 1, EnemyWaveType.EASY, rightSideBoundary);
 
         return objs;
     }
@@ -84,6 +85,69 @@ public class TestSubLevels extends Level{
     // //////////////////////////////////////////
     // HELPER METHODS FOR CREATING LEVELS
     // //////////////////////////////////////////
+    private enum EnemyWaveType{
+        EASY,
+        MEDIUM,
+        HARD
+    }
+
+
+    private void enemyWaves(int section, int number, EnemyWaveType type, final Boundary rightBoundary){
+        if (number <= 0){
+            throw new RuntimeException("Enemy waves has to be greater than 0");
+        }
+        List<List<GameObject>> enemyWaves = new ArrayList<>();
+        for (int i = 0; i < number; i++){
+            List<GameObject> enemies = new ArrayList<>();
+            enemies.add(new EnemyThrower(xOffset(section) + halfScreenWidth, -5, 0));
+            enemyWaves.add(enemies);
+        }
+        for (int i = 0; i < number; i++){
+            final BlankObject trigger = new BlankObject();
+            objs.add(trigger);
+            final List<GameObject> curEnemyWave = enemyWaves.get(i);
+            if (i + 1 < number){
+                final List<GameObject> nextEnemyWave = enemyWaves.get(i + 1);
+                // call next wave
+                trigger.addAndInitializeTrait(new UpdatableTrait(trigger, new Runnable() {
+                    @Override
+                    public void run() {
+                        boolean allDead = true;
+                        for(GameObject obj : curEnemyWave){
+                            if (! obj.shouldBeDeleted()){
+                                allDead = false;
+                                break;
+                            }
+                        }
+                        if (allDead){
+                            GameScreen.addObjects(nextEnemyWave);
+                        }
+                    }
+                }));
+            }else {
+                // delete boundary when they all die instead of call next wave
+                trigger.addAndInitializeTrait(new UpdatableTrait(trigger, new Runnable() {
+                    @Override
+                    public void run() {
+                        boolean allDead = true;
+                        for(GameObject obj : curEnemyWave){
+                            if (! obj.shouldBeDeleted()){
+                                allDead = false;
+                                break;
+                            }
+                        }
+                        if (allDead){
+                            rightBoundary.markForDeletion();
+                        }
+                    }
+                }));
+            }
+        }
+
+        GameScreen.addObjects(enemyWaves.get(0));
+    }
+
+
     private void sectionSetup(final int section, String background){
         objs.add(new Background(section, 0.01f, "environment/background"));
         objs.add(new Background(section, "environment/" + background));
@@ -153,17 +217,6 @@ public class TestSubLevels extends Level{
         lp.traits.add(pft);
         lp.initializeTraits();
         objs.add(lp);
-    }
-
-    private enum EnemyWaveType{
-        EASY,
-        MEDIUM,
-        HARD
-    }
-
-
-    private void enemyWaves(int number, String type){
-
     }
 
     private float xOffset(int section){
