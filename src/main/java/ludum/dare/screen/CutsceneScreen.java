@@ -31,12 +31,12 @@ public class CutsceneScreen implements Screen {
     CKeyboard keyboard;
 
     private Music introMusic;
-    private boolean fade = false;
+    private boolean fadeIn = true;
+    private boolean fadeOut = false;
 
     public CutsceneScreen(final Game game) {
 
         introMusic = SoundLibrary.GetMusic("intro-withoutDelay");
-        introMusic.setVolume(1);
         this.game = game;
 
         listStoryText = new ArrayList<>();
@@ -73,8 +73,11 @@ public class CutsceneScreen implements Screen {
             l.addAction(Actions.alpha(0));
         }
 
-        introMusic.play();
-        introMusic.setVolume(0.4f);
+        if (!introMusic.isPlaying()) {
+            introMusic.setLooping(true);
+            introMusic.setVolume(0);
+            introMusic.play();
+        }
         showNextText(0);
     }
 
@@ -93,7 +96,7 @@ public class CutsceneScreen implements Screen {
                     Actions.run(new Runnable() {
                         @Override
                         public void run() {
-                            fade = true;
+                            fadeOut = true;
                         }
                     })));
         }
@@ -126,7 +129,16 @@ public class CutsceneScreen implements Screen {
             game.setScreen(new SplashScreen(game));
         }
 
-        if (fade) {
+        if (fadeIn) {
+            float vol = introMusic.getVolume() + .003f;
+            if (vol > 0.4f){
+                vol = 0.4f;
+                fadeIn = false;
+            }
+            introMusic.setVolume(vol);
+        }
+
+        if (fadeOut) {
 //            float vol = introMusic.getVolume() - .008f;
 //            if (vol < 0){
 //                vol = 0;

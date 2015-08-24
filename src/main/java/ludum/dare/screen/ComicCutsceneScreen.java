@@ -103,7 +103,7 @@ public class ComicCutsceneScreen implements Screen {
 
         if (fade) {
             music.setVolume(music.getVolume() - .008f);
-            if (music.getVolume() <= .1) {
+            if (music.getVolume() <= .01) {
                 fade = false;
                 music.setVolume(0.01f);
                 music.stop();
