@@ -45,9 +45,13 @@ public class AIHiveMind {
     public static void minionLogic(GameObject e, GameObject p){
         List traits = e.getTraits(AIMovementAggressiveTrait.class, AIMovementRangedTrait.class, AIMovementRetreatTrait.class );
         Vector2 pPos = new Vector2(p.getTrait(PositionTrait.class).x, p.getTrait(PositionTrait.class).y);
-//        if(traits.get(0) != null) {
-            ((EnemyBasic)e).target = pPos;
-//        }
+        if(traits.get(0) != null) {
+            if (e instanceof EnemyBasic) {
+                ((EnemyBasic) e).target = pPos;
+            } else if (e instanceof EnemyHeavy) {
+                ((EnemyHeavy) e).target = pPos;
+            }
+        }
         if(traits.get(1) != null){
             e.getTrait(AIMovementRangedTrait.class).updateMovement(pPos);
         }

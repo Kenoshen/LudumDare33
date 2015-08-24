@@ -18,15 +18,17 @@ import java.util.Map;
 /**
  * Created by jake on 8/22/2015.
  */
-public class EnemyThrower extends GameObject{
+public class EnemyHeavy extends GameObject{
     private PhysicalTrait physical;
-    private Vector2 target;
+    public Vector2 target;
     private AnimatorTrait animator;
 
+    public boolean rightFacing = false;
 
-    public EnemyThrower(float x, float y, float z){
+
+    public EnemyHeavy(float x, float y, float z){
         float width = 12;
-        float height = 12;
+        float height =12;
         traits.add(new PositionTrait(this, x, y, z));
         traits.add(new DrawableTrait(this));
 
@@ -34,16 +36,17 @@ public class EnemyThrower extends GameObject{
 
         AnimationBundle bundle = new AnimationBundle();
 
-        final NamedAnimation animation = new NamedAnimation("stand", .1f,AtlasManager.instance.getAtlas("spark").findRegions("stand/sparkStand"), AtlasManager.instance.getAtlas("spark").findRegions("stand/sparkStand"), new Vector2(0, 0), new Vector2(width*1.5f, height));
+        final NamedAnimation animation = new NamedAnimation("stand", .1f,AtlasManager.instance.getAtlas("heavybot").findRegions("stand/heavyStand"), AtlasManager.instance.getAtlas("heavybot").findRegions("stand/heavyStand"), new Vector2(0, 0), new Vector2(width*1.5f, height));
         bundle.addNamedAnimation(animation);
-        bundle.addNamedAnimation(new NamedAnimation("walk", .1f,AtlasManager.instance.getAtlas("spark").findRegions("walk/sparkWalk"), AtlasManager.instance.getAtlas("spark").findRegions("walk/sparkWalk"), new Vector2(0,0), new Vector2(width*1.5f, height)));
-        bundle.addNamedAnimation(new NamedAnimation("shoot", .1f, AtlasManager.instance.getAtlas("spark").findRegions("shoot/sparkShoot"), AtlasManager.instance.getAtlas("spark").findRegions("shoot/sparkShoot"), new Vector2(0, 1), new Vector2(width * 1.5f, height * 1.25f)));
+        bundle.addNamedAnimation(new NamedAnimation("walk", .1f,AtlasManager.instance.getAtlas("heavybot").findRegions("walk/heavyWalk"), AtlasManager.instance.getAtlas("heavybot").findRegions("walk/heavyWalk"), new Vector2(0,0), new Vector2(width*1.5f, height)));
+        bundle.addNamedAnimation(new NamedAnimation("hit", .1f,AtlasManager.instance.getAtlas("heavybot").findRegions("slam/heavySlam"), AtlasManager.instance.getAtlas("heavybot").findRegions("slam/heavySlams"), new Vector2(-3,3), new Vector2(width*1.5f, height*1.5f)));
 
         animator = new AnimatorTrait(this, bundle.getAnimations());
         traits.add(animator);
 
         traits.add(new AITrait(this));
-        traits.add(new AIMovementRangedTrait(this, 6.0f, 25.0f));
+        traits.add(new AIMovementAggressiveTrait(this));
+        traits.add(new ControlTraitEnemy(this, 3, 12));
 
         FixtureDef fd = new FixtureDef();
         BodyDef bd = new BodyDef();
