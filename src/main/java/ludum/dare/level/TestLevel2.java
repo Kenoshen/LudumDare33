@@ -35,15 +35,15 @@ public class TestLevel2 extends Level{
         o.addAndInitializeTrait(new CameraFollowTrait(o));
         objs.add(o);
 
-        o = new EnemyBasic(10, 5, 0, 6, 6);
+        o = new EnemyBasic(10, 5, 0);
         o.addAndInitializeTrait(new CameraFollowTrait(o));
         objs.add(o);
 
-        o = new EnemyBasic(10, 5, 0, 6, 6);
+        o = new EnemyBasic(10, 5, 0);
         o.addAndInitializeTrait(new CameraFollowTrait(o));
         objs.add(o);
 
-        o = new EnemyBasic(10, 5, 0, 6, 6);
+        o = new EnemyBasic(10, 5, 0);
         o.addAndInitializeTrait(new CameraFollowTrait(o));
         objs.add(o);
 
