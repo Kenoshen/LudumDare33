@@ -42,8 +42,8 @@ public class BossLevel extends Level {
 
 //        objs.add(new EnemyThrower(15, -10, 0));
 //        objs.add(new EnemyHeavy(15, -10, 0));
-//        objs.add(new Fourty(-10,-10,0,3));
-//        objs.add(new Chicken(-15,-10,0,6));
+        objs.add(new Fourty(-10,-10,0,3));
+        objs.add(new Chicken(-15,-10,0,6));
 
         objs.add(new Player(-8, -5, 0, CMouse.instance, CKeyboard.instance, null));
         TextureRegion tex = AtlasManager.instance.findRegion("white");

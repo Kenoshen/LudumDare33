@@ -17,22 +17,30 @@ import java.util.List;
 /**
  * Created by mwingfield on 8/6/15.
  */
-public class TestLevel extends Level{
+public class TestLevel extends Level {
 
     @Override
-    public String name(){
+    public String name() {
         return this.getClass().getSimpleName();
     }
 
     @Override
-    public List<GameObject> loadLevel(){
+    public List<GameObject> loadLevel() {
+        AtlasManager.instance.loadAtlasAsynch("packed/game.atlas");
+        AtlasManager.instance.loadAtlasAsynch("packed/game_n.atlas");
+        AtlasManager.instance.finishLoading();
         List<GameObject> objs = new ArrayList<>();
 
-//        objs.add(new EnemyBasic(15, -10, 0));
-        objs.add(new EnemyThrower(15, -10, 0));
+        objs.add(new EnemyHeavy(15, -10, 0).initializeTraits());
+
+//        for (GameObject obj : objs) {
+//            obj.initializeTraits();
+//        }
+        //objs.add(new EnemyBasic(15, -10, 0));
+//        objs.add(new EnemyThrower(15, -10, 0));
 //        objs.add(new EnemyHeavy(15, -10, 0));
-        objs.add(new Fourty(-10,-10,0,3));
-        objs.add(new Chicken(-15,-10,0,6));
+//        objs.add(new Fourty(-10,-10,0,3));
+//        objs.add(new Chicken(-15,-10,0,6));
 
         objs.add(new Player(0, 5, 0, CMouse.instance, CKeyboard.instance, null));
         TextureRegion tex = AtlasManager.instance.findRegion("white");

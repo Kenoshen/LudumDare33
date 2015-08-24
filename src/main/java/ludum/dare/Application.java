@@ -7,18 +7,26 @@ import com.winger.log.HTMLLogger;
 import com.winger.log.LogGroup;
 import com.winger.utils.GlobalClipboard;
 
+import java.util.Arrays;
+
 public class Application
 {
     private static final HTMLLogger log = HTMLLogger.getLogger(Application.class, LogGroup.System);
     public static void main(String[] arg)
     {
+        System.out.println(Arrays.toString(arg));
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "Scabs";
         config.foregroundFPS = 60;
         config.backgroundFPS = 0;
         config.resizable = false;
-        config.width = 1600;
-        config.height = 900;
+        if (arg.length > 0 && "low-res".equals(arg[0])) {
+            config.width = 800;
+            config.height = 450;
+        } else {
+            config.width = 1600;
+            config.height = 900;
+        }
         config.addIcon("imgs/icons/icon_128.png", Files.FileType.Internal);
         config.addIcon("imgs/icons/icon_32.png", Files.FileType.Internal);
         config.addIcon("imgs/icons/icon_16.png", Files.FileType.Internal);

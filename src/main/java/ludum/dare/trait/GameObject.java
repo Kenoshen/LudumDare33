@@ -51,10 +51,11 @@ public abstract class GameObject {
         return shouldBeDeleted;
     }
 
-    public void initializeTraits(){
+    public GameObject initializeTraits(){
         for (Trait t : traits){
             t.initialize();
         }
+        return this;
     }
 
 }

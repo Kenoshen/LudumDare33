@@ -1,15 +1,13 @@
 package ludum.dare.world;
 
-import ludum.dare.utils.Sprite;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.winger.physics.CBody;
 import com.winger.physics.body.BoxBody;
-import javafx.animation.Animation;
 import ludum.dare.Conf;
 import ludum.dare.collision.AnimationBundle;
 import ludum.dare.trait.*;
+import ludum.dare.utils.Sprite;
 
 /**
  * Created by mwingfield on 8/3/15.
