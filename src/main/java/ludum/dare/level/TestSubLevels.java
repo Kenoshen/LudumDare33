@@ -58,8 +58,8 @@ public class TestSubLevels extends Level{
         objs.add(newBottomBoundary(0));
         objs.add(path(-halfScreenWidth, -halfScreenHeight, -halfScreenWidth, -3, halfScreenWidth, -1));
 
-        objs.add(new Background(0, 0.01f, "background"));
-        objs.add(new Background(0, "background_one"));
+        objs.add(new Background(0, 0.01f, "environment/background"));
+        objs.add(new Background(0, "environment/background_one"));
 
         player = new Player(0, -5, 0, CMouse.instance, CKeyboard.instance, null);
         objs.add(player);
@@ -118,7 +118,7 @@ public class TestSubLevels extends Level{
         objs.add(newBottomBoundary(1));
         objs.add(path(-halfScreenWidth + screenWidth, -1, halfScreenWidth + screenWidth, -1));
 
-        objs.add(new Background(1, "background_two"));
+        objs.add(new Background(1, "environment/background_two"));
 
         Light light = new Light(screenWidth - 11, 5);
         light.light.color = Color.BLUE;

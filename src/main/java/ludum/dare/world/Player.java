@@ -285,7 +285,7 @@ public class Player extends GameObject {
         bundle.addHurtboxSequence(landSequence);
 
         bundle.addNamedAnimation(new NamedAnimation("zap", .1f,
-                AtlasManager.instance.getAtlas("bum").findRegions("zap/bumShock"), AtlasManager.instance.getAtlas("bum").findRegions("zap/bumShock"),
+                AtlasManager.instance.findRegions("bum/zap/bumShock"), AtlasManager.instance.findRegions("bum/zap/bumShock"),
                 new Vector2(0,0), new Vector2(width, height)));
 
         bundle.addNamedAnimation(new NamedAnimation("death", .1f,
