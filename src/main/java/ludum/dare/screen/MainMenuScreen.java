@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import ludum.dare.Game;
 import ludum.dare.level.TestSubLevels;
+import ludum.dare.utils.AtlasManager;
 import ludum.dare.utils.SkinManager;
 
 
@@ -27,8 +28,7 @@ public class MainMenuScreen implements Screen {
     private Image background;
     private Label title;
     private TextButton playBtn;
-    private TextButton highscoreBtn;
-    private TextButton optionsBtn;
+    private TextButton creditsBtn;
     private TextButton quitBtn;
 
     public MainMenuScreen(final Game game){
@@ -36,9 +36,7 @@ public class MainMenuScreen implements Screen {
 
         Skin skin = SkinManager.instance.getSkin("menu-skin");
 
-
-        Texture backgroundTex = new Texture(Gdx.files.internal("imgs/misc/frame_0.png"));
-        background = new Image(backgroundTex);
+        background = new Image(AtlasManager.instance.findRegion("titleBlank"));
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         title = new Label("Robo Hobo", skin);
@@ -47,7 +45,7 @@ public class MainMenuScreen implements Screen {
         title.setFillParent(true);
 
         playBtn = new TextButton("Play", skin, "button");
-        playBtn.addListener(new ClickListener(){
+        playBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 TestSubLevels level = new TestSubLevels();
@@ -55,8 +53,23 @@ public class MainMenuScreen implements Screen {
                 game.setScreen(screen);
             }
         });
-        highscoreBtn = new TextButton("Highscores", skin, "button");
-        optionsBtn = new TextButton("Options", skin, "button");
+        creditsBtn = new TextButton("Credits", skin, "button");
+        creditsBtn.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                int seconds = 1;
+                int moveOff = Gdx.graphics.getWidth();
+                menu.addAction(Actions.sequence(
+                        Actions.moveBy(-moveOff, 0, seconds),
+                        Actions.run(new Runnable() {
+                            @Override
+                            public void run() {
+                                game.setScreen(new CreditsScreen(game));
+                            }
+                        })
+                ));
+            }
+        });
         quitBtn = new TextButton("Exit", skin, "button");
         quitBtn.addListener(new ClickListener(){
             @Override
@@ -67,10 +80,9 @@ public class MainMenuScreen implements Screen {
 
 
         menu = new Table();
-        menu.add(playBtn).height(60).padBottom(5).padTop(150).row();
-//        menu.add(highscoreBtn).height(60).padBottom(5).row();
-//        menu.add(optionsBtn).height(60).padBottom(5).row();
-//        menu.add(quitBtn).height(60).padBottom(5).row();
+        menu.add(playBtn).height(60).padBottom(20).padTop(150).row();
+        menu.add(creditsBtn).height(60).padBottom(20).row();
+        menu.add(quitBtn).height(60).padBottom(20).row();
         menu.align(Align.center);
         menu.setFillParent(true);
 
@@ -84,8 +96,12 @@ public class MainMenuScreen implements Screen {
     @Override
     public void show() {
         // animate the main menu when entering
-        int startFrom = -300;
-        menu.addAction(Actions.sequence(Actions.moveBy(0, startFrom), Actions.moveBy(0, -startFrom, 1)));
+        int seconds = 1;
+        int moveOff = Gdx.graphics.getWidth();
+        menu.addAction(Actions.sequence(
+                Actions.moveBy(-moveOff, 0),
+                Actions.moveBy(moveOff, 0, seconds)
+        ));
     }
 
     @Override

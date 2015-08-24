@@ -12,11 +12,8 @@ import ludum.dare.level.*;
 import ludum.dare.level.TestLamp;
 import ludum.dare.level.TestLevel;
 import ludum.dare.level.TestLevel2;
-import ludum.dare.screen.CutsceneScreen;
+import ludum.dare.screen.*;
 import ludum.dare.screen.GameScreen;
-import ludum.dare.screen.GameScreen;
-import ludum.dare.screen.MainMenuScreen;
-import ludum.dare.screen.SplashScreen;
 import ludum.dare.utils.AtlasManager;
 import ludum.dare.utils.SkinManager;
 
@@ -54,12 +51,9 @@ public class Game extends com.badlogic.gdx.Game {
         //
         AtlasManager.instance.loadAtlas("packed/misc.atlas");
         //
-        AtlasManager.instance.loadAtlas("packed/game.atlas");
-        AtlasManager.instance.loadAtlas("packed/game_n.atlas");
         //
-        //setScreen(new CutsceneScreen(this));
-        setScreen(new GameScreen(this, new DebugSprites()));
-        //setScreen(new MainMenuScreen(this));
+        setScreen(new MainMenuScreen(this));
+        //setScreen(new GameScreen(this, new DebugSprites()));
         //setScreen(new GameScreen(this, new TestSubLevels()));
     }
 
