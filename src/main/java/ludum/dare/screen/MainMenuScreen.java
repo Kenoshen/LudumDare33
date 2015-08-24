@@ -60,7 +60,7 @@ public class MainMenuScreen implements Screen {
                 int seconds = 1;
                 int moveOff = Gdx.graphics.getWidth();
                 menu.addAction(Actions.sequence(
-                        Actions.moveBy(-moveOff, 0, seconds),
+                        Actions.moveBy(moveOff, 0, seconds),
                         Actions.run(new Runnable() {
                             @Override
                             public void run() {
@@ -99,8 +99,8 @@ public class MainMenuScreen implements Screen {
         int seconds = 1;
         int moveOff = Gdx.graphics.getWidth();
         menu.addAction(Actions.sequence(
-                Actions.moveBy(-moveOff, 0),
-                Actions.moveBy(moveOff, 0, seconds)
+                Actions.moveBy(moveOff, 0),
+                Actions.moveBy(-moveOff, 0, seconds)
         ));
     }
 
