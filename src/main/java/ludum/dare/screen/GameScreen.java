@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -31,9 +32,11 @@ import ludum.dare.utils.AtlasManager;
 import ludum.dare.utils.SkinManager;
 import ludum.dare.utils.Sprite;
 import ludum.dare.world.AIHiveMind;
-import ludum.dare.world.BlankObject;
+import ludum.dare.world.SoundLibrary;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -62,21 +65,29 @@ public class GameScreen implements Screen {
 
     public List<GameObject> gameObjects = new ArrayList<>();
     private List<GameObject> objsToDelete = new ArrayList<>();
-    private List<GameObject> objsToAdd = new ArrayList<>();
 
     private AIHiveMind AIHM = new AIHiveMind();
 
     ShaderProgram program;
+    private Comparator<? super GameObject> compare = new Comparator<GameObject>() {
+        @Override
+        public int compare(GameObject o1, GameObject o2) {
+            if (o1.getTrait(PhysicalTrait.class) != null && o2.getTrait(PhysicalTrait.class) != null) {
+                return o1.getTrait(PhysicalTrait.class).body.getPosition().y >= o2.getTrait(PhysicalTrait.class).body.getPosition().y ? -1 : 1;
+            } else {
+                return o1.getTrait(PositionTrait.class).y >= o2.getTrait(PositionTrait.class).y ? -1 : 1;
+            }
+        }
+    };
 
     public GameScreen(final Game game, Level level){
 
-        music = Gdx.audio.newMusic(Gdx.files.internal("music/Main_song.ogg"));
-        music.setVolume(1);
+        music = SoundLibrary.GetMusic("Main_Song");
+        music.setVolume(.5f);
         music.play();
 
         this.game = game;
         //
-        //camera = new FollowOrthoCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera = new FollowOrthoCamera(48, 27);
         camera.minZoom = 1f;
         camera.maxZoom = 1f;
@@ -185,6 +196,7 @@ public class GameScreen implements Screen {
         batch.begin();
         shaper.begin(ShapeRenderer.ShapeType.Line);
 
+        Collections.sort(gameObjects, compare);
 
         int currentNumberOfLights = 0;
         for (GameObject obj : gameObjects){

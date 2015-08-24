@@ -53,13 +53,13 @@ public class AIMovementAggressiveTrait extends Trait implements AnimationCallbac
             }
         }
         if((target.y < self.getTrait(PositionTrait.class).y)
-                && (self.getTrait(PositionTrait.class).y - target.y)>minDist/4){
+                && (self.getTrait(PositionTrait.class).y - target.y)>minDist/10){
             vel.y -= speed;
             self.getTrait(AnimatorTrait.class).changeStateIfUnique("walk", true);
 //            log.debug("Enemy: Want to move down");
         }
         if((target.y >= self.getTrait(PositionTrait.class).y)
-                && (target.y - self.getTrait(PositionTrait.class).y)>minDist/2){
+                && (target.y - self.getTrait(PositionTrait.class).y)>minDist/10){
             vel.y += speed;
             self.getTrait(AnimatorTrait.class).changeStateIfUnique("walk", true);
 //            log.debug("Enemy: Want to move up");

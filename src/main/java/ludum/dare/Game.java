@@ -53,6 +53,7 @@ public class Game extends com.badlogic.gdx.Game {
         SkinManager.instance.loadSkin("skins/menu-skin.json", "ui");
         //
         AtlasManager.instance.loadAtlas("packed/misc.atlas");
+        AtlasManager.instance.loadAtlas("packed/collectables.atlas");
 
         AtlasManager.instance.loadAtlas("packed/bum.atlas");
         AtlasManager.instance.loadAtlas("packed/bum_n.atlas");

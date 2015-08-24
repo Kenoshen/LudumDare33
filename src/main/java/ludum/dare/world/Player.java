@@ -35,6 +35,11 @@ public class Player extends GameObject {
     private CollisionCallback collisionFunc = new CollisionCallback() {
             @Override
         public void collide(GameObject obj) {
+                HealthTrait health = obj.getTrait(HealthTrait.class);
+                if (health != null) {
+                    health.damage(10, Player.this);
+                    System.out.println("I doth remain standing.");
+                }
             System.out.println("Those are my cans");
             SoundLibrary.GetSound("Hit_Robot").play();
         }
@@ -56,14 +61,18 @@ public class Player extends GameObject {
         float width = 12;
         float height = 12;
 
+        SoundLibrary.GetSound("Player_Death");
+
         traits.add(new PositionTrait(this, x, y, z));
         traits.add(new DrawableTrait(this));
         traits.add(new CollidableTrait(this, collisionFunc));
         traits.add(new ImmobilizedTrait(this));
 
-        traits.add(new HealthTrait(this, 100, healthCallback));
+        traits.add(new HealthTrait(this, 1, healthCallback));
 
         ID = "Player";
+
+        traits.add(new LightTrait(this));
 
 
         AnimationBundle bundle = new AnimationBundle();
@@ -104,7 +113,6 @@ public class Player extends GameObject {
             walkSequence.frames[i] = walkGroup;
         }
         bundle.addHurtboxSequence(walkSequence);
-
 
         bundle.addNamedAnimation(new NamedAnimation("punch", 0.1f,
                 AtlasManager.instance.getAtlas("bum").findRegions("jab/bumJab"), AtlasManager.instance.getAtlas("bum_n").findRegions("jab/bumJab_n"),
@@ -278,6 +286,10 @@ public class Player extends GameObject {
         landSequence.frames = new CollisionGroup[] {landSeq1, landSeq2, landSeq3};
         bundle.addHurtboxSequence(landSequence);
 
+        bundle.addNamedAnimation(new NamedAnimation("death", .1f,
+                AtlasManager.instance.getAtlas("bum").findRegions("death/bumDeath"), AtlasManager.instance.getAtlas("bum").findRegions("death/bumDeath"),
+                new Vector2(5f, 0), new Vector2(width * 1.25f, height)));
+
 
         animator = new AnimatorTrait(this, bundle.getAnimations());
         traits.add(animator);
@@ -315,7 +327,12 @@ public class Player extends GameObject {
         ControlTrait myControl = getTrait(ControlTrait.class);
         if(o instanceof EnemyBasic){
 
-            SoundLibrary.GetSound("Get_Hit").play();
+            HealthTrait healthTrait = getTrait(HealthTrait.class);
+            if(healthTrait != null) {
+                if (healthTrait.health > 0) {
+                    SoundLibrary.GetSound("Get_Hit").play();
+                }
+            }
 
             if (getTrait(PositionTrait.class).x < o.getTrait(PositionTrait.class).x
                     && getTrait(PositionTrait.class).y < o.getTrait(PositionTrait.class).y){
