@@ -61,7 +61,7 @@ public class ComicCutsceneScreen implements Screen {
         tmpImage.setFillParent(true);
         stage.addActor(tmpImage);
 
-        sounds.add(Tups.tup2(6.5f, SoundLibrary.GetSound("Hit_Robot")));
+        sounds.add(Tups.tup2(5.5f, SoundLibrary.GetSound("dumpster")));
         sounds.add(Tups.tup2(12.0f, SoundLibrary.GetSound("lightningStrike")));
         sounds.add(Tups.tup2(13.0f, SoundLibrary.GetSound("lightningStrike")));
     }
@@ -89,7 +89,7 @@ public class ComicCutsceneScreen implements Screen {
             }
         }
         if(!fade){
-            if (totalTime > 17) {
+            if (totalTime > 18) {
                 fade = true;
             }
         }
@@ -101,12 +101,21 @@ public class ComicCutsceneScreen implements Screen {
             }
         }
 
-        log.debug(music.getVolume());
         if (fade) {
             music.setVolume(music.getVolume() - .008f);
             if (music.getVolume() <= .1) {
+                fade = false;
+                music.setVolume(0.01f);
                 music.stop();
-                game.setScreen(new CutsceneScreen(game));
+                stage.addAction(Actions.sequence(
+                        Actions.fadeOut(1),
+                        Actions.run(new Runnable() {
+                            @Override
+                            public void run() {
+                                game.setScreen(new CutsceneScreen(game));
+                            }
+                        })
+                ));
             }
         }
 
