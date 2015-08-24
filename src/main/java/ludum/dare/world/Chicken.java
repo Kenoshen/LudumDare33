@@ -70,6 +70,7 @@ public class Chicken extends GameObject{
         CBody body = new BoxBody(1, 1).init(fd, bd);
         PhysicalTrait physical = new PhysicalTrait(this, body);
         physical.setOffset(0, (size*.75f)/2-.5f);
+        physical.setSensor(true);
         traits.add(physical);
 
         traits.add(new DebugTrait(this));
