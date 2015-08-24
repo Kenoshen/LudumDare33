@@ -30,6 +30,7 @@ import com.winger.struct.Tups;
 import ludum.dare.Conf;
 import ludum.dare.Game;
 import ludum.dare.level.Level;
+import ludum.dare.level.TestSubLevels;
 import ludum.dare.trait.*;
 import ludum.dare.utils.AtlasManager;
 import ludum.dare.utils.SkinManager;
@@ -78,6 +79,8 @@ public class GameScreen implements Screen {
     private static List<GameObject> objsToAdd = new ArrayList<>();
 
     private AIHiveMind AIHM = new AIHiveMind();
+
+    private boolean endGame = false;
 
     ShaderProgram program;
     private Comparator<? super GameObject> compare = new Comparator<GameObject>() {
@@ -172,6 +175,10 @@ public class GameScreen implements Screen {
         //
         log.debug("Load scene");
         gameObjects = level.loadLevel();
+
+        if (level instanceof TestSubLevels){
+            ((TestSubLevels)level).gameScreen = this;
+        }
     }
 
     @Override
@@ -196,50 +203,50 @@ public class GameScreen implements Screen {
         stage.act();
 
         Vector2 camPos = new Vector2(camera.position.x, camera.position.y);
+        if (!endGame) {
+            world.update(Conf.instance.worldStepTime());
+            AIHiveMind.update();
+            for (GameObject obj : gameObjects) {
+                List<Trait> traits = obj.getTraits(InputHandlerTrait.class, ControlTrait.class, PhysicalTrait.class, DebugTrait.class, UpdatableTrait.class, PathFollowerTrait.class, MoveDirectionTrait.class, ControlTraitEnemy.class, PositionTrait.class, BossTrait.class);
 
-        world.update(Conf.instance.worldStepTime());
-        AIHiveMind.update();
-        for (GameObject obj : gameObjects){
-            List<Trait> traits = obj.getTraits(InputHandlerTrait.class, ControlTrait.class, PhysicalTrait.class, DebugTrait.class, UpdatableTrait.class, PathFollowerTrait.class, MoveDirectionTrait.class, ControlTraitEnemy.class, PositionTrait.class, BossTrait.class);
+                if (traits.get(0) != null) {
+                    ((InputHandlerTrait) traits.get(0)).update();
+                }
+                if (traits.get(1) != null) {
+                    ((ControlTrait) traits.get(1)).update();
+                }
+                if (traits.get(2) != null) {
+                    ((PhysicalTrait) traits.get(2)).step();
+                }
+                if (traits.get(3) != null) {
+                    ((DebugTrait) traits.get(3)).debug();
+                }
+                if (traits.get(4) != null) {
+                    ((UpdatableTrait) traits.get(4)).update();
+                }
+                if (traits.get(5) != null) {
+                    ((PathFollowerTrait) traits.get(5)).travelOnPath(delta);
+                }
+                if (traits.get(6) != null) {
+                    ((MoveDirectionTrait) traits.get(6)).travel(delta);
+                }
+                if (traits.get(7) != null) {
+                    ((ControlTraitEnemy) traits.get(7)).update();
+                }
+                if (traits.get(9) != null) {
+                    ((BossTrait) traits.get(9)).update(delta);
+                }
 
-            if (traits.get(0) != null) {
-                ((InputHandlerTrait) traits.get(0)).update();
-            }
-            if (traits.get(1) != null) {
-                ((ControlTrait) traits.get(1)).update();
-            }
-            if (traits.get(2) != null) {
-                ((PhysicalTrait) traits.get(2)).step();
-            }
-            if (traits.get(3) != null) {
-                ((DebugTrait) traits.get(3)).debug();
-            }
-            if (traits.get(4) != null) {
-                ((UpdatableTrait) traits.get(4)).update();
-            }
-            if (traits.get(5) != null) {
-                ((PathFollowerTrait) traits.get(5)).travelOnPath(delta);
-            }
-            if (traits.get(6) != null) {
-                ((MoveDirectionTrait) traits.get(6)).travel(delta);
-            }
-            if(traits.get(7) != null){
-                ((ControlTraitEnemy) traits.get(7)).update();
-            }
-            if(traits.get(9) != null){
-                ((BossTrait) traits.get(9)).update(delta);
+                // handle deletion of objects gracefully
+                if (obj.shouldBeDeleted()) {
+                    objsToDelete.add(obj);
+                }
             }
 
-            // handle deletion of objects gracefully
-            if (obj.shouldBeDeleted()) {
-                objsToDelete.add(obj);
-            }
+            removeMarkedGameObjects();
+            addObjectsToAdd();
+
         }
-
-        removeMarkedGameObjects();
-        addObjectsToAdd();
-       
-
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         uiBatch.setProjectionMatrix(camera.combined);
@@ -417,6 +424,7 @@ public class GameScreen implements Screen {
     }
 
     public void endGame(){
+        endGame = true;
         Image fader = new Image(AtlasManager.instance.findRegion("white"));
         fader.setColor(Color.BLACK);
         fader.setBounds(-800, -800, Gdx.graphics.getWidth() + 1600, Gdx.graphics.getHeight() + 1600);

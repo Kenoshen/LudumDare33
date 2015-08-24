@@ -22,6 +22,7 @@ public class TestSubLevels extends Level{
     private float screenHeight = 27;
     private float halfScreenWidth = 24;
     private float halfScreenHeight = 13.5f;
+    public GameScreen gameScreen;
 
     List<GameObject> objs;
 
@@ -155,7 +156,7 @@ public class TestSubLevels extends Level{
     }
 
 
-    private List<GameObject> section6(int section){
+    private List<GameObject> section6(final int section){
         objs = new ArrayList<>();
 
         sectionSetup(section);
@@ -163,15 +164,29 @@ public class TestSubLevels extends Level{
         path(section,
                 new Vector2(0, -1),
                 new Vector2(screenWidth - 18, -1),
-                new Vector2(screenWidth - 0, -4),
+                new Vector2(screenWidth - 0, -6),
                 new Vector2(screenWidth - 10, -13));
 
-        light(Color.BLUE.cpy(), 20, 0, new Vector2(xOffset(section) + 13, 5));
+        float left = xOffset(section);
+        light(Color.YELLOW.cpy(), 40, 0, new Vector2(xOffset(section) + 9.5f, 13));
 
         final Boundary rightSideBoundary = path(section,
                 new Vector2(screenWidth - 8, halfScreenHeight),
                 new Vector2(screenWidth - 8, -halfScreenHeight));
-        enemyWaves(section, 2, EnemyWaveType.EASY, rightSideBoundary);
+
+        enemyWaves(section, 1, EnemyWaveType.BOSS, rightSideBoundary);
+
+
+        final BlankObject trigger = new BlankObject();
+        trigger.addAndInitializeTrait(new UpdatableTrait(trigger, new Runnable() {
+            @Override
+            public void run() {
+                if (player.getTrait(PositionTrait.class).x > (xOffset(section) + screenWidth - 11)) {
+                    gameScreen.endGame();
+                }
+            }
+        }));
+        objs.add(trigger);
 
         return objs;
     }
@@ -182,7 +197,8 @@ public class TestSubLevels extends Level{
     private enum EnemyWaveType{
         EASY,
         MEDIUM,
-        HARD
+        HARD,
+        BOSS
     }
 
 
@@ -193,7 +209,21 @@ public class TestSubLevels extends Level{
         List<List<GameObject>> enemyWaves = new ArrayList<>();
         for (int i = 0; i < number; i++){
             List<GameObject> enemies = new ArrayList<>();
-            enemies.add(new EnemyThrower(xOffset(section) + screenWidth, -(halfScreenHeight - 3), 0));
+            switch (type){
+                case EASY:
+                    enemies.add(new EnemyThrower(xOffset(section) + screenWidth, -(halfScreenHeight - 3), 0));
+                    break;
+                case MEDIUM:
+                    enemies.add(new EnemyThrower(xOffset(section) + screenWidth, -(halfScreenHeight - 3), 0));
+                    break;
+                case HARD:
+                    enemies.add(new EnemyThrower(xOffset(section) + screenWidth, -(halfScreenHeight - 3), 0));
+                    break;
+                case BOSS:
+                    enemies.add(new EnemyThrower(xOffset(section) + halfScreenWidth, -2, 0));
+                    break;
+            }
+
             enemyWaves.add(enemies);
         }
         for (int i = 0; i < number; i++){
