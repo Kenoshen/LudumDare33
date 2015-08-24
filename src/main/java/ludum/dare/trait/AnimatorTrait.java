@@ -72,6 +72,9 @@ public class AnimatorTrait extends Trait {
             if (!keepTime) {
                 curTimer = 0;
             }
+            for(AnimationCallback callback : callbackList) {
+                callback.animationStarted(state);
+            }
             return true;
         } else {
             // return false; // TODO: maybe use the true/false thing instead of an exception?

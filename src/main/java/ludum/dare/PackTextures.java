@@ -21,6 +21,7 @@ public class PackTextures
         TexturePacker.process(settings, "src/main/resources/imgs/game/bum_n", "src/main/resources/packed", "bum_n");
         TexturePacker.process(settings, "src/main/resources/imgs/game/bot", "src/main/resources/packed", "bot");
         TexturePacker.process(settings, "src/main/resources/imgs/game/bot_n", "src/main/resources/packed", "bot_n");
+        TexturePacker.process(settings, "src/main/resources/imgs/game/heavybot", "src/main/resources/packed", "heavybot");
         TexturePacker.process(settings, "src/main/resources/imgs/game/spark", "src/main/resources/packed", "spark");
         TexturePacker.process(settings, "src/main/resources/imgs/game/environment", "src/main/resources/packed", "environment");
         TexturePacker.process(settings, "src/main/resources/imgs/game/environment_n", "src/main/resources/packed", "environment_n");
