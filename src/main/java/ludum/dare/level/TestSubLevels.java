@@ -22,8 +22,6 @@ public class TestSubLevels extends Level{
     private float halfScreenWidth = 24;
     private float halfScreenHeight = 13.5f;
 
-    public GameScreen gameScreen;
-
     private Player player;
 
     @Override
@@ -80,7 +78,7 @@ public class TestSubLevels extends Level{
                     trigger.markForDeletion();
                     target.markForDeletion();
                     rightSideBoundary.markForDeletion();
-                    gameScreen.addObjects(nextSection());
+                    GameScreen.addObjects(nextSection());
                 }
             }
         }));
