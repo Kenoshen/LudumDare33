@@ -58,7 +58,7 @@ public class EnemyHeavy extends GameObject{
 
         AnimationBundle bundle = new AnimationBundle();
 
-        bundle.addNamedAnimation(new NamedAnimation("stand", .1f, AtlasManager.instance.getAtlas("heavybot").findRegions("stand/heavyStand"), AtlasManager.instance.getAtlas("heavybot").findRegions("stand/heavyStand"), new Vector2(0, 0), new Vector2(width * 1.5f, height)));
+        bundle.addNamedAnimation(new NamedAnimation("stand", .1f, AtlasManager.instance.findRegions("heavybot/stand/heavyStand"), AtlasManager.instance.findRegions("heavybot/stand/heavyStand"), new Vector2(0, 0), new Vector2(width * 1.5f, height)));
         CollisionSequence standSequence = new CollisionSequence();
         standSequence.name = "stand";
 
@@ -68,7 +68,7 @@ public class EnemyHeavy extends GameObject{
         standSequence.frames = new CollisionGroup[] {standGroup};
         bundle.addHurtboxSequence(standSequence);
 
-        bundle.addNamedAnimation(new NamedAnimation("walk", .1f, AtlasManager.instance.getAtlas("heavybot").findRegions("walk/heavyWalk"), AtlasManager.instance.getAtlas("heavybot").findRegions("walk/heavyWalk"), new Vector2(0, 0), new Vector2(width * 1.5f, height)));
+        bundle.addNamedAnimation(new NamedAnimation("walk", .1f, AtlasManager.instance.findRegions("heavybot/walk/heavyWalk"), AtlasManager.instance.findRegions("heavybot/walk/heavyWalk"), new Vector2(0, 0), new Vector2(width * 1.5f, height)));
         CollisionSequence walkSequence = new CollisionSequence();
         walkSequence.name = "walk";
 
@@ -82,7 +82,7 @@ public class EnemyHeavy extends GameObject{
         bundle.addHurtboxSequence(walkSequence);
 
 
-        bundle.addNamedAnimation(new NamedAnimation("hit", .1f, AtlasManager.instance.getAtlas("heavybot").findRegions("slam/heavySlam"), AtlasManager.instance.getAtlas("heavybot").findRegions("slam/heavySlams"), new Vector2(-3, 3), new Vector2(width * 1.5f, height * 1.5f)));
+        bundle.addNamedAnimation(new NamedAnimation("hit", .1f, AtlasManager.instance.findRegions("heavybot/slam/heavySlam"), AtlasManager.instance.findRegions("heavybot/slam/heavySlam"), new Vector2(-3, 3), new Vector2(width * 1.5f, height * 1.5f)));
         CollisionSequence hitSequence = new CollisionSequence();
         hitSequence.name = "hit";
 
@@ -118,8 +118,8 @@ public class EnemyHeavy extends GameObject{
 
         bundle.addHitboxSequence(hitBoxSeq);
 
-        bundle.addNamedAnimation(new NamedAnimation("die", .1f, AtlasManager.instance.getAtlas("bot").findRegions("die/botDie"),
-                AtlasManager.instance.getAtlas("bot").findRegions("die/botDie"), new Vector2(4, 0), new Vector2(width * 1.5f, height)));
+        bundle.addNamedAnimation(new NamedAnimation("die", .1f, AtlasManager.instance.findRegions("bot/die/botDie"),
+                AtlasManager.instance.findRegions("bot/die/botDie"), new Vector2(4, 0), new Vector2(width * 1.5f, height)));
 
 
         animator = new AnimatorTrait(this, bundle.getAnimations());

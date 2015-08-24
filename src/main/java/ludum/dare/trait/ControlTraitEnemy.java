@@ -74,6 +74,7 @@ public class ControlTraitEnemy extends Trait implements AnimationCallback {
         if(dead) {
             // wipe yo'self off. You dead.
             zeroOutVelocity();
+            return;
         }
         if (health.health <= 0) {
             animator.changeStateIfUnique("die", false);
