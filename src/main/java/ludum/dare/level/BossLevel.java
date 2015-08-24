@@ -28,8 +28,8 @@ public class BossLevel extends Level {
     public List<GameObject> loadLevel() {
         List<GameObject> objs = new ArrayList<>();
 
-        ShockCan can1 = new ShockCan(12, 3, 0);
-        ShockCan can2 = new ShockCan(20f, -6, 0);
+        ShockCan can1 = new ShockCan(12, 0, 0);
+        ShockCan can2 = new ShockCan(20f, -9, 0);
         SpawnerDoor door = new SpawnerDoor(-8, 3, 0);
         objs.add(can1);
         objs.add(can2);
