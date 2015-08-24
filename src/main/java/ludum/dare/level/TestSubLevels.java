@@ -58,7 +58,7 @@ public class TestSubLevels extends Level{
         objs.add(newBottomBoundary(0));
         objs.add(path(-halfScreenWidth, -halfScreenHeight, -halfScreenWidth, -3, halfScreenWidth, -1));
 
-        //objs.add(new Background(0, "background"));
+        objs.add(new Background(0, 0.01f, "background"));
         objs.add(new Background(0, "background_one"));
 
         player = new Player(0, -5, 0, CMouse.instance, CKeyboard.instance, null);
