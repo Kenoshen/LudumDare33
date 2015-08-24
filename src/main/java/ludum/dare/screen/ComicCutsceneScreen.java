@@ -1,7 +1,6 @@
 package ludum.dare.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -103,7 +102,7 @@ public class ComicCutsceneScreen implements Screen {
 
         if (fade) {
             music.setVolume(music.getVolume() - .008f);
-            if (music.getVolume() <= .1) {
+            if (music.getVolume() <= .01) {
                 fade = false;
                 music.setVolume(0.01f);
                 music.stop();

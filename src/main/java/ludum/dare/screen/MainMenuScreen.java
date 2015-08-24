@@ -2,6 +2,7 @@ package ludum.dare.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -14,6 +15,7 @@ import ludum.dare.Game;
 import ludum.dare.level.TestSubLevels;
 import ludum.dare.utils.AtlasManager;
 import ludum.dare.utils.SkinManager;
+import ludum.dare.world.SoundLibrary;
 
 
 /**
@@ -31,7 +33,11 @@ public class MainMenuScreen implements Screen {
     private TextButton creditsBtn;
     private TextButton quitBtn;
 
-    public MainMenuScreen(final Game game){
+    private Music music;
+
+    boolean active = true;
+
+    public MainMenuScreen(final Game game) {
         this.game = game;
 
         Skin skin = SkinManager.instance.getSkin("menu-skin");
@@ -39,7 +45,7 @@ public class MainMenuScreen implements Screen {
         background = new Image(AtlasManager.instance.findRegion("titleBlank"));
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        title = new Label("Robo Hobo", skin);
+        title = new Label("Scabs", skin);
         title.setFontScale(2);
         title.setAlignment(Align.top);
         title.setFillParent(true);
@@ -48,13 +54,12 @@ public class MainMenuScreen implements Screen {
         playBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                TestSubLevels level = new TestSubLevels();
-                GameScreen screen = new GameScreen(game, level);
-                game.setScreen(screen);
+                AtlasManager.instance.finishLoading();
+                active = false;
             }
         });
         creditsBtn = new TextButton("Credits", skin, "button");
-        creditsBtn.addListener(new ClickListener(){
+        creditsBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 int seconds = 1;
@@ -71,7 +76,7 @@ public class MainMenuScreen implements Screen {
             }
         });
         quitBtn = new TextButton("Exit", skin, "button");
-        quitBtn.addListener(new ClickListener(){
+        quitBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.exit();
@@ -95,6 +100,12 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void show() {
+        music = SoundLibrary.GetMusic("intro-withoutDelay");
+        if (!music.isPlaying()) {
+            music.setLooping(true);
+            music.setVolume(0.4f);
+            music.play();
+        }
         // animate the main menu when entering
         int seconds = 1;
         int moveOff = Gdx.graphics.getWidth();
@@ -106,11 +117,35 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.39f, 0.58f, 0.92f, 1);
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.act();
         stage.draw();
+
+        if (!active) {
+            stage.addAction(Actions.sequence(
+                    Actions.fadeOut(1),
+                    Actions.delay(.5f),
+                    Actions.run(new Runnable() {
+                        @Override
+                        public void run() {
+                            TestSubLevels level = new TestSubLevels();
+                            GameScreen screen = new GameScreen(game, level);
+                            music.stop();
+                            game.setScreen(screen);
+                        }
+                    })
+            ));
+            if (music.isPlaying()) {
+                float volume = music.getVolume() - .005f;
+                if (volume < 0) {
+                    music.stop();
+                }
+                music.setVolume(volume);
+            }
+        }
+
     }
 
     @Override
