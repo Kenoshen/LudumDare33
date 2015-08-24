@@ -331,10 +331,10 @@ public class GameScreen implements Screen {
         program.setUniformi("u_normals", 1);
         program.setUniformf("strength", 1);
         program.setUniformf("ambientIntensity", 0.3f);
-        program.setUniformf("ambientColor", new Vector3(0.3f, 0.3f, 1f));
+        program.setUniformf("ambientColor", new Vector3(0.3f, 0.6f, 1f));
         program.setUniformf("resolution", new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         program.setUniformf("lightColor", new Vector3(1f, 0.7f, 0.6f));
-        program.setUniformf("attenuation", new Vector3(0.4f, 3f, 20f));
+        program.setUniformf("attenuation", new Vector3(0f, 0f, 5f));
         program.setUniformi("useShadow", true ? 1 : 0);
         program.setUniformi("useNormals", true ? 1 : 0);
         program.setUniformi("yInvert", false ? 1 : 0);

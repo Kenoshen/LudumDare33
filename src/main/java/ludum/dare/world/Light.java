@@ -11,9 +11,12 @@ import ludum.dare.utils.Sprite;
  * Created by Michael on 8/23/2015.
  */
 public class Light extends GameObject {
+    public LightTrait light;
+
     public Light(float x, float y){
         traits.add(new PositionTrait(this, x, y, 0));
-        traits.add(new LightTrait(this));
+        light = new LightTrait(this);
+        traits.add(light);
 
         initializeTraits();
     }

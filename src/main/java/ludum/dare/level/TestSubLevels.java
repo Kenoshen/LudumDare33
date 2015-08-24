@@ -67,6 +67,7 @@ public class TestSubLevels extends Level{
 
 
         Light light = new Light(0, 0);
+        light.light.z = 0.01f;
         objs.add(light);
 
 
@@ -74,7 +75,7 @@ public class TestSubLevels extends Level{
         trigger.addAndInitializeTrait(new UpdatableTrait(trigger, new Runnable() {
             @Override
             public void run() {
-                if (player.getTrait(PositionTrait.class).x > 8){
+                if (player.getTrait(PositionTrait.class).x > 10){
                     trigger.markForDeletion();
                     target.markForDeletion();
                     rightSideBoundary.markForDeletion();
