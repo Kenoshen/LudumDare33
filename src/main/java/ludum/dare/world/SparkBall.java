@@ -59,7 +59,6 @@ public class SparkBall extends GameObject {
         traits.add(animator);
 
         traits.add(new AITrait(this));
-        traits.add(new AIMovementAggressiveTrait(this, 15.0f, 0));
 
         FixtureDef fd = new FixtureDef();
         BodyDef bd = new BodyDef();

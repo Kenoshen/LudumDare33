@@ -21,8 +21,12 @@ import ludum.dare.utils.NamedAnimation;
  */
 public class EnemyBasic extends GameObject{
     private PhysicalTrait physical;
-    private Vector2 target;
     private AnimatorTrait animator;
+    public Vector2 target;
+
+    public boolean rightFacing = false;
+
+
 
     private CollisionCallback collisionFunc = new CollisionCallback() {
         @Override
@@ -34,23 +38,10 @@ public class EnemyBasic extends GameObject{
             }
         }
     };
-
-    public void collidedWith(GameObject p){
-        Vector2 v = new Vector2(0, 0);
-        PositionTrait ePos = getTrait(PositionTrait.class);
-        PositionTrait pPos = p.getTrait(PositionTrait.class);
-        String pAnimName = p.getTrait(AnimatorTrait.class).getCurrentAnimation().getName();
-
-        if(pAnimName == "punch"){
-
-        } else if(pAnimName == "punch2" || pAnimName == "jumpKick"){
-
-        }
-    }
-
     private HealthCallback healthCallback = new HealthCallback() {
         @Override
         public void damageReceived(int amount, GameObject from) {
+            collidedWith(from);
 
         }
 
@@ -65,6 +56,7 @@ public class EnemyBasic extends GameObject{
         traits.add(new DrawableTrait(this));
         traits.add(new CollidableTrait(this, collisionFunc));
         traits.add(new ControlTraitEnemy(this));
+        traits.add(new ImmobilizedTrait(this));
 
         traits.add(new HealthTrait(this, 80, healthCallback));
 
@@ -105,7 +97,7 @@ public class EnemyBasic extends GameObject{
         traits.add(new TimedCollisionTrait(this, bundle));
 
         traits.add(new AITrait(this));
-        traits.add(new AIMovementAggressiveTrait(this, 7.0f, 9.0f));
+        traits.add(new AIMovementAggressiveTrait(this));
         traits.add(new AIMeleeAttackTrait(this));
 
         FixtureDef fd = new FixtureDef();
@@ -124,5 +116,20 @@ public class EnemyBasic extends GameObject{
 
         initializeTraits();
     }
+    public void collidedWith(GameObject p){
+        Vector2 v = new Vector2(0, 0);
+        PositionTrait ePos = getTrait(PositionTrait.class);
+        PositionTrait pPos = p.getTrait(PositionTrait.class);
+        String pAnimName = p.getTrait(AnimatorTrait.class).getCurrentAnimation().getName();
 
+        if(pAnimName == "punch"){
+
+        } else if(pAnimName == "punch2" || pAnimName == "jumpKick"){
+
+        }
+    }
+
+    public void updateTarget(Vector2 t){
+        target = t;
+    }
 }
