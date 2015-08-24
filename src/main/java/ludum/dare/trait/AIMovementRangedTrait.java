@@ -95,7 +95,6 @@ public class AIMovementRangedTrait extends Trait implements AnimationCallback{
 
             if(!shooting){
                 if (System.currentTimeMillis() - lastShot >= shootTimer) {
-                    System.out.println("will shoot");
                     shooting = true;
                     self.getTrait(AnimatorTrait.class).setState("shoot", false);
                     SoundLibrary.GetSound("Electric_Charge").play();

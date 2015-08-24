@@ -102,7 +102,6 @@ public class ControlTrait extends Trait implements AnimationCallback {
             return;
         }
         if (health.health <= 0) {
-            System.out.println("I'M FUCKING DEAD");
             animator.changeStateIfUnique("death", false);
             SoundLibrary.GetSound("Player_Death").play();
             dead = true;
@@ -195,12 +194,10 @@ public class ControlTrait extends Trait implements AnimationCallback {
 
     @Override
     public void animationStarted(String name) {
-        System.out.println(name + " started");
     }
 
     @Override
     public void animationEnded(String name) {
-        System.out.println(name + " ended");
         if (name.equals("punch")) {
             if (queuedAttack) {
                 animator.setState("punch2", false);

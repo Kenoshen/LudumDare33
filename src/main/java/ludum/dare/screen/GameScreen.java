@@ -57,6 +57,7 @@ public class GameScreen implements Screen {
     private CKeyboard keyboard;
 
     private SpriteBatch batch;
+    private SpriteBatch uiBatch;
     private ShapeRenderer shaper;
 
     private Music music;
@@ -119,6 +120,7 @@ public class GameScreen implements Screen {
         keyboard = CKeyboard.instance;
         //
         batch = new SpriteBatch();
+        uiBatch = new SpriteBatch();
         program = createShader();
         batch.setShader(program);
         shaper = new ShapeRenderer();
@@ -215,6 +217,7 @@ public class GameScreen implements Screen {
 
         camera.update();
         batch.setProjectionMatrix(camera.combined);
+        uiBatch.setProjectionMatrix(camera.combined);
         shaper.setProjectionMatrix(camera.combined);
 
         batch.begin();
@@ -222,9 +225,11 @@ public class GameScreen implements Screen {
 
         Collections.sort(gameObjects, compare);
 
+        HealthBarTrait healthBarer = null;
+
         int currentNumberOfLights = 0;
         for (GameObject obj : gameObjects){
-            List<Trait> traits = obj.getTraits(AnimatorTrait.class, DrawableTrait.class, TimedCollisionTrait.class, CameraFollowTrait.class, CollidableTrait.class, LightTrait.class);
+            List<Trait> traits = obj.getTraits(AnimatorTrait.class, DrawableTrait.class, TimedCollisionTrait.class, CameraFollowTrait.class, CollidableTrait.class, LightTrait.class, HealthBarTrait.class);
             if (traits.get(0) != null){
                 ((AnimatorTrait) traits.get(0)).update(delta);
             }
@@ -248,11 +253,21 @@ public class GameScreen implements Screen {
                     log.debug("currentNumberOfLights("+ (currentNumberOfLights + 1) + ") cannot exceed MAX_LIGHTS("+ MAX_LIGHTS + ")");
                 }
             }
+            if (traits.get(6) != null) {
+                healthBarer = ((HealthBarTrait) traits.get(6));
+
+            }
         }
 
         listCollisions.clear();
         batch.end();
         shaper.end();
+        uiBatch.begin();
+        
+        if (healthBarer != null) {
+            healthBarer.draw(camera, uiBatch);
+        }
+        uiBatch.end();
 
         if (world.debug()){
             //world.draw(); //TODO: uncomment for debugging

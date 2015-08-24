@@ -6,11 +6,13 @@ import ludum.dare.utils.HealthCallback;
  * Created by jake on 8/22/2015.
  */
 public class HealthTrait extends Trait {
+    public final int maxHealth;
     public int health;
     private HealthCallback callback;
 
     public HealthTrait(GameObject obj, int h, HealthCallback cback) {
         super(obj);
+        maxHealth = h;
         health = h;
         cback = cback == null ? new HealthCallback() {
             @Override
@@ -31,10 +33,12 @@ public class HealthTrait extends Trait {
     }
     public void damage(int d, GameObject from) {
         health -= d;
+        health = Math.max(0, health);
         callback.damageReceived(d, from);
     }
     public void heal(int h, GameObject from){
         health += h;
+        health = Math.min(health, maxHealth);
         callback.healthRegained(h, from);
     }
 }

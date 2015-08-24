@@ -38,9 +38,7 @@ public class Player extends GameObject {
                 HealthTrait health = obj.getTrait(HealthTrait.class);
                 if (health != null) {
                     health.damage(10, Player.this);
-                    System.out.println("I doth remain standing.");
                 }
-            System.out.println("Those are my cans");
             SoundLibrary.GetSound("Hit_Robot").play();
         }
     };
@@ -69,6 +67,7 @@ public class Player extends GameObject {
         traits.add(new ImmobilizedTrait(this));
 
         traits.add(new HealthTrait(this, 100, healthCallback));
+        traits.add(new HealthBarTrait(this));
 
         ID = "Player";
 
@@ -286,7 +285,7 @@ public class Player extends GameObject {
 
         bundle.addNamedAnimation(new NamedAnimation("zap", .1f,
                 AtlasManager.instance.findRegions("bum/zap/bumShock"), AtlasManager.instance.findRegions("bum/zap/bumShock"),
-                new Vector2(0,0), new Vector2(width, height)));
+                new Vector2(0, 0), new Vector2(width, height)));
 
         bundle.addNamedAnimation(new NamedAnimation("death", .1f,
                 AtlasManager.instance.findRegions("bum/death/bumDeath"), AtlasManager.instance.findRegions("bum/death/bumDeath_n"),
