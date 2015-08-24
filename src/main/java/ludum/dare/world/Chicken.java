@@ -23,6 +23,13 @@ public class Chicken extends GameObject{
     private CollisionCallback collisionFunc = new CollisionCallback() {
         @Override
         public void collide(GameObject obj) {
+            if (obj.getTrait(InputHandlerTrait.class) == null) {
+                return;
+            }
+            HealthTrait health = obj.getTrait(HealthTrait.class);
+            if (health != null) {
+                health.heal(40, Chicken.this);
+            }
             SoundLibrary.GetSound("Collect").play();
             markForDeletion();
         }
