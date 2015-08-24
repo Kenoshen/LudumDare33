@@ -32,6 +32,9 @@ public class EnemyBasic extends GameObject{
     private CollisionCallback collisionFunc = new CollisionCallback() {
         @Override
         public void collide(GameObject obj) {
+            if (obj.getTrait(InputHandlerTrait.class) == null) {
+                return;
+            }
             HealthTrait health = obj.getTrait(HealthTrait.class);
             if (health != null) {
                 health.damage(10, EnemyBasic.this);

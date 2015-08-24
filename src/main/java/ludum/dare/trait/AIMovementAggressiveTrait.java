@@ -1,9 +1,6 @@
 package ludum.dare.trait;
 
-import com.badlogic.gdx.math.Vector2;
-import javafx.animation.Animation;
 import ludum.dare.utils.AnimationCallback;
-import ludum.dare.world.EnemyBasic;
 
 /**
  * Created by jake on 8/22/2015.

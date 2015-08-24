@@ -1,5 +1,6 @@
 package ludum.dare.world;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
@@ -29,7 +30,13 @@ public class SparkBall extends GameObject {
     private CollisionCallback collisionFunc = new CollisionCallback() {
         @Override
         public void collide(GameObject obj) {
-            System.out.println("Zap");
+            if (obj.getTrait(InputHandlerTrait.class) == null) {
+                return;
+            }
+            HealthTrait health = obj.getTrait(HealthTrait.class);
+            if (health != null) {
+                health.damage(10, SparkBall.this);
+            }
             markForDeletion();
         }
     };
