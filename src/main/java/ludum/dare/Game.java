@@ -52,9 +52,9 @@ public class Game extends com.badlogic.gdx.Game {
         //
         AtlasManager.instance.loadAtlas("packed/misc.atlas");
         //
-        setScreen(new ComicCutsceneScreen(this));
+        //setScreen(new ComicCutsceneScreen(this));
         //setScreen(new GameScreen(this, new DebugSprites()));
-        //setScreen(new GameScreen(this, new TestSubLevels()));
+        setScreen(new GameScreen(this, new TestSubLevels()));
     }
 
     @Override
