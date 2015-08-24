@@ -15,6 +15,7 @@ public class PhysicalTrait extends Trait {
     private Vector2 offset;
 
     private boolean active = true;
+    private boolean sensor;
 
     public PhysicalTrait(GameObject obj, CBody<?> body) {
         super(obj);
@@ -28,6 +29,9 @@ public class PhysicalTrait extends Trait {
 
         pos = self.getTrait(PositionTrait.class);
         body.addToWorld(CWorld.world._world);
+        if(sensor) {
+            body.setIsSensor(sensor);
+        }
     }
 
     @Override
@@ -59,5 +63,9 @@ public class PhysicalTrait extends Trait {
     public void setOffset(int x, float y) {
         offset.x = x;
         offset.y = y;
+    }
+
+    public void setSensor(boolean b) {
+        sensor = b;
     }
 }
