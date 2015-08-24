@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import ludum.dare.Game;
-import ludum.dare.level.TestLevel;
 import ludum.dare.level.TestSubLevels;
 import ludum.dare.utils.SkinManager;
 
@@ -38,7 +37,7 @@ public class MainMenuScreen implements Screen {
         Skin skin = SkinManager.instance.getSkin("menu-skin");
 
 
-        Texture backgroundTex = new Texture(Gdx.files.internal("imgs/game/misc/frame_0.png"));
+        Texture backgroundTex = new Texture(Gdx.files.internal("imgs/misc/frame_0.png"));
         background = new Image(backgroundTex);
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 

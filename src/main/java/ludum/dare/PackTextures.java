@@ -9,24 +9,18 @@ public class PackTextures
     {
         System.out.println("Start packing textures");
         TexturePacker.Settings settings = new TexturePacker.Settings();
-        settings.maxWidth *= 2;
-        settings.maxHeight *= 2;
+        settings.maxWidth *= 8;
+        settings.maxHeight *= 8;
         settings.filterMin = Texture.TextureFilter.Linear;
         settings.filterMag = Texture.TextureFilter.Linear;
-
+        //
         TexturePacker.process(settings, "src/main/resources/imgs/ui/menu", "src/main/resources/packed", "ui");
         TexturePacker.process(settings, "src/main/resources/imgs/ui/background", "src/main/resources/packed", "ui-background");
-        TexturePacker.process(settings, "src/main/resources/imgs/game/collectables", "src/main/resources/packed", "collectables");
-        TexturePacker.process(settings, "src/main/resources/imgs/game/bum", "src/main/resources/packed", "bum");
-        TexturePacker.process(settings, "src/main/resources/imgs/game/bum_n", "src/main/resources/packed", "bum_n");
-        TexturePacker.process(settings, "src/main/resources/imgs/game/bot", "src/main/resources/packed", "bot");
-        TexturePacker.process(settings, "src/main/resources/imgs/game/bot_n", "src/main/resources/packed", "bot_n");
-        TexturePacker.process(settings, "src/main/resources/imgs/game/heavybot", "src/main/resources/packed", "heavybot");
-        TexturePacker.process(settings, "src/main/resources/imgs/game/spark", "src/main/resources/packed", "spark");
-        TexturePacker.process(settings, "src/main/resources/imgs/game/environment", "src/main/resources/packed", "environment");
-        TexturePacker.process(settings, "src/main/resources/imgs/game/environment_n", "src/main/resources/packed", "environment_n");
-
-        TexturePacker.process(settings, "src/main/resources/imgs/game/misc", "src/main/resources/packed", "misc");
+        //
+        TexturePacker.process(settings, "src/main/resources/imgs/game", "src/main/resources/packed", "game");
+        TexturePacker.process(settings, "src/main/resources/imgs/game_n", "src/main/resources/packed", "game_n");
+        //
+        TexturePacker.process(settings, "src/main/resources/imgs/misc", "src/main/resources/packed", "misc");
         System.out.println("Finished packing textures");
     }
 }

@@ -32,7 +32,7 @@ public class EnemyThrower extends GameObject{
 
         AnimationBundle bundle = new AnimationBundle();
 
-        final NamedAnimation animation = new NamedAnimation("stand", .1f,AtlasManager.instance.getAtlas("spark").findRegions("stand/sparkStand"), AtlasManager.instance.getAtlas("spark").findRegions("stand/sparkStand"), new Vector2(0, 0), new Vector2(width*1.5f, height));
+        final NamedAnimation animation = new NamedAnimation("stand", .1f,AtlasManager.instance.findRegions("spark/stand/sparkStand"), AtlasManager.instance.findRegions("spark/stand/sparkStand"), new Vector2(0, 0), new Vector2(width*1.5f, height));
         bundle.addNamedAnimation(animation);
         CollisionSequence standSequence = new CollisionSequence();
         standSequence.name = "stand";
@@ -46,7 +46,8 @@ public class EnemyThrower extends GameObject{
         }
         bundle.addHurtboxSequence(standSequence);
 
-        bundle.addNamedAnimation(new NamedAnimation("walk", .1f,AtlasManager.instance.getAtlas("spark").findRegions("walk/sparkWalk"), AtlasManager.instance.getAtlas("spark").findRegions("walk/sparkWalk"), new Vector2(0,-.5f), new Vector2(width*1.5f, height)));
+        bundle.addNamedAnimation(new NamedAnimation("walk", .1f,AtlasManager.instance.findRegions("spark/walk/sparkWalk"),
+                AtlasManager.instance.findRegions("spark/walk/sparkWalk_n"), new Vector2(0,-.5f), new Vector2(width*1.5f, height)));
         CollisionSequence walkSequence = new CollisionSequence();
         walkSequence.name = "walk";
 
@@ -59,7 +60,8 @@ public class EnemyThrower extends GameObject{
         }
         bundle.addHurtboxSequence(walkSequence);
 
-        bundle.addNamedAnimation(new NamedAnimation("shoot", .1f, AtlasManager.instance.getAtlas("spark").findRegions("shoot/sparkShoot"), AtlasManager.instance.getAtlas("spark").findRegions("shoot/sparkShoot"), new Vector2(0, 1), new Vector2(width * 1.5f, height * 1.25f)));
+        bundle.addNamedAnimation(new NamedAnimation("shoot", .1f, AtlasManager.instance.findRegions("spark/shoot/sparkShoot"),
+                AtlasManager.instance.findRegions("spark/shoot/sparkShoot_n"), new Vector2(0, 1), new Vector2(width * 1.5f, height * 1.25f)));
         CollisionSequence shootSequence = new CollisionSequence();
         shootSequence.name = "shoot";
 

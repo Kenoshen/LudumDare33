@@ -17,8 +17,8 @@ public class Application
         config.foregroundFPS = 60;
         config.backgroundFPS = 0;
         config.resizable = false;
-        config.width = 800;
-        config.height = 450;
+        config.width = 1600;
+        config.height = 900;
         config.addIcon("imgs/icons/icon_128.png", Files.FileType.Internal);
         config.addIcon("imgs/icons/icon_32.png", Files.FileType.Internal);
         config.addIcon("imgs/icons/icon_16.png", Files.FileType.Internal);

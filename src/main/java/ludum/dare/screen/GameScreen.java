@@ -120,7 +120,7 @@ public class GameScreen implements Screen {
         //
         batch = new SpriteBatch();
         program = createShader();
-        //batch.setShader(program);
+        batch.setShader(program);
         shaper = new ShapeRenderer();
         //
         final GameScreen self = this;
@@ -232,7 +232,7 @@ public class GameScreen implements Screen {
                 ((DrawableTrait) traits.get(1)).draw(batch);
             }
             if (traits.get(2) != null){
-                ((TimedCollisionTrait) traits.get(2)).draw(shaper);
+                //((TimedCollisionTrait) traits.get(2)).draw(shaper); // TODO: uncomment for debugging
             }
             if (traits.get(3) != null){
                 ((CameraFollowTrait) traits.get(3)).updateCamera(camera);
@@ -242,7 +242,7 @@ public class GameScreen implements Screen {
             }
             if (traits.get(5) != null){
                 if (currentNumberOfLights < MAX_LIGHTS) {
-                    ((LightTrait) traits.get(5)).updateShaderProgram(program, currentNumberOfLights, camera).debug(shaper);
+                    ((LightTrait) traits.get(5)).updateShaderProgram(program, currentNumberOfLights, camera);//.debug(shaper); // TODO: uncomment for debugging
                     currentNumberOfLights++;
                 } else {
                     log.debug("currentNumberOfLights("+ (currentNumberOfLights + 1) + ") cannot exceed MAX_LIGHTS("+ MAX_LIGHTS + ")");
@@ -255,7 +255,7 @@ public class GameScreen implements Screen {
         shaper.end();
 
         if (world.debug()){
-            world.draw();
+            //world.draw(); //TODO: uncomment for debugging
         }
 
         stage.draw();
@@ -339,10 +339,10 @@ public class GameScreen implements Screen {
         program.setUniformi("u_normals", 1);
         program.setUniformf("strength", 1);
         program.setUniformf("ambientIntensity", 0.3f);
-        program.setUniformf("ambientColor", new Vector3(0.3f, 0.3f, 1f));
+        program.setUniformf("ambientColor", new Vector3(0.3f, 0.6f, 1f));
         program.setUniformf("resolution", new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         program.setUniformf("lightColor", new Vector3(1f, 0.7f, 0.6f));
-        program.setUniformf("attenuation", new Vector3(0.4f, 3f, 20f));
+        program.setUniformf("attenuation", new Vector3(0f, 0f, 5f));
         program.setUniformi("useShadow", true ? 1 : 0);
         program.setUniformi("useNormals", true ? 1 : 0);
         program.setUniformi("yInvert", false ? 1 : 0);
@@ -354,7 +354,7 @@ public class GameScreen implements Screen {
     public void endGame(){
         Image fader = new Image(AtlasManager.instance.findRegion("white"));
         fader.setColor(Color.BLACK);
-        fader.setBounds(-100, -100, Gdx.graphics.getWidth() + 200, Gdx.graphics.getHeight() + 200);
+        fader.setBounds(-800, -800, Gdx.graphics.getWidth() + 1600, Gdx.graphics.getHeight() + 1600);
         fader.addAction(Actions.sequence(Actions.alpha(0),
                 Actions.fadeIn(2.5f),
                 Actions.delay(1.5f),

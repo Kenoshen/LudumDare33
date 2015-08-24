@@ -10,6 +10,7 @@ import ludum.dare.utils.AtlasManager;
 import ludum.dare.utils.Sprite;
 import ludum.dare.world.*;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +58,7 @@ public class TestSubLevels extends Level{
         objs.add(newBottomBoundary(0));
         objs.add(path(-halfScreenWidth, -halfScreenHeight, -halfScreenWidth, -3, halfScreenWidth, -1));
 
+        objs.add(new Background(0, 0.01f, "background"));
         objs.add(new Background(0, "background_one"));
 
         player = new Player(0, -5, 0, CMouse.instance, CKeyboard.instance, null);
@@ -65,11 +67,36 @@ public class TestSubLevels extends Level{
         final Boundary rightSideBoundary = path(halfScreenWidth, -1, halfScreenWidth, -halfScreenHeight);
         objs.add(rightSideBoundary);
 
+        BlankObject lightPather = new BlankObject();
+        lightPather.traits.add(new PositionTrait(lightPather, 0, 13, 0));
+        LightTrait lt = new LightTrait(lightPather);
+        lt.z = 0.1f;
+        lightPather.traits.add(lt);
+        lightPather.traits.add(new PathFollowerTrait(lightPather, PathFollowerTrait.PathFollowStyle.LOOP, 0,
+                new Vector2(0, 13),
+                new Vector2(20, 13)));
+        lightPather.initializeTraits();
+        objs.add(lightPather);
+
+        BlankObject lightPather2 = new BlankObject();
+        lightPather2.traits.add(new PositionTrait(lightPather2, -50, -15, 0));
+        LightTrait lt2 = new LightTrait(lightPather2, Color.RED);
+        lt2.z = 0.01f;
+        lightPather2.traits.add(lt2);
+        PathFollowerTrait pft = new PathFollowerTrait(lightPather2, PathFollowerTrait.PathFollowStyle.LOOP, 0,
+                new Vector2(-50, -13),
+                new Vector2(96, -13));
+        pft.travelTimeInMilliseconds = 2000;
+        lightPather2.traits.add(pft);
+        lightPather2.initializeTraits();
+        objs.add(lightPather2);
+
+
         final BlankObject trigger = new BlankObject();
         trigger.addAndInitializeTrait(new UpdatableTrait(trigger, new Runnable() {
             @Override
             public void run() {
-                if (player.getTrait(PositionTrait.class).x > 5){
+                if (player.getTrait(PositionTrait.class).x > 13){
                     trigger.markForDeletion();
                     target.markForDeletion();
                     rightSideBoundary.markForDeletion();
@@ -92,6 +119,12 @@ public class TestSubLevels extends Level{
         objs.add(path(-halfScreenWidth + screenWidth, -1, halfScreenWidth + screenWidth, -1));
 
         objs.add(new Background(1, "background_two"));
+
+        Light light = new Light(screenWidth - 11, 5);
+        light.light.color = Color.BLUE;
+        light.light.attenuation.z = 20;
+        light.light.z = 0.1f;
+        objs.add(light);
 
         final Boundary rightSideBoundary = path(halfScreenWidth + screenWidth, -1, halfScreenWidth + screenWidth, -halfScreenHeight);
         objs.add(rightSideBoundary);
