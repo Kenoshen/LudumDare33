@@ -24,6 +24,11 @@ public class HealthTrait extends Trait {
             public void healthRegained(int amount, GameObject from) {
 
             }
+
+            @Override
+            public void died() {
+
+            }
         } : cback;
         callback = cback;
     }
@@ -35,6 +40,9 @@ public class HealthTrait extends Trait {
         health -= d;
         health = Math.max(0, health);
         callback.damageReceived(d, from);
+        if (health <= 0) {
+            callback.died();
+        }
     }
     public void heal(int h, GameObject from){
         health += h;

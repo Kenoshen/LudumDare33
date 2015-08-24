@@ -1,9 +1,11 @@
 package ludum.dare.world;
 
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import ludum.dare.collision.CollisionGroup;
 import ludum.dare.collision.CollisionSequence;
+import ludum.dare.screen.GameScreen;
 import ludum.dare.utils.CollisionCallback;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -52,6 +54,13 @@ public class EnemyBasic extends GameObject{
         @Override
         public void healthRegained(int amount, GameObject from) {
 
+        }
+
+        @Override
+        public void died() {
+            if (MathUtils.randomBoolean(.2f)) {
+                GameScreen.addObject(new Fourty(getTrait(PositionTrait.class).x, getTrait(PositionTrait.class).y, 0, 2));
+            }
         }
     };
 
@@ -135,7 +144,7 @@ public class EnemyBasic extends GameObject{
         bd.fixedRotation = true;
         CBody body = new BoxBody(width/2, 1).init(fd, bd);
         physical = new PhysicalTrait(this, body);
-        physical.setOffset(0, height/2 - .5f);
+        physical.setOffset(0, height / 2 - .5f);
         traits.add(physical);
 
         traits.add(new DebugTrait(this));

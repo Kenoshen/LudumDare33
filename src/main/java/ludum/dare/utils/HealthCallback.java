@@ -8,4 +8,5 @@ import ludum.dare.trait.GameObject;
 public abstract class HealthCallback {
     public abstract void damageReceived(int amount, GameObject from);
     public abstract void healthRegained(int amount, GameObject from);
+    public abstract void died();
 }
