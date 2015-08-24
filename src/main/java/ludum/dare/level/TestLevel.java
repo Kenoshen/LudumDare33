@@ -1,8 +1,5 @@
 package ludum.dare.level;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.winger.input.raw.CKeyboard;
@@ -32,10 +29,9 @@ public class TestLevel extends Level{
         List<GameObject> objs = new ArrayList<>();
 
 
-        objs.add(new Boundary(new Vector2(-20, 1), new Vector2(20, 1)));
-        objs.add(new EnemyBasic(20, 5, 0, 12, 12));
-        objs.add(new Fourty(-10,0,0,3));
-        objs.add(new Chicken(-15,0,0,6));
+        objs.add(new EnemyThrower(20, 5, 0, 12, 12));
+        objs.add(new Fourty(-10,-10,0,3));
+        objs.add(new Chicken(-15,-10,0,6));
 
         objs.add(new Player(0, 5, 0, CMouse.instance, CKeyboard.instance, null));
         TextureRegion tex = AtlasManager.instance.findRegion("white");

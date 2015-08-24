@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -32,9 +33,10 @@ import ludum.dare.utils.SkinManager;
 import ludum.dare.utils.Sprite;
 import ludum.dare.world.AIHiveMind;
 import ludum.dare.world.SoundLibrary;
-import ludum.dare.world.BlankObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -61,12 +63,35 @@ public class GameScreen implements Screen {
 
     List<Tups.Tup2<GameObject, GameObject>> listCollisions;
 
-    public List<GameObject> gameObjects = new ArrayList<>();
+    public  List<GameObject> gameObjects = new ArrayList<>();
     private List<GameObject> objsToDelete = new ArrayList<>();
+    private static List<GameObject> objsToAdd = new ArrayList<>();
 
     private AIHiveMind AIHM = new AIHiveMind();
 
     ShaderProgram program;
+    private Comparator<? super GameObject> compare = new Comparator<GameObject>() {
+        @Override
+        public int compare(GameObject o1, GameObject o2) {
+            List<Trait> o1Traits = o1.getTraits(PhysicalTrait.class, PositionTrait.class);
+            float y1 = 0;
+            if (o1Traits.get(0) != null){
+                y1 = ((PhysicalTrait) o1Traits.get(0)).body.getPosition().y;
+            } else if (o1Traits.get(1) != null){
+                y1 = ((PositionTrait) o1Traits.get(1)).y;
+            }
+
+            List<Trait> o2Traits = o2.getTraits(PhysicalTrait.class, PositionTrait.class);
+            float y2 = 0;
+            if (o2Traits.get(0) != null){
+                y2 = ((PhysicalTrait) o2Traits.get(0)).body.getPosition().y;
+            } else if (o2Traits.get(1) != null){
+                y2 = ((PositionTrait) o2Traits.get(1)).y;
+            }
+
+            return y1 >= y2 ? -1 : 1;
+        }
+    };
 
     public GameScreen(final Game game, Level level){
 
@@ -91,11 +116,11 @@ public class GameScreen implements Screen {
         //
         batch = new SpriteBatch();
         program = createShader();
-        batch.setShader(program);
+        //batch.setShader(program);
         shaper = new ShapeRenderer();
         //
         final GameScreen self = this;
-        TextButton btn = new TextButton("Back", SkinManager.instance.getSkin("menu-skin"), "simple");
+        TextButton btn = new TextButton("Back", SkinManager.instance.getSkin("menu-skin"), "button");
         btn.setPosition(50, 50);
         btn.addListener(new ClickListener() {
             @Override
@@ -148,7 +173,7 @@ public class GameScreen implements Screen {
         world.update(Conf.instance.worldStepTime());
         AIHiveMind.update();
         for (GameObject obj : gameObjects){
-            List<Trait> traits = obj.getTraits(InputHandlerTrait.class, ControlTrait.class, PhysicalTrait.class, DebugTrait.class, UpdatableTrait.class, PathFollowerTrait.class, ControlTraitEnemy.class);
+            List<Trait> traits = obj.getTraits(InputHandlerTrait.class, ControlTrait.class, PhysicalTrait.class, DebugTrait.class, UpdatableTrait.class, PathFollowerTrait.class, MoveDirectionTrait.class, ControlTraitEnemy.class);
             if (traits.get(0) != null) {
                 ((InputHandlerTrait) traits.get(0)).update();
             }
@@ -167,8 +192,11 @@ public class GameScreen implements Screen {
             if (traits.get(5) != null) {
                 ((PathFollowerTrait) traits.get(5)).travelOnPath(delta);
             }
-            if(traits.get(6) != null){
-                ((ControlTraitEnemy) traits.get(6)).update();
+            if (traits.get(6) != null) {
+                ((MoveDirectionTrait) traits.get(6)).travel(delta);
+            }
+            if(traits.get(7) != null){
+                ((ControlTraitEnemy) traits.get(7)).update();
             }
 
             // handle deletion of objects gracefully
@@ -178,6 +206,8 @@ public class GameScreen implements Screen {
         }
 
         removeMarkedGameObjects();
+        addObjectsToAdd();
+       
 
         camera.update();
         batch.setProjectionMatrix(camera.combined);
@@ -186,6 +216,7 @@ public class GameScreen implements Screen {
         batch.begin();
         shaper.begin(ShapeRenderer.ShapeType.Line);
 
+        Collections.sort(gameObjects, compare);
 
         int currentNumberOfLights = 0;
         for (GameObject obj : gameObjects){
@@ -275,6 +306,19 @@ public class GameScreen implements Screen {
             }
             objsToDelete = new ArrayList<>();
         }
+    }
+
+    public static void addObject(GameObject object){
+        objsToAdd.add(object);
+    }
+
+    public static void addObjects(List<GameObject> objects){
+        objsToAdd.addAll(objects);
+    }
+
+    private void addObjectsToAdd(){
+        gameObjects.addAll(objsToAdd);
+        objsToAdd.clear();
     }
 
     private ShaderProgram createShader() {
