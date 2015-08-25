@@ -23,6 +23,9 @@ public class Application
         if (arg.length > 0 && "low-res".equals(arg[0])) {
             config.width = 1280;
             config.height = 720;
+        } else if (arg.length > 0 && "super-low-res".equals(arg[0])) {
+            config.width = 800;
+            config.height = 450;
         } else {
             config.width = 1600;
             config.height = 900;
