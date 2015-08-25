@@ -67,7 +67,7 @@ public class BossTrait extends Trait {
                     GameScreen.addObject(new Explosion(20, 1.5f, 30 + MathUtils.random(-5, 5)));
                     SoundLibrary.GetSound("Robot_Death").play();
                     if (explosions == 3) {
-                        GameScreen.addObject(new HollInTheWall(20, 2, 8));
+                        GameScreen.addObject(new HollInTheWall(48 * 6 + 17, 0, 8));
                     }
                 }
             }

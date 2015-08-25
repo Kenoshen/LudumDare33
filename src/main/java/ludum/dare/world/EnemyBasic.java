@@ -55,7 +55,7 @@ public class EnemyBasic extends GameObject implements AnimationCallback {
 
         @Override
         public void died() {
-            if (MathUtils.randomBoolean(.2f)) {
+            if (MathUtils.randomBoolean(.6f)) {
                 GameScreen.addObject(new Fourty(getTrait(PositionTrait.class).x, getTrait(PositionTrait.class).y, 0, 2));
             }
         }

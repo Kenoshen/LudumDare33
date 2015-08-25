@@ -41,18 +41,19 @@ public class CreditsScreen implements Screen {
         table = new Table(skin);
         table.setFillParent(true);
         table.add("Jake Fisher:        Programming\n" +
-                "Eric Meredith:      Art\n" +
+                "Erik Meredith:      Art\n" +
                 "Logan Moore:       Programming\n" +
                 "Tanner Moore:      Programming\n" +
                 "Michael Wingfield:  Programming").row();
         table.add("Unless otherwise stated, assets listed are\nused under the Creative Commons License.\n" +
                 "\n" +
-                "Intro Music:            SKIQI - WIthout Delay\n" +
-                "Cutscene Music:        Secret Tunnels\n" +
-                "footstep1:               swuing\n" +
-                "footstep2:               swuing\n" +
-                "ld33wallpaper:         '01010111'\n" +
-                "Shaders With Normals: davedes").row();
+                "Lightning strike: henderda\n" +
+                "Dumpster lid:     VlatkoBlazek\n" +
+                "Intro Music:      SKIQI - WIthout Delay\n" +
+                "Cutscene Music:   Secret Tunnels\n" +
+                "Footstep:         swuing\n" +
+                "LD33wallpaper:    '01010111'\n" +
+                "Shaders:          davedes").row();
         stage.addActor(table);
 
         back = new TextButton("Back", skin, "button");

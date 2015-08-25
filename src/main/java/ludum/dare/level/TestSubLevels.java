@@ -33,10 +33,13 @@ public class TestSubLevels extends Level{
         return this.getClass().getSimpleName();
     }
 
-    private int index = 5;
+    private int index = -1;
 
     @Override
     public List<GameObject> loadLevel(){
+//        AtlasManager.instance.loadAtlas("packed/game.atlas");
+//        AtlasManager.instance.loadAtlas("packed/game_n.atlas");
+//        AtlasManager.instance.finishLoading();
         return nextSection();
     }
 
@@ -72,7 +75,7 @@ public class TestSubLevels extends Level{
 
         float numOfSections = 8;
         light(Color.RED.cpy(), 15, 1500 * numOfSections, new Vector2(-48, -13), new Vector2(48 * numOfSections, -13));
-
+        objs.add(new Chicken(0, -5, 0, 6));
 
         return objs;
     }
@@ -103,7 +106,8 @@ public class TestSubLevels extends Level{
         light(new Color(0.5f, 0.5f, 1.0f, 1), 10, 1000, new Vector2(left + 3, 13), new Vector2(left + halfScreenWidth + 3, 13));
 
         final Boundary rightSideBoundary = newRightSideBoundary(section);
-        enemyWaves(section, 2, EnemyWaveType.EASY, rightSideBoundary);
+        enemyWaves(section, 2, EnemyWaveType.MEDIUM, rightSideBoundary);
+        objs.add(new Chicken(xOffset(section) + halfScreenWidth + 10, -3, 0, 6));
 
         return objs;
     }
@@ -120,7 +124,7 @@ public class TestSubLevels extends Level{
         light(Color.YELLOW, 25, 1000, new Vector2(left + halfScreenWidth + 9.5f, 6));
 
         final Boundary rightSideBoundary = newRightSideBoundary(section);
-        enemyWaves(section, 2, EnemyWaveType.EASY, rightSideBoundary);
+        enemyWaves(section, 2, EnemyWaveType.MEDIUM, rightSideBoundary);
 
         return objs;
     }
@@ -135,8 +139,8 @@ public class TestSubLevels extends Level{
         light(Color.BLUE.cpy(), 20, 0, new Vector2(xOffset(section) + halfScreenWidth + 8, 6));
 
         final Boundary rightSideBoundary = newRightSideBoundary(section);
-        enemyWaves(section, 2, EnemyWaveType.EASY, rightSideBoundary);
-
+        enemyWaves(section, 3, EnemyWaveType.MEDIUM, rightSideBoundary);
+        objs.add(new Chicken(xOffset(section) + halfScreenWidth + 10, -3, 0, 6));
         return objs;
     }
 
@@ -150,8 +154,8 @@ public class TestSubLevels extends Level{
         light(Color.YELLOW.cpy(), 40, 0, new Vector2(xOffset(section) + 15.3f, 11));
 
         final Boundary rightSideBoundary = newRightSideBoundary(section);
-        enemyWaves(section, 2, EnemyWaveType.EASY, rightSideBoundary);
-
+        enemyWaves(section, 2, EnemyWaveType.HARD, rightSideBoundary);
+        objs.add(new Chicken(xOffset(section) + halfScreenWidth + 10, -3, 0, 6));
         return objs;
     }
 
@@ -163,16 +167,16 @@ public class TestSubLevels extends Level{
 
         path(section,
                 new Vector2(0, -1),
-                new Vector2(screenWidth - 18, -1),
+                new Vector2(screenWidth - 16, -1),
                 new Vector2(screenWidth - 0, -6),
-                new Vector2(screenWidth - 10, -13));
+                new Vector2(screenWidth - 6, -13));
 
         float left = xOffset(section);
         light(Color.YELLOW.cpy(), 40, 0, new Vector2(xOffset(section) + 9.5f, 13));
 
         final Boundary rightSideBoundary = path(section,
-                new Vector2(screenWidth - 8, halfScreenHeight),
-                new Vector2(screenWidth - 8, -halfScreenHeight));
+                new Vector2(screenWidth - 6, halfScreenHeight),
+                new Vector2(screenWidth - 6, -halfScreenHeight));
 
         enemyWaves(section, 1, EnemyWaveType.BOSS, rightSideBoundary);
 
@@ -211,16 +215,26 @@ public class TestSubLevels extends Level{
             List<GameObject> enemies = new ArrayList<>();
             switch (type){
                 case EASY:
-                    enemies.add(new EnemyThrower(xOffset(section) + screenWidth, -(halfScreenHeight - 3), 0));
+                    enemies.add(new EnemyBasic(xOffset(section) + screenWidth, -(halfScreenHeight - 3), 0));
                     break;
                 case MEDIUM:
-                    enemies.add(new EnemyThrower(xOffset(section) + screenWidth, -(halfScreenHeight - 3), 0));
+                    enemies.add(new EnemyBasic(xOffset(section) + screenWidth, -(halfScreenHeight - 3), 0));
+                    enemies.add(new EnemyThrower(xOffset(section) + screenWidth, -(halfScreenHeight - 5), 0));
                     break;
                 case HARD:
-                    enemies.add(new EnemyThrower(xOffset(section) + screenWidth, -(halfScreenHeight - 3), 0));
+                    enemies.add(new EnemyBasic(xOffset(section) + screenWidth, -(halfScreenHeight - 3), 0));
+                    enemies.add(new EnemyThrower(xOffset(section) + screenWidth, -(halfScreenHeight - 4), 0));
+                    enemies.add(new EnemyHeavy(xOffset(section) + screenWidth, -(halfScreenHeight - 5), 0));
                     break;
                 case BOSS:
-                    enemies.add(new EnemyThrower(xOffset(section) + halfScreenWidth, -2, 0));
+                    ShockCan can1 = new ShockCan(xOffset(section) + 10 + halfScreenWidth, -2, 0);
+                    ShockCan can2 = new ShockCan(xOffset(section) + 18 + halfScreenWidth, -11, 0);
+                    SpawnerDoor door = new SpawnerDoor(xOffset(section) + -14.5f + halfScreenWidth, 1, 0);
+                    enemies.add(can1);
+                    enemies.add(can2);
+                    GameScreen.addObject(door);
+
+                    GameScreen.addObject(new Boss(can1, can2, door));
                     break;
             }
 
@@ -238,10 +252,11 @@ public class TestSubLevels extends Level{
                     public void run() {
                         boolean allDead = true;
                         for(GameObject obj : curEnemyWave){
-                            if (! obj.shouldBeDeleted()){
-                                allDead = false;
-                                break;
+                            if (obj.shouldBeDeleted() || obj.getTrait(HealthTrait.class).health <= 0){
+                                continue;
                             }
+                            allDead = false;
+                            break;
                         }
                         if (allDead){
                             for(GameObject obj : nextEnemyWave){
@@ -259,10 +274,11 @@ public class TestSubLevels extends Level{
                     public void run() {
                         boolean allDead = true;
                         for(GameObject obj : curEnemyWave){
-                            if (! obj.shouldBeDeleted()){
-                                allDead = false;
-                                break;
+                            if (obj.shouldBeDeleted() || obj.getTrait(HealthTrait.class).health <= 0){
+                                continue;
                             }
+                            allDead = false;
+                            break;
                         }
                         if (allDead){
                             rightBoundary.markForDeletion();
@@ -303,6 +319,7 @@ public class TestSubLevels extends Level{
 
         if (player == null){
             player = new Player(xOffset(section), -(halfScreenHeight - 1), 0, CMouse.instance, CKeyboard.instance, null);
+            player.getTrait(HealthTrait.class).health = 60;
             objs.add(player);
         }
     }

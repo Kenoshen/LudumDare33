@@ -1,6 +1,7 @@
 package ludum.dare.world;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
@@ -18,7 +19,6 @@ import ludum.dare.utils.AtlasManager;
 import ludum.dare.utils.CollisionCallback;
 import ludum.dare.utils.NamedAnimation;
 
-import java.awt.*;
 
 /**
  * Created by jake on 8/23/2015.
@@ -48,6 +48,7 @@ public class SparkBall extends GameObject {
         traits.add(new PositionTrait(this, x, y+sparkOffset, z));
         traits.add(new DrawableTrait(this));
         traits.add(new CollidableTrait(this, collisionFunc));
+        traits.add(new LightTrait(this, new Color(.5f, .5f, .9f, 1)));
 
         AnimationBundle bundle = new AnimationBundle();
 

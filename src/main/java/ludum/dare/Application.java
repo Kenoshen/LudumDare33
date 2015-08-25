@@ -21,8 +21,8 @@ public class Application
         config.backgroundFPS = 0;
         config.resizable = false;
         if (arg.length > 0 && "low-res".equals(arg[0])) {
-            config.width = 800;
-            config.height = 450;
+            config.width = 1280;
+            config.height = 720;
         } else {
             config.width = 1600;
             config.height = 900;

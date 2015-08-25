@@ -9,14 +9,16 @@ import com.winger.physics.body.BoxBody;
 import ludum.dare.collision.AnimationBundle;
 import ludum.dare.collision.CollisionGroup;
 import ludum.dare.collision.CollisionSequence;
+import ludum.dare.screen.GameScreen;
 import ludum.dare.trait.*;
+import ludum.dare.utils.AnimationCallback;
 import ludum.dare.utils.AtlasManager;
 import ludum.dare.utils.NamedAnimation;
 
 /**
  * Created by jake on 8/22/2015.
  */
-public class EnemyThrower extends GameObject{
+public class EnemyThrower extends GameObject implements AnimationCallback{
     private PhysicalTrait physical;
     private Vector2 target;
     private AnimatorTrait animator;
@@ -75,10 +77,11 @@ public class EnemyThrower extends GameObject{
         bundle.addHurtboxSequence(shootSequence);
 
         bundle.addNamedAnimation(new NamedAnimation("die", .1f, AtlasManager.instance.findRegions("bot/die/botDie"),
-                AtlasManager.instance.findRegions("bot/die/botDie_n"), new Vector2(0, 0), new Vector2(width, height)));
+                AtlasManager.instance.findRegions("bot/die/botDie_n"), new Vector2(0, 0), new Vector2(width*1.5f, height)));
 
 
         animator = new AnimatorTrait(this, bundle.getAnimations());
+        animator.registerAnimationCallback(this);
         traits.add(animator);
         traits.add(new TimedCollisionTrait(this, bundle));
 
@@ -97,5 +100,19 @@ public class EnemyThrower extends GameObject{
         traits.add(physical);
 
         traits.add(new DebugTrait(this));
+    }
+
+
+    @Override
+    public void animationStarted(String name) {
+        if (name.equals("die")) {
+            SoundLibrary.GetSound("Robot_Death");
+            GameScreen.addObject(new Explosion(getTrait(PositionTrait.class).x, getTrait(PositionTrait.class).y-1, 12));
+        }
+    }
+
+    @Override
+    public void animationEnded(String name) {
+
     }
 }

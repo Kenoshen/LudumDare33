@@ -1,5 +1,6 @@
 package ludum.dare.world;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -15,16 +16,13 @@ import ludum.dare.Conf;
 import ludum.dare.collision.CollisionGroup;
 import ludum.dare.collision.CollisionSequence;
 import ludum.dare.trait.*;
-import ludum.dare.utils.AtlasManager;
-import ludum.dare.utils.CollisionCallback;
-import ludum.dare.utils.HealthCallback;
-import ludum.dare.utils.NamedAnimation;
+import ludum.dare.utils.*;
 
 
 /**
  * Created by mwingfield on 8/3/15.
  */
-public class Player extends GameObject {
+public class Player extends GameObject implements AnimationCallback {
 
     private PhysicalTrait physical;
     private AnimatorTrait animator;
@@ -302,6 +300,7 @@ public class Player extends GameObject {
 
 
         animator = new AnimatorTrait(this, bundle.getAnimations());
+        animator.registerAnimationCallback(this);
         traits.add(animator);
 
         hitboxes = new TimedCollisionTrait(this, bundle);
@@ -390,5 +389,14 @@ public class Player extends GameObject {
             myControl.landing = false;
 
         }
+    }
+
+    @Override
+    public void animationStarted(String name) {
+    }
+
+    @Override
+    public void animationEnded(String name) {
+
     }
 }

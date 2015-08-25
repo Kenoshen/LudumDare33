@@ -10,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.winger.input.raw.CKeyboard;
+import com.winger.input.raw.state.KeyboardKey;
 import com.winger.log.HTMLLogger;
 import com.winger.log.LogGroup;
 import com.winger.struct.Tups;
@@ -74,6 +76,11 @@ public class ComicCutsceneScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        if (CKeyboard.instance.isKeyJustPressed(KeyboardKey.S)) {
+            music.stop();
+            game.setScreen(new SplashScreen(game));
+        }
 
         totalTime += delta;
         stateTime += delta;

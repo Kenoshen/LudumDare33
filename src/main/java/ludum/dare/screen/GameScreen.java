@@ -51,7 +51,7 @@ import java.util.List;
 public class GameScreen implements Screen {
     private static final HTMLLogger log = HTMLLogger.getLogger(GameScreen.class, LogGroup.System);
 
-    private static final boolean DEBUG_DRAW = true;
+    private static final boolean DEBUG_DRAW = false;
     private static final int MAX_LIGHTS = 10;
     private static final float DIST_FROM_CAM_BEFORE_DEATH = 96;
 
@@ -81,6 +81,7 @@ public class GameScreen implements Screen {
     private AIHiveMind AIHM = new AIHiveMind();
 
     private boolean endGame = false;
+    private boolean firstEnd = true;
 
     ShaderProgram program;
     private Comparator<? super GameObject> compare = new Comparator<GameObject>() {
@@ -111,10 +112,6 @@ public class GameScreen implements Screen {
     };
 
     public GameScreen(final Game game, Level level){
-        // TODO: remove these lines
-        AtlasManager.instance.loadAtlas("packed/game.atlas");
-        AtlasManager.instance.loadAtlas("packed/game_n.atlas");
-
         music = SoundLibrary.GetMusic("Main_Song");
         music.setVolume(.5f);
         music.play();
@@ -203,6 +200,23 @@ public class GameScreen implements Screen {
         stage.act();
 
         Vector2 camPos = new Vector2(camera.position.x, camera.position.y);
+        if (endGame && firstEnd) {
+            firstEnd = false;
+            game.setScreen(new EndScreen(game));
+            Image fader = new Image(AtlasManager.instance.findRegion("white"));
+            fader.setColor(Color.BLACK);
+            fader.setBounds(-800, -800, Gdx.graphics.getWidth() + 1600, Gdx.graphics.getHeight() + 1600);
+            fader.addAction(Actions.sequence(Actions.alpha(0),
+                    Actions.fadeIn(2.5f),
+                    Actions.delay(1.5f),
+                    Actions.run(new Runnable() {
+                        @Override
+                        public void run() {
+                            game.setScreen(new EndScreen(game));
+                        }
+                    })));
+            stage.addActor(fader);
+        }
         if (!endGame) {
             world.update(Conf.instance.worldStepTime());
             AIHiveMind.update();
@@ -355,7 +369,7 @@ public class GameScreen implements Screen {
             objsToDelete.add(obj);
         }
         removeMarkedGameObjects();
-        world._world.dispose();
+//        world._world.dispose();
         //batch.dispose();
         //program.dispose();
         stage.dispose();
@@ -425,19 +439,19 @@ public class GameScreen implements Screen {
 
     public void endGame(){
         endGame = true;
-        Image fader = new Image(AtlasManager.instance.findRegion("white"));
-        fader.setColor(Color.BLACK);
-        fader.setBounds(-800, -800, Gdx.graphics.getWidth() + 1600, Gdx.graphics.getHeight() + 1600);
-        fader.addAction(Actions.sequence(Actions.alpha(0),
-                Actions.fadeIn(2.5f),
-                Actions.delay(1.5f),
-                Actions.run(new Runnable() {
-                    @Override
-                    public void run() {
-                        game.setScreen(new MainMenuScreen(game));
-                    }
-                })));
-        stage.addActor(fader);
+//        Image fader = new Image(AtlasManager.instance.findRegion("white"));
+//        fader.setColor(Color.BLACK);
+//        fader.setBounds(-800, -800, Gdx.graphics.getWidth() + 1600, Gdx.graphics.getHeight() + 1600);
+//        fader.addAction(Actions.sequence(Actions.alpha(0),
+//                Actions.fadeIn(2.5f),
+//                Actions.delay(1.5f),
+//                Actions.run(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        game.setScreen(new EndScreen(game));
+//                    }
+//                })));
+//        stage.addActor(fader);
     }
 
 }

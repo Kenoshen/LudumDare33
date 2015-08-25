@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector3;
  * Created by mwingfield on 8/2/15.
  */
 public class LightTrait extends Trait {
-    private static final Color DEFAULT_AMBIENT_COLOR = new Color(0.1f, 0.1f, 0.1f, 1f);
+    private static final Color DEFAULT_AMBIENT_COLOR = new Color(0.3f, 0.3f, 0.3f, 1f);
     private static final Color DEFAULT_COLOR = new Color(1f, 1f, 1f, 1f);
     private static final Vector3 DEFAULT_ATTENUATION = new Vector3(0.5f, 0.5f, 15);
     private static final float DEFAULT_INTENSITY = 1f;
