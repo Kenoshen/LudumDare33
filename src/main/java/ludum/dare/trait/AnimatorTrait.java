@@ -77,7 +77,6 @@ public class AnimatorTrait extends Trait {
             }
             return true;
         } else {
-            // return false; // TODO: maybe use the true/false thing instead of an exception?
             throw new RuntimeException("State does not exist on animator: " + state + ".  Possible values: " + states.keySet());
         }
     }

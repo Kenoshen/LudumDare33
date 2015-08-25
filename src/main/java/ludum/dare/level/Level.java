@@ -35,7 +35,6 @@ public class Level {
     }
 
     public List<GameObject> loadLevel(){
-        // TODO: load some level file and parse into game objects and what ever other settings
         return null;
     }
 }

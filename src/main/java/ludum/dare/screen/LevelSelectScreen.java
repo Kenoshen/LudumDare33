@@ -70,7 +70,7 @@ public class LevelSelectScreen implements Screen {
                             })));
                 }
             });
-            levelButtons.add(btn); // TODO: do any button positioning
+            levelButtons.add(btn);
             lvls.add(new Tups.Tup2<>(level, btn));
         }
 

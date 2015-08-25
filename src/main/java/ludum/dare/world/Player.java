@@ -404,7 +404,6 @@ public class Player extends GameObject implements AnimationCallback {
     public void animationEnded(String name) {
         if ("death".equalsIgnoreCase(name) && !dead){
             dead = true;
-            // TODO: restart the level?
             if (testSubLevel != null && gameScreen != null) {
                 testSubLevel.setLevelIndex(testSubLevel.getLevelIndex() - 1);
                 testSubLevel.player = null;
