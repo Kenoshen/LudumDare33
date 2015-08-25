@@ -26,8 +26,12 @@ public class Game extends com.badlogic.gdx.Game {
     CKeyboard keyboard;
     CMouse mouse;
 
-    public Game() {
+    public static boolean useAwesomeShader = true;
+
+    public Game(boolean useAwesomeShader)
+    {
         super();
+        this.useAwesomeShader = useAwesomeShader;
     }
 
     @Override

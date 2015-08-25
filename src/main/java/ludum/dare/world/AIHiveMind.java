@@ -17,6 +17,8 @@ public class AIHiveMind {
     static List<GameObject> Enemies = new ArrayList<>();
 
     public static void update() {
+        removeMarkedGameObjects();
+
         for (GameObject p : Players){
             for (GameObject e : Enemies){
                 minionLogic(e, p);
@@ -30,15 +32,19 @@ public class AIHiveMind {
     public static void addEnemy(GameObject enemyBasic){
         Enemies.add(enemyBasic);
     }
-    private void removeMarkedGameObjects() {
-        for(GameObject e : Enemies){
+    public static void removeMarkedGameObjects() {
+        for(int i = 0; i < Enemies.size(); i++){
+            GameObject e = Enemies.get(i);
             if(e.shouldBeDeleted()){
                 Enemies.remove(e);
+                i--;
             }
         }
-        for(GameObject p : Players){
+        for(int i = 0; i < Players.size(); i++){
+            GameObject p = Players.get(i);
             if(p.shouldBeDeleted()){
                 Players.remove(p);
+                i--;
             }
         }
     }

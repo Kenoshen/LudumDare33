@@ -15,6 +15,8 @@ import ludum.dare.collision.AnimationBundle;
 import ludum.dare.Conf;
 import ludum.dare.collision.CollisionGroup;
 import ludum.dare.collision.CollisionSequence;
+import ludum.dare.level.TestSubLevels;
+import ludum.dare.screen.GameScreen;
 import ludum.dare.trait.*;
 import ludum.dare.utils.*;
 
@@ -29,6 +31,10 @@ public class Player extends GameObject implements AnimationCallback {
     private TimedCollisionTrait hitboxes;
     public boolean rightFacing = true;
     public boolean hitFromRight;
+    public boolean dead = false;
+
+    public GameScreen gameScreen;
+    public TestSubLevels testSubLevel;
 
     private CollisionCallback collisionFunc = new CollisionCallback() {
         @Override
@@ -58,7 +64,6 @@ public class Player extends GameObject implements AnimationCallback {
 
         @Override
         public void died() {
-
         }
     };
 
@@ -397,6 +402,14 @@ public class Player extends GameObject implements AnimationCallback {
 
     @Override
     public void animationEnded(String name) {
-
+        if ("death".equalsIgnoreCase(name) && !dead){
+            dead = true;
+            // TODO: restart the level?
+            if (testSubLevel != null && gameScreen != null) {
+                testSubLevel.setLevelIndex(testSubLevel.getLevelIndex() - 1);
+                testSubLevel.player = null;
+                gameScreen.shouldLoadLevel(testSubLevel);
+            }
+        }
     }
 }

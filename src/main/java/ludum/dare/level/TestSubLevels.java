@@ -26,14 +26,14 @@ public class TestSubLevels extends Level{
 
     List<GameObject> objs;
 
-    private Player player = null;
+    public Player player = null;
 
     @Override
     public String name(){
         return this.getClass().getSimpleName();
     }
 
-    private int index = -1;
+    private int index = 0;
 
     @Override
     public List<GameObject> loadLevel(){
@@ -43,22 +43,31 @@ public class TestSubLevels extends Level{
         return nextSection();
     }
 
+    public int getLevelIndex(){
+        return index;
+    }
+    public TestSubLevels setLevelIndex(int index){
+        this.index = index;
+        return this;
+    }
+
     public List<GameObject> nextSection(){
+        int preAddIndex = index;
         index ++;
-        if (index == 0){
-            return section0(index);
-        } else if (index == 1){
-            return section1(index);
-        } else if (index == 2){
-            return section2(index);
-        } else if (index == 3){
-            return section3(index);
-        } else if (index == 4){
-            return section4(index);
-        } else if (index == 5){
-            return section5(index);
-        } else if (index == 6){
-            return section6(index);
+        if (preAddIndex == 0){
+            return section0(preAddIndex);
+        } else if (preAddIndex == 1){
+            return section1(preAddIndex);
+        } else if (preAddIndex == 2){
+            return section2(preAddIndex);
+        } else if (preAddIndex == 3){
+            return section3(preAddIndex);
+        } else if (preAddIndex == 4){
+            return section4(preAddIndex);
+        } else if (preAddIndex == 5){
+            return section5(preAddIndex);
+        } else if (preAddIndex == 6){
+            return section6(preAddIndex);
         } else {
             throw new RuntimeException("No more sections in this level");
         }
@@ -320,6 +329,8 @@ public class TestSubLevels extends Level{
         if (player == null){
             player = new Player(xOffset(section), -(halfScreenHeight - 1), 0, CMouse.instance, CKeyboard.instance, null);
             player.getTrait(HealthTrait.class).health = 60;
+            player.gameScreen = gameScreen;
+            player.testSubLevel = this;
             objs.add(player);
         }
     }

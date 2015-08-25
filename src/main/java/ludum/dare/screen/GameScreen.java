@@ -84,6 +84,8 @@ public class GameScreen implements Screen {
     private boolean firstEnd = true;
 
     ShaderProgram program;
+
+    private Level shouldLoadLevel = null;
     private Comparator<? super GameObject> compare = new Comparator<GameObject>() {
         @Override
         public int compare(GameObject o1, GameObject o2) {
@@ -134,7 +136,9 @@ public class GameScreen implements Screen {
         batch = new SpriteBatch();
         uiBatch = new SpriteBatch();
         program = createShader();
-        batch.setShader(program);
+        if (Game.useAwesomeShader) {
+            batch.setShader(program);
+        }
         shaper = new ShapeRenderer();
         //
 //        final GameScreen self = this;
@@ -161,7 +165,8 @@ public class GameScreen implements Screen {
         blackLight.light.attenuation = new Vector3(0, 0, 0);
     }
 
-    private void loadLevel(Level level){
+    public void loadLevel(Level level){
+        shouldLoadLevel = null;
         // should clean up old game objects (remove from world, etc)
         objsToDelete = new ArrayList<>();
         for (GameObject obj : gameObjects){
@@ -171,15 +176,11 @@ public class GameScreen implements Screen {
         removeMarkedGameObjects();
         //
         log.debug("Load scene");
-        gameObjects = level.loadLevel();
-
         if (level instanceof TestSubLevels){
             ((TestSubLevels)level).gameScreen = this;
         }
-    }
+        gameObjects = level.loadLevel();
 
-    @Override
-    public void show() {
         for(GameObject g : gameObjects){
             List things = g.getTraits(InputHandlerTrait.class, AITrait.class);
             if (things.get(0) != null){
@@ -189,6 +190,16 @@ public class GameScreen implements Screen {
                 AIHiveMind.addEnemy(g);
             }
         }
+    }
+
+    public void shouldLoadLevel(Level level)
+    {
+        shouldLoadLevel = level;
+    }
+
+    @Override
+    public void show() {
+
     }
 
     @Override
@@ -339,6 +350,10 @@ public class GameScreen implements Screen {
         }
 
         stage.draw();
+
+        if (shouldLoadLevel != null){
+            loadLevel(shouldLoadLevel);
+        }
     }
 
     @Override

@@ -49,7 +49,8 @@ public class PhysicalTrait extends Trait {
     }
 
     public void delete(){
-        body.removeFromWorld();
+        CWorld.world._world.destroyBody(body.body);
+        body.body = null;
     }
 
     public boolean isActive() {
