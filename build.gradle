@@ -1,4 +1,4 @@
-ext.gameName = "Game"
+ext.gameName = "LudumDare33"
 version = '0.1.0'
 
 apply plugin: 'java'
