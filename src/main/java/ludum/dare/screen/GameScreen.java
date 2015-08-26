@@ -162,7 +162,7 @@ public class GameScreen implements Screen {
         blackLight.light.ambientColor = new Color(0, 0, 0, 0);
         blackLight.light.intensity = 0;
         blackLight.light.z = 0.1f;
-        blackLight.light.attenuation = new Vector3(0, 0, 0);
+        blackLight.light.attenuation = new Vector3(0, 0, 1); // Note here.
     }
 
     public void loadLevel(Level level){
@@ -442,8 +442,6 @@ public class GameScreen implements Screen {
         program.setUniformf("ambientIntensity", 0.3f);
         program.setUniformf("ambientColor", new Vector3(0.3f, 0.6f, 1f));
         program.setUniformf("resolution", new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-        program.setUniformf("lightColor", new Vector3(1f, 0.7f, 0.6f));
-        program.setUniformf("attenuation", new Vector3(0f, 0f, 5f));
         program.setUniformi("useShadow", true ? 1 : 0);
         program.setUniformi("useNormals", true ? 1 : 0);
         program.setUniformi("yInvert", false ? 1 : 0);
